@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     AuthService authService;
 
-    @RequestMapping(value = "/auth/singup", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/signup", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(@RequestBody Account account) {
         authService.createAccount(account);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
