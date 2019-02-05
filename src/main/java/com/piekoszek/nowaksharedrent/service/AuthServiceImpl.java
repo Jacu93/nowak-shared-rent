@@ -15,8 +15,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void createAccount(Account account) {
-        //if(!accountRepository.exists(account.getEmail())) {
+    public boolean createAccount(Account account) {
+        if(accountRepository.findByEmail(account.getEmail()).isEmpty()) {
             accountRepository.save(
                     Account.builder()
                     .email(account.getEmail())
@@ -24,7 +24,9 @@ public class AuthServiceImpl implements AuthService {
                     .password(account.getPassword())
                     .build()
             );
-        //}
+            return true;
+        }
+        return false;
     }
 
     @Override

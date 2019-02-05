@@ -11,10 +11,8 @@ import org.springframework.data.annotation.Id;
 
 public class Account {
 
-
     @Id
     private String email;
     private String password;
     private String name;
-    private String id;
 }

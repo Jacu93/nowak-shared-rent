@@ -20,8 +20,9 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/signup", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(@RequestBody Account account) {
-        authService.createAccount(account);
-        return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
+        if(authService.createAccount(account))
+            return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
+        return  new ResponseEntity<>("Account with such email already exists", HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/account")
