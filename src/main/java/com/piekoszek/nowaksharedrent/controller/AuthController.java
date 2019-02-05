@@ -12,11 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 
 public class AuthController {
-    AuthService authService;
+    private AuthService authService;
+
+    public AuthController (AuthService authService) {
+        this.authService = authService;
+    }
 
     @RequestMapping(value = "/auth/signup", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(@RequestBody Account account) {
         authService.createAccount(account);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/account")
+    public  ResponseEntity<Object> getAccount() {
+        return new ResponseEntity<>(authService.getAccount(), HttpStatus.OK);
     }
 }

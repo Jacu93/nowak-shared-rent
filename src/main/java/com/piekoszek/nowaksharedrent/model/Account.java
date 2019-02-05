@@ -10,6 +10,8 @@ import org.springframework.data.annotation.Id;
 @Setter
 
 public class Account {
+
+
     @Id
     private String email;
     private String password;
