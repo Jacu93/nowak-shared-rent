@@ -16,7 +16,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean createAccount(Account account) {
-        if(accountRepository.findByEmail(account.getEmail()).isEmpty()) {
+        if(!accountRepository.existsById(account.getEmail())) {
             accountRepository.save(
                     Account.builder()
                     .email(account.getEmail())
