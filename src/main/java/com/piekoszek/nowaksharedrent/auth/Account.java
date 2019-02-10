@@ -1,15 +1,13 @@
-package com.piekoszek.nowaksharedrent.model;
+package com.piekoszek.nowaksharedrent.auth;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 @Builder
 @Getter
-@Setter
 
-public class Account {
+class Account {
 
     @Id
     private String email;
