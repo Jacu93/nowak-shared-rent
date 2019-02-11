@@ -1,7 +1,9 @@
 package com.piekoszek.nowaksharedrent.auth;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.Repository;
 
-interface AccountRepository extends MongoRepository<Account, String> {
+interface AccountRepository extends Repository<Account, String> {
 
+    boolean existsById(String id);
+    void save(Account account);
 }

@@ -1,5 +1,5 @@
 package com.piekoszek.nowaksharedrent.auth;
 
-interface AuthService {
+public interface AuthService {
     boolean createAccount(Account account);
 }
