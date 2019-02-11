@@ -14,6 +14,6 @@ class InMemoryAccountRepository implements AccountRepository {
     @Override
     public boolean existsById(String id) {
         Account account = inMemoryAccountRepository.get(id);
-        return (Objects.isNull(account));
+        return (!Objects.isNull(account));
     }
 }
