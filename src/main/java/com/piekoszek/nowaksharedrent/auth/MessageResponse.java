@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 
 class MessageResponse {
+
     String message;
 
     MessageResponse(String msg) {

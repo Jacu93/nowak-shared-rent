@@ -1,55 +1,44 @@
 package com.piekoszek.nowaksharedrent.auth
 
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 class AuthControllerTest extends Specification {
-    @LocalServerPort
-    private int webPort
 
-    private AccountRepository repository
-    private static final String PATH = "/auth/signup"
+    def "Save an account in database"() {
 
-    def setup() {
-        repository.deleteAll()
+        given: "new account data is entered"
+        def acc = new Account("example@mail.com", "tester", "secret")
+
+        expect: "method createAccount should return true"
+        AuthService.createAccount(acc)
     }
 
-    def "Register account and return 201 status code"() {
-        when:
-        given()
-                .port(webPort)
-                .when()
-                .contentType(ContentType.JSON)
-                .body([email: "example@mail.com", name: "tester", password: "secret"])
-                .post(PATH)
-                .then()
-                .statusCode(200)
-        then:
-        repository.count() == 1
-        repository.existsById("example@mail.com")
+    def "Saving 2 accounts in a row with different id (email)"(Account acc) {
+
+        given: "data of the accounts that are going to be saved one after another"
+        def firstAccount = new Account("example@mail.com", "tester", "secret")
+        def secondAccount = new Account("testing@mail.com", "tester", "secret")
+
+        expect: "method createAccount should return true"
+        AuthService.createAccount(acc)
+
+        where: "true should be returned for both attempts"
+        acc | _
+        firstAccount | _
+        secondAccount | _
     }
 
-    def "Two times create with same email, first 201, then 400 response"() {
-        given:
-        given()
-                .port(webPort)
-                .when()
-                .contentType(ContentType.JSON)
-                .body([email: "example@mail.com", name: "tester", password: "secret"])
-                .post(PATH)
-                .then().statusCode(200)
+    def "Saving 2 accounts in a row with the same id (email)"(Account acc, boolean result) {
 
-        given()
-                .port(webPort)
-                .when()
-                .contentType(ContentType.JSON)
-                .body([email: "example@mail.com", name: "tester", password: "secret"])
-                .post(PATH)
-                .then().statusCode(400)
-                .body("message", equalTo("Account with such email already exists"))
+        given: "data of the accounts that are going to be saved one after another"
+        def account = new Account("example@mail.com", "tester", "secret")
+
+        expect: "method createAccount should return true"
+        AuthService.createAccount(acc) == result
+
+        where: "true should be returned only for the first attempt"
+        acc | result
+        account | true
+        account | false
     }
 }

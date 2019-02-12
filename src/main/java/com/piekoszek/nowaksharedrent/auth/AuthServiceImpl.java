@@ -1,6 +1,7 @@
 package com.piekoszek.nowaksharedrent.auth;
 
 class AuthServiceImpl implements AuthService {
+
     private AccountRepository accountRepository;
 
     AuthServiceImpl (AccountRepository accountRepository) {

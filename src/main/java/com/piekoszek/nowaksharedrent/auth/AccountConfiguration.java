@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class AccountConfiguration {
+
     AuthService authService() {
         return new AuthServiceImpl(new InMemoryAccountRepository());
     }
