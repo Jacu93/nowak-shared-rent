@@ -1,9 +1,7 @@
 package com.piekoszek.nowaksharedrent.auth;
 
-import org.springframework.stereotype.Service;
-
-@Service
 class AuthServiceImpl implements AuthService {
+
     private AccountRepository accountRepository;
 
     AuthServiceImpl (AccountRepository accountRepository) {
