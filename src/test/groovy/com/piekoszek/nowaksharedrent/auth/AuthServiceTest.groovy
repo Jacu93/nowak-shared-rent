@@ -17,28 +17,29 @@ class AuthServiceTest extends Specification {
         given: "new account data is entered"
         def account = new Account("example@mail.com", "tester", "secret")
 
-        expect: "method createAccount should return true"
+        expect: "account is created successfully"
         authService.createAccount(account)
     }
 
     def "Saving 2 accounts in a row with different id (email)"() {
 
-        given: "data of the accounts that are going to be saved one after another"
-        def firstAccount = new Account("example@mail.com", "tester", "secret")
+        given: "data of accounts that are going to be saved one after another"
+        def firstAccount = new Account("example@mail.com", "example", "pass")
         def secondAccount = new Account("testing@mail.com", "tester", "secret")
 
-        expect: "method createAccount should return true twice"
+        expect: "both accounts are created successfully"
         authService.createAccount(firstAccount)
         authService.createAccount(secondAccount)
     }
 
     def "Saving 2 accounts in a row with the same id (email)"() {
 
-        given: "data of the accounts that are going to be saved one after another"
-        def account = new Account("example@mail.com", "tester", "secret")
+        given: "data of accounts that are going to be saved one after another"
+        def firstAccount = new Account("example@mail.com", "tester", "secret")
+        def secondAccount = new Account("example@mail.com", "example", "pass")
 
-        expect: "method createAccount should return true only for the first attempt"
-        authService.createAccount(account)
-        !authService.createAccount(account)
+        expect: "only first account is created successfully, second one is not because of duplicated id (email)"
+        authService.createAccount(firstAccount)
+        !authService.createAccount(secondAccount)
     }
 }
