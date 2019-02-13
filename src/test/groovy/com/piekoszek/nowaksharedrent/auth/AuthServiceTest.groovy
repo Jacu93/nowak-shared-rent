@@ -3,7 +3,7 @@ package com.piekoszek.nowaksharedrent.auth
 import spock.lang.Specification
 import spock.lang.Subject
 
-class AuthControllerTest extends Specification {
+class AuthServiceTest extends Specification {
 
     @Subject
     AuthService authService
