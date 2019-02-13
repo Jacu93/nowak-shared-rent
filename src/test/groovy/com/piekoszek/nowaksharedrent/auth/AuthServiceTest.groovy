@@ -39,6 +39,6 @@ class AuthServiceTest extends Specification {
 
         expect: "method createAccount should return true only for the first attempt"
         authService.createAccount(account)
-        authService.createAccount(account) == false
+        !authService.createAccount(account)
     }
 }
