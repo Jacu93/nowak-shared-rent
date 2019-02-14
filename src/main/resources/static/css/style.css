@@ -57,6 +57,10 @@
   color: #4CAF50;
   text-decoration: none;
 }
+.form .error-message {
+  color: #ff0000;
+  font-weight: bold;
+}
 body {
   background: #76b852;
   font-size: 16px;
