@@ -30,4 +30,6 @@ function register() {
     }).then(res => res.json())
     .then(response => console.log('Success:', JSON.stringify(response)))
     .catch(error => console.error('Error:', error));
+    document.getElementById("error").innerHTML = "Account registered successfully!";
+    document.getElementById("error").style.color = #009933;
 }
