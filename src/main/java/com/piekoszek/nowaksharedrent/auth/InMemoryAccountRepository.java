@@ -17,7 +17,7 @@ class InMemoryAccountRepository implements AccountRepository {
     }
 
     @Override
-    public Account findOne(String id) {
-        return map.get(id);
+    public Account findByEmail(String email) {
+        return map.get(email);
     }
 }
