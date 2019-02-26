@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 class AuthController {
 
     private AuthService authService;
+    private AccountRepository accountRepository;
 
     AuthController (AuthService authService) {
         this.authService = authService;
@@ -18,6 +19,15 @@ class AuthController {
         if(authService.createAccount(account)) {
             return new ResponseEntity<>(new MessageResponse("Account created successfully"), HttpStatus.CREATED);
         }
-        return  new ResponseEntity<>(new MessageResponse("Account with such email already exists"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MessageResponse("Account with such email already exists"), HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/auth/login")
+    ResponseEntity<Object> loginAccount(@RequestBody Account inputAccount) {
+        Account account = accountRepository.findOne(inputAccount.getEmail());
+        if (account != null && inputAccount.getPassword() == account.getPassword()) {
+            return new ResponseEntity<>(new MessageResponse("Login successful!"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MessageResponse("Invalid email or password!"), HttpStatus.UNAUTHORIZED);
     }
 }

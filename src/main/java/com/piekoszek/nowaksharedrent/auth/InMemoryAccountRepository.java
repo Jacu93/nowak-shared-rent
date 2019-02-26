@@ -15,4 +15,9 @@ class InMemoryAccountRepository implements AccountRepository {
     public boolean existsById(String id) {
         return map.containsKey(id);
     }
+
+/*    @Override
+    public Account findOne(String id) {
+        return map.get(id);
+    }*/
 }
