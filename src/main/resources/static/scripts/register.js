@@ -8,7 +8,7 @@ function register() {
     var url = 'http://localhost:8080/auth/signup';
     var data = {"email": emailElement.value, "name": nameElement.value, "password": passwordElement.value};
 
-    if (passwordElement.value != repasswordElement.value){
+    if (passwordElement.value !== repasswordElement.value){
         document.getElementById("error").innerHTML = "Not the same passwords";
         return;
     }
@@ -31,7 +31,6 @@ function register() {
     .then(response => console.log('Success:', JSON.stringify(response)))
     .catch(error => console.error('Error:', error));
 
-    //ten blok ponizej mi nie dziala :( wywala cala funkcje register()
-    /*document.getElementById("error").innerHTML = "Account registered successfully!";
-    document.getElementById("error").style.color = #009933;*/
+    document.getElementById("error").innerHTML = "Account registered successfully!";
+    document.getElementById("error").style.color = "#009933";
 }

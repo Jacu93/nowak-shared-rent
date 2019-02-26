@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 class AuthController {
 
     private AuthService authService;
-    private AccountRepository accountRepository;
 
     AuthController (AuthService authService) {
         this.authService = authService;
@@ -24,8 +23,8 @@ class AuthController {
 
     @PostMapping("/auth/login")
     ResponseEntity<Object> loginAccount(@RequestBody Account inputAccount) {
-        Account account = accountRepository.findOne(inputAccount.getEmail());
-        if (account != null && inputAccount.getPassword() == account.getPassword()) {
+        Account account = authService.findAccount (inputAccount.getEmail());
+        if (account != null && inputAccount.getPassword().equals(account.getPassword())) {
             return new ResponseEntity<>(new MessageResponse("Login successful!"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("Invalid email or password!"), HttpStatus.UNAUTHORIZED);

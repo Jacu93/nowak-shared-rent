@@ -16,4 +16,8 @@ class AuthServiceImpl implements AuthService {
         }
         return false;
     }
+
+    public Account findAccount(String id) {
+        return (accountRepository.findOne(id));
+    }
 }
