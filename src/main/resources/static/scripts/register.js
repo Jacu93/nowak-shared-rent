@@ -28,9 +28,11 @@ function register() {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-    .then(response => console.log('Success:', JSON.stringify(response)))
+    .then(response => {
+        console.log('Success:', JSON.stringify(response));
+        document.getElementById("error").innerHTML = "Account registered successfully!";
+        document.getElementById("error").style.color = "#009933";
+        })
+    }
     .catch(error => console.error('Error:', error));
-
-    document.getElementById("error").innerHTML = "Account registered successfully!";
-    document.getElementById("error").style.color = "#009933";
 }
