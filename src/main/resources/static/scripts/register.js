@@ -30,17 +30,22 @@ function register() {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-    .then(response => {
-        console.log('Success:', JSON.stringify(response));
-        if(response.ok) {
-            document.getElementById("error").innerHTML = "Account registered successfully!";
-            document.getElementById("error").style.color = "#009933";
+    }).then(res => {
+        console.log('Success:', JSON.stringify(res));
+        if(res.ok) {
+            res.json().then(json => {
+                console.log('Success:', JSON.stringify(json));
+                document.getElementById("error").innerHTML = "Account registered successfully!";
+                document.getElementById("error").style.color = "#009933";
+            })
         }
         else {
-            document.getElementById("error").innerHTML = "Account with such email already exists!";
-            document.getElementById("error").style.color = "#ff0000";
+            res.json().then(json => {
+                console.log('Internal error:', JSON.stringify(json));
+                document.getElementById("error").innerHTML = "Account with such email already exists!";
+                document.getElementById("error").style.color = "#ff0000";
+            })
         }
-        })
+    })
     .catch(error => console.error('Error:', error));
 }

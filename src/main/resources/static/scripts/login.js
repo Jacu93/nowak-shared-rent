@@ -12,15 +12,19 @@ function login() {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-    .then(response => {
-      console.log('Success:', JSON.stringify(response));
-      if(response.ok) {
-        document.getElementById("error").innerHTML = "gut gut";
-        window.location.href = 'main.html';
+    }).then(res => {
+      if(res.ok) {
+        res.json().then(json => {
+          console.log('Success:', JSON.stringify(json));
+          window.location.href = 'main.html';
+        })
       }
       else {
-        document.getElementById("error").innerHTML = "Invalid email or password!";
+        res.json().then(json => {
+          console.log('Internal error:', JSON.stringify(json));
+          document.getElementById("error").innerHTML = "Invalid email or password!";
+          document.getElementById("error").style.color = "#ff0000";
+        })
       }
     })
     .catch(error => console.error('Error:', error));
