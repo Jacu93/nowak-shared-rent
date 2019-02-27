@@ -13,8 +13,15 @@ function login() {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-    .then(response => console.log('Success:', JSON.stringify(response)))
+    .then(response => {
+      console.log('Success:', JSON.stringify(response));
+      if(response.ok) {
+        document.getElementById("error").innerHTML = "gut gut";
+        window.location.href = 'main.html';
+      }
+      else {
+        document.getElementById("error").innerHTML = "Invalid email or password!";
+      }
+    })
     .catch(error => console.error('Error:', error));
-
-    window.location.href = 'main.html';
 }
