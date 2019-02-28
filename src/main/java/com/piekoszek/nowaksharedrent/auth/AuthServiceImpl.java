@@ -10,7 +10,7 @@ class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean createAccount(Account account) {
-        if(!accountRepository.existsById(account.getEmail())) {
+        if(!accountRepository.existsByEmail(account.getEmail())) {
             accountRepository.save(account);
             return true;
         }

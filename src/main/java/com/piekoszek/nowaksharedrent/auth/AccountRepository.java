@@ -4,7 +4,7 @@ import org.springframework.data.repository.Repository;
 
 interface AccountRepository extends Repository<Account, String> {
 
-    boolean existsById(String id);
+    boolean existsByEmail(String email);
     void save(Account account);
-    Account findByEmail(String id);
+    Account findByEmail(String email);
 }

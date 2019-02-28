@@ -22,9 +22,9 @@ class AuthController {
     }
 
     @PostMapping("/auth/login")
-    ResponseEntity<Object> loginAccount(@RequestBody Account inputAccount) {
-        Account account = authService.findAccount (inputAccount.getEmail());
-        if (account != null && inputAccount.getPassword().equals(account.getPassword())) {
+    ResponseEntity<Object> login(@RequestBody Account input) {
+        Account account = authService.findAccount (input.getEmail());
+        if (account != null && input.getPassword().equals(account.getPassword())) {
             return new ResponseEntity<>(new MessageResponse("Login successful!"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("Invalid email or password!"), HttpStatus.UNAUTHORIZED);

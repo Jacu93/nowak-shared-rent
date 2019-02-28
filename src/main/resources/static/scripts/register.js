@@ -1,24 +1,24 @@
 function register() {
 
-    var emailElement=document.getElementById("emailInput");
-    var nameElement=document.getElementById("nameInput");
-    var passwordElement=document.getElementById("passInput");
-    var repasswordElement=document.getElementById("repassInput");
+    let email=document.getElementById("emailInput").value;
+    let name=document.getElementById("nameInput").value;
+    let password=document.getElementById("passInput").value;
+    let repassword=document.getElementById("repassInput").value;
 
-    var url = 'http://localhost:8080/auth/signup';
-    var data = {"email": emailElement.value, "name": nameElement.value, "password": passwordElement.value};
+    let url = 'http://localhost:8080/auth/signup';
+    let data = {"email": email, "name": name, "password": password};
 
-    if (passwordElement.value !== repasswordElement.value){
+    if (password !== repassword){
         document.getElementById("error").innerHTML = "Not the same passwords";
         document.getElementById("error").style.color = "#ff0000";
         return;
     }
-    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailElement.value))){
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))){
         document.getElementById("error").innerHTML = "Wrong email address";
         document.getElementById("error").style.color = "#ff0000";
         return;
     }
-    if (!(passwordElement.value.length>3)){
+    if (!(password.length>3)){
         document.getElementById("error").innerHTML = "Too short password";
         document.getElementById("error").style.color = "#ff0000";
         return;
@@ -31,19 +31,20 @@ function register() {
         'Content-Type': 'application/json'
       }
     }).then(res => {
+        let errorElement = document.getElementById("error");
         console.log('Success:', JSON.stringify(res));
         if(res.ok) {
             res.json().then(json => {
                 console.log('Success:', JSON.stringify(json));
-                document.getElementById("error").innerHTML = "Account registered successfully!";
-                document.getElementById("error").style.color = "#009933";
+                errorElement.innerHTML = "Account registered successfully!";
+                errorElement.style.color = "#009933";
             })
         }
         else {
             res.json().then(json => {
                 console.log('Internal error:', JSON.stringify(json));
-                document.getElementById("error").innerHTML = "Account with such email already exists!";
-                document.getElementById("error").style.color = "#ff0000";
+                errorElement.innerHTML = "Account with such email already exists!";
+                errorElement.style.color = "#ff0000";
             })
         }
     })

@@ -1,10 +1,10 @@
 function login() {
 
-    var emailElement=document.getElementById("emailInput");
-    var passwordElement=document.getElementById("passInput");
+    let email=document.getElementById("emailInput").value;
+    let password=document.getElementById("passInput").value;
 
-    var url = 'http://localhost:8080/auth/login';
-    var data = {"email": emailElement.value, "password": passwordElement.value};
+    let url = 'http://localhost:8080/auth/login';
+    let data = {"email": email, "password": password};
 
     fetch(url, {
       method: 'POST',
@@ -13,6 +13,7 @@ function login() {
         'Content-Type': 'application/json'
       }
     }).then(res => {
+      let errorElement = document.getElementById("error");
       if(res.ok) {
         res.json().then(json => {
           console.log('Success:', JSON.stringify(json));
@@ -22,8 +23,8 @@ function login() {
       else {
         res.json().then(json => {
           console.log('Internal error:', JSON.stringify(json));
-          document.getElementById("error").innerHTML = "Invalid email or password!";
-          document.getElementById("error").style.color = "#ff0000";
+          errorElement.innerHTML = "Invalid email or password!";
+          errorElement.style.color = "#ff0000";
         })
       }
     })
