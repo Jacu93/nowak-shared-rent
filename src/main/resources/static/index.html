@@ -11,11 +11,12 @@
 <div class="login-page">
     <div class="form">
         <div class="login-form">
-            <input type="text" placeholder="username"/>
-            <input type="password" placeholder="password"/>
+            <input id="emailInput" type="text" placeholder="email address"/>
+            <input id="passInput" type="password" placeholder="password"/>
             <button class="normal-button" onclick="login()">login</button>
             <button class="facebook-button">login with facebook</button>
             <p class="message">Not registered? <a href="register.html">Create an account</a></p>
+            <p class="error-message" id="error"></p>
         </div>
     </div>
 </div>
