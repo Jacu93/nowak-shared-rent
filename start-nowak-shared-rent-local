@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 echo "skrypt bozy"
-cd /mnt/d/github/nowak-shared-rent/
 mvn clean install
-cd /mnt/d/github/nowak-shared-rent/target/
+cd ./target/
 scp nowak-shared-rent-0.0.1-SNAPSHOT.jar jackie@piekoszek.pl:/home/jackie/
 ssh jackie@piekoszek.pl 'bash -s /home/jackie/start-nowak-shared-rent-piekoszek.sh'
