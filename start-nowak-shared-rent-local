@@ -4,4 +4,4 @@ echo "skrypt bozy"
 mvn clean install
 cd ./target/
 scp nowak-shared-rent-0.0.1-SNAPSHOT.jar jackie@piekoszek.pl:/home/jackie/
-ssh jackie@piekoszek.pl 'bash -s /home/jackie/start-nowak-shared-rent-piekoszek.sh'
+ssh jackie@piekoszek.pl 'bash -s /home/jackie/start-app-piekoszek.sh'
