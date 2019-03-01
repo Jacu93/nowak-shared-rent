@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-echo "skrypt bozy"
 mvn clean install
 cd ./target/
 scp nowak-shared-rent-0.0.1-SNAPSHOT.jar jackie@piekoszek.pl:/home/jackie/
