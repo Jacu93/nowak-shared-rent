@@ -5,7 +5,7 @@ function register() {
     let password=document.getElementById("passInput").value;
     let repassword=document.getElementById("repassInput").value;
 
-    let url = 'http://localhost:8080/auth/signup';
+    let url = '/auth/signup';
     let data = {"email": email, "name": name, "password": password};
 
     if (password !== repassword){
