@@ -1,5 +1,8 @@
-package com.piekoszek.nowaksharedrent.jwt;
+package com.piekoszek.nowaksharedrent.time;
 
+import org.springframework.stereotype.Service;
+
+@Service
 class TimeServiceImpl implements TimeService {
 
     @Override
