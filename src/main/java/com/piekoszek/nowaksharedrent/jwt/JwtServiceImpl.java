@@ -3,6 +3,7 @@ package com.piekoszek.nowaksharedrent.jwt;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.Setter;
 
 import javax.crypto.SecretKey;
@@ -15,22 +16,27 @@ class JwtServiceImpl implements JwtService {
     private SecretKey key;
     private TimeService timeService;
 
-    public JwtServiceImpl(SecretKey key, TimeService timeService) {
+    JwtServiceImpl(SecretKey key, TimeService timeService) {
         this.key = key;
         this.timeService = timeService;
+    }
+
+    void setKey(SecretKey key) {
+        this.key = key;
     }
 
     @Override
     public String generateToken (JwtData jwtData) {
         Date now = new Date(timeService.millisSinceEpoch());
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .claim("name", jwtData.getName())
                 .claim("email", jwtData.getEmail())
                 .setIssuedAt(now)
                 .signWith(key)
                 .setExpiration(new Date(now.getTime() + 60 * 60 * 1000))
                 .compact();
+        return ("bearer " + token);
     }
 
     @Override
@@ -38,15 +44,33 @@ class JwtServiceImpl implements JwtService {
         Jwts.parser()
                 .setClock(() -> new Date(timeService.millisSinceEpoch()))
                 .setSigningKey(key)
-                .parseClaimsJws(token);
+                .parseClaimsJws(removeBearerString(token));
     }
 
     @Override
-    public Claims readToken(String token) {
-        return Jwts.parser()
+    public JwtData readToken(String token) {
+        Claims claims = Jwts.parser()
                 .setClock(() -> new Date(timeService.millisSinceEpoch()))
                 .setSigningKey(key)
-                .parseClaimsJws(token)
+                .parseClaimsJws(removeBearerString(token))
                 .getBody();
+        return JwtData.builder()
+                .name(claimToString(claims, "name"))
+                .email(claimToString(claims, "email"))
+                .build();
+    }
+
+    private String claimToString(Claims claims, String name) {
+        if (!claims.containsKey(name)) {
+            return "";
+        }
+        return claims.get(name, String.class);
+    }
+
+    private String removeBearerString(String token) {
+            if ((token.split(" ").length < 2) || (!token.toLowerCase().startsWith("bearer "))) {
+            throw new MalformedJwtException("Expected bearer authorization type!");
+        }
+        return token.split(" ")[1];
     }
 }

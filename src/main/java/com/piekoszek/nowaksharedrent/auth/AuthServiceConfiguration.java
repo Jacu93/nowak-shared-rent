@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class AccountConfiguration {
+class AuthServiceConfiguration {
 
     AuthService authService() {
         return new AuthServiceImpl(new InMemoryAccountRepository());

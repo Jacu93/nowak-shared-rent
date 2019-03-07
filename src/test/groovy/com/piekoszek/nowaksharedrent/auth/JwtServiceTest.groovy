@@ -1,11 +1,11 @@
-package com.piekoszek.nowaksharedrent.auth
+package com.piekoszek.nowaksharedrent.jwt
 
-import com.piekoszek.nowaksharedrent.jwt.JwtData
-import com.piekoszek.nowaksharedrent.jwt.JwtService
-import com.piekoszek.nowaksharedrent.jwt.JwtServiceConfiguration
 import com.piekoszek.nowaksharedrent.time.TimeService
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SignatureException
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -15,10 +15,14 @@ class JwtServiceTest extends Specification {
 
     @Subject
     JwtService jwtService
-    TimeService timeService = Mock()
+
+    TimeService timeService = Mock(TimeService)
     SecretKey key
 
-    def jwtData = new JwtData("example@mail.com", "exampleName")
+    def jwtData = JwtData.builder()
+            .name("exampleName")
+            .email("example@mail.com")
+            .build()
 
     def setup() {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
@@ -27,12 +31,65 @@ class JwtServiceTest extends Specification {
 
     def "Generate correct token with user name and email"() {
 
-        given: "jwt is generated as second 1 and checked at second 2"
+        given: "JWT is generated at second 1 and checked at second 2"
         timeService.millisSinceEpoch() >>> [1000, 2000]
         def token = jwtService.generateToken(jwtData)
 
-        //expect:
-        //jwtParser.jwtInfo(token) == JwtInfo.builder().email("example@mail.com").name("exampleName").region("exampleRegion").token(token).build()
+        expect: "Information saved in and read from the token are the same"
+        jwtService.readToken(token) == JwtData.builder().name("exampleName").email("example@mail.com").build()
+    }
 
+    def "Check valid token"() {
+
+        given: "JWT is generated at second 1 and checked at second 2"
+        timeService.millisSinceEpoch() >>> [1000, 2000]
+        def token = jwtService.generateToken(jwtData)
+
+        when: "Token is checked"
+        jwtService.validateToken(token)
+
+        then: "Nothing happens, which means that token is valid"
+    }
+
+    def "Check expired token"() {
+
+        given: "JWT is generated at second 1 and checked one hour later"
+        timeService.millisSinceEpoch() >>> [1000, 1000 * 60 * 60 + 2000]
+        def token = jwtService.generateToken(jwtData)
+
+        when: "Token is checked"
+        jwtService.validateToken(token)
+
+        then: "Token is expired"
+        thrown(ExpiredJwtException)
+    }
+
+    def "Check token with wrong format"() {
+
+        given: "JWT in incorrect format"
+        def token = "eyJhbGciOiJIUzI1NiJ9eyJpYXQiOjEsImV4cCI6MzYwMX0.Q5HBk79pi0YzazlbpBT0kUXw8vwXcs76FcAw52DKaFI"
+
+        when: "Token is checked"
+        jwtService.validateToken(token)
+
+        then: "Token is in incorrect format"
+        thrown(MalformedJwtException)
+    }
+
+    def "Check token with incorrect signature"() {
+
+        given: "JWT is generated at second 1 and checked at second 2"
+        timeService.millisSinceEpoch() >>> [1000, 2000]
+        def token = jwtService.generateToken(jwtData)
+
+        and: "Incorrect secret is used for token validation"
+        def secret = ")H@McQfTjWnZr4u7x!A%D*G-KaNdRgUk"
+        jwtService = new JwtServiceConfiguration().jwtService(Keys.hmacShaKeyFor(secret.getBytes()), timeService)
+
+        when: "Token is checked"
+        jwtService.validateToken(token)
+
+        then: "Signature is invalid"
+        thrown(SignatureException)
     }
 }
