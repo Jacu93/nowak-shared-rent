@@ -1,9 +1,12 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
+import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.Setter;
 
 import javax.crypto.SecretKey;
@@ -41,10 +44,21 @@ class JwtServiceImpl implements JwtService {
 
     @Override
     public void validateToken(String token) {
-        Jwts.parser()
-                .setClock(() -> new Date(timeService.millisSinceEpoch()))
-                .setSigningKey(key)
-                .parseClaimsJws(removeBearerString(token));
+        try {
+            Jwts.parser()
+                    .setClock(() -> new Date(timeService.millisSinceEpoch()))
+                    .setSigningKey(key)
+                    .parseClaimsJws(removeBearerString(token));
+        }
+        catch (ExpiredJwtException e) {
+            throw new InvalidTokenException("Token expired");
+        }
+        catch (MalformedJwtException e) {
+            throw new InvalidTokenException("Invalid token format");
+        }
+        catch (SignatureException e) {
+            throw new InvalidTokenException("Invalid token signature");
+        }
     }
 
     @Override

@@ -1,11 +1,9 @@
 package com.piekoszek.nowaksharedrent.jwt
 
+import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException
 import com.piekoszek.nowaksharedrent.time.TimeService
-import io.jsonwebtoken.ExpiredJwtException
-import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.security.SignatureException
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -61,7 +59,7 @@ class JwtServiceTest extends Specification {
         jwtService.validateToken(token)
 
         then: "Token is expired"
-        thrown(ExpiredJwtException)
+        thrown(InvalidTokenException)
     }
 
     def "Check token with wrong format"() {
@@ -73,7 +71,7 @@ class JwtServiceTest extends Specification {
         jwtService.validateToken(token)
 
         then: "Token is in incorrect format"
-        thrown(MalformedJwtException)
+        thrown(InvalidTokenException)
     }
 
     def "Check token with incorrect signature"() {
@@ -90,6 +88,6 @@ class JwtServiceTest extends Specification {
         jwtService.validateToken(token)
 
         then: "Signature is invalid"
-        thrown(SignatureException)
+        thrown(InvalidTokenException)
     }
 }
