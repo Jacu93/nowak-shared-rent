@@ -59,7 +59,8 @@ class JwtServiceTest extends Specification {
         jwtService.validateToken(token)
 
         then: "Token is expired"
-        thrown(InvalidTokenException)
+        def ex = thrown(InvalidTokenException)
+        ex.message == "Token expired"
     }
 
     def "Check token with wrong format"() {
@@ -71,7 +72,8 @@ class JwtServiceTest extends Specification {
         jwtService.validateToken(token)
 
         then: "Token is in incorrect format"
-        thrown(InvalidTokenException)
+        def ex = thrown(InvalidTokenException)
+        ex.message == "Invalid token format"
     }
 
     def "Check token with incorrect signature"() {
@@ -88,6 +90,7 @@ class JwtServiceTest extends Specification {
         jwtService.validateToken(token)
 
         then: "Signature is invalid"
-        thrown(InvalidTokenException)
+        def ex = thrown(InvalidTokenException)
+        ex.message == "Invalid token signature"
     }
 }

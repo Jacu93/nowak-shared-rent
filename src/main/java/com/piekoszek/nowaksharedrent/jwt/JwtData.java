@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 @Builder
 @EqualsAndHashCode
-
 public class JwtData {
 
     private String email;

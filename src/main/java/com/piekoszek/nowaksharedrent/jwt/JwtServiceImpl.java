@@ -13,7 +13,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Setter
-
 class JwtServiceImpl implements JwtService {
 
     private SecretKey key;
