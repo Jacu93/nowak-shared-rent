@@ -9,7 +9,7 @@ class AuthServiceTest extends Specification {
     AuthService authService
 
     def setup() {
-        authService = new AccountConfiguration().authService()
+        authService = new AuthServiceConfiguration().authService()
     }
 
     def "Save an account in database"() {
