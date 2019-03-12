@@ -1,15 +1,25 @@
 package com.piekoszek.nowaksharedrent.auth
 
+
 import spock.lang.Specification
 import spock.lang.Subject
+
+import javax.validation.ConstraintViolation
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
 
 class AuthServiceTest extends Specification {
 
     @Subject
     AuthService authService
+    ValidatorFactory validatorFactory
+    Validator validator
 
     def setup() {
         authService = new AuthServiceConfiguration().authService()
+        validatorFactory = Validation.buildDefaultValidatorFactory()
+        validator = validatorFactory.getValidator()
     }
 
     def "Save an account in database"() {
@@ -41,5 +51,27 @@ class AuthServiceTest extends Specification {
         expect: "only first account is created successfully, second one is not because of duplicated id (email)"
         authService.createAccount(firstAccount)
         !authService.createAccount(secondAccount)
+    }
+
+    def "Saving an account with wrong email" () {
+
+        given: "new account data is entered"
+        def account = new Account("example@@mail.com", "tester", "secret")
+        Set<ConstraintViolation<Account>> constraintViolations = validator.validate(account)
+
+        expect: "error message should appear"
+        constraintViolations.size() == 1
+        constraintViolations.iterator().next().getMessage() == "Invalid email"
+    }
+
+    def "Saving an account with too short password" () {
+
+        given: "new account data is entered"
+        def account = new Account("example@mail.com", "tester", "sec")
+        Set<ConstraintViolation<Account>> constraintViolations = validator.validate(account)
+
+        expect: "error message should appear"
+        constraintViolations.size() == 1
+        constraintViolations.iterator().next().getMessage() == "Too short password"
     }
 }
