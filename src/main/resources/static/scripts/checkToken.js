@@ -11,10 +11,6 @@ function checkToken() {
         let decodedPayload = atob(encodedPayload);
         let payload = JSON.parse(decodedPayload);
 
-        if(payload.name == undefined) {
-            window.location.href = "/register.html"
-        }
-
         if(payload.exp < Date.now()/1000) {
             window.location.href = "/login.html"
         }
