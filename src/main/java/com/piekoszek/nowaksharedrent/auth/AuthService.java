@@ -1,7 +1,9 @@
 package com.piekoszek.nowaksharedrent.auth;
 
+import java.util.Optional;
+
 public interface AuthService {
 
     boolean createAccount(Account account);
-    String loginUser(Account input);
+    Optional<String> loginUser(Account input);
 }

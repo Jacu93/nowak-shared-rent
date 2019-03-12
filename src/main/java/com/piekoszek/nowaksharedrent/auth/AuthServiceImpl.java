@@ -4,6 +4,8 @@ import com.piekoszek.nowaksharedrent.hash.HashService;
 import com.piekoszek.nowaksharedrent.jwt.JwtData;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
 
+import java.util.Optional;
+
 class AuthServiceImpl implements AuthService {
 
     private AccountRepository accountRepository;
@@ -28,16 +30,16 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String loginUser(Account input) {
+    public Optional<String> loginUser(Account input) {
         Account account = accountRepository.findByEmail(input.getEmail());
-        if (account != null && hashService.compareWithHash(account.getPassword(), input.getPassword()))
+        if (account != null && hashService.compareWithHash(input.getPassword(), account.getPassword()))
         {
             JwtData jwtData = JwtData.builder()
                     .email(account.getEmail())
                     .name(account.getName())
                     .build();
-            return jwtService.generateToken(jwtData);
+            return Optional.of(jwtService.generateToken(jwtData));
         }
-        return "";
+        return Optional.empty();
     }
 }
