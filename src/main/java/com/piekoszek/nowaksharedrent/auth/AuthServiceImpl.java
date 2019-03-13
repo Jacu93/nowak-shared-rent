@@ -18,27 +18,31 @@ class AuthServiceImpl implements AuthService {
         this.jwtService = jwtService;
     }
 
-    @Override
-    public boolean createAccount(Account input) {
-        if(!accountRepository.existsByEmail(input.getEmail())) {
-            String hashPassword = hashService.encryptString(input.getPassword());
-            Account account = new Account(input.getEmail(), input.getName(), hashPassword);
-            accountRepository.save(account);
-            return true;
-        }
-        return false;
+    private Optional<String> returnToken (Account account) {
+        JwtData jwtData = JwtData.builder()
+                .email(account.getEmail())
+                .name(account.getName())
+                .build();
+        return Optional.of(jwtService.generateToken(jwtData));
     }
 
     @Override
-    public Optional<String> loginUser(Account input) {
-        Account account = accountRepository.findByEmail(input.getEmail());
-        if (account != null && hashService.compareWithHash(input.getPassword(), account.getPassword()))
+    public Optional<String> createAccount(Account account) {
+        if(!accountRepository.existsByEmail(account.getEmail())) {
+            String hashPassword = hashService.encrypt(account.getPassword());
+            Account accountToCreate = new Account(account.getEmail(), account.getName(), hashPassword);
+            accountRepository.save(accountToCreate);
+            return returnToken(accountToCreate);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> loginUser(Account account) {
+        Account registeredAccount = accountRepository.findByEmail(account.getEmail());
+        if (registeredAccount != null && hashService.compareWithHash(account.getPassword(), registeredAccount.getPassword()))
         {
-            JwtData jwtData = JwtData.builder()
-                    .email(account.getEmail())
-                    .name(account.getName())
-                    .build();
-            return Optional.of(jwtService.generateToken(jwtData));
+            return returnToken(registeredAccount);
         }
         return Optional.empty();
     }

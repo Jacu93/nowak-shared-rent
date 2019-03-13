@@ -18,20 +18,17 @@ class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    ResponseEntity<Object> createAccount(@RequestBody Account input) {
-        if(authService.createAccount(input)) {
-            Optional<String> token = authService.loginUser(input);
-            if (token.isPresent()) {
-                return new ResponseEntity<>(new MessageResponse(token.get()), HttpStatus.CREATED);
-            }
-            return new ResponseEntity<>(new MessageResponse("Unable to generate token"), HttpStatus.UNAUTHORIZED);
+    ResponseEntity<Object> createAccount(@RequestBody Account account) {
+        Optional<String> token = authService.createAccount(account);
+        if (token.isPresent()) {
+            return new ResponseEntity<>(new MessageResponse(token.get()), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new MessageResponse("Account with such email already exists"), HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/auth/login")
-    ResponseEntity<Object> login(@RequestBody Account input) {
-        Optional<String> token = authService.loginUser(input);
+    ResponseEntity<Object> login(@RequestBody Account account) {
+        Optional<String> token = authService.loginUser(account);
         if (token.isPresent()) {
             return new ResponseEntity<>(new MessageResponse(token.get()), HttpStatus.CREATED);
         }

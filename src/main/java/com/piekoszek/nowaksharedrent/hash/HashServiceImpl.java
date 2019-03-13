@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 class HashServiceImpl implements HashService {
 
     @Override
-    public String encryptString(String input) {
-        return BCrypt.hashpw(input, BCrypt.gensalt());
+    public String encrypt(String text) {
+        return BCrypt.hashpw(text, BCrypt.gensalt());
     }
 
     @Override
-    public Boolean compareWithHash(String input, String hashInput) {
-        return BCrypt.checkpw(input, hashInput);
+    public boolean compareWithHash(String text, String hashText) {
+        return BCrypt.checkpw(text, hashText);
     }
 }

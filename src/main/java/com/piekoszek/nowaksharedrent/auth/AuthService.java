@@ -4,6 +4,6 @@ import java.util.Optional;
 
 public interface AuthService {
 
-    boolean createAccount(Account account);
-    Optional<String> loginUser(Account input);
+    Optional<String> createAccount(Account account);
+    Optional<String> loginUser(Account account);
 }
