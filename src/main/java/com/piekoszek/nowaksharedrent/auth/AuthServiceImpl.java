@@ -18,12 +18,12 @@ class AuthServiceImpl implements AuthService {
         this.jwtService = jwtService;
     }
 
-    private Optional<String> returnToken (Account account) {
+    private String returnToken (Account account) {
         JwtData jwtData = JwtData.builder()
                 .email(account.getEmail())
                 .name(account.getName())
                 .build();
-        return Optional.of(jwtService.generateToken(jwtData));
+        return jwtService.generateToken(jwtData);
     }
 
     @Override
@@ -32,7 +32,7 @@ class AuthServiceImpl implements AuthService {
             String hashPassword = hashService.encrypt(account.getPassword());
             Account accountToCreate = new Account(account.getEmail(), account.getName(), hashPassword);
             accountRepository.save(accountToCreate);
-            return returnToken(accountToCreate);
+            return Optional.of(returnToken(accountToCreate));
         }
         return Optional.empty();
     }
@@ -42,7 +42,7 @@ class AuthServiceImpl implements AuthService {
         Account registeredAccount = accountRepository.findByEmail(account.getEmail());
         if (registeredAccount != null && hashService.compareWithHash(account.getPassword(), registeredAccount.getPassword()))
         {
-            return returnToken(registeredAccount);
+            return Optional.of(returnToken(registeredAccount));
         }
         return Optional.empty();
     }
