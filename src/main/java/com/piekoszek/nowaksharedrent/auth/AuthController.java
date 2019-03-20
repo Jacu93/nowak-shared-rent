@@ -2,7 +2,12 @@ package com.piekoszek.nowaksharedrent.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 class AuthController {
@@ -14,18 +19,19 @@ class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    ResponseEntity<Object> createAccount(@RequestBody Account account) {
-        if(authService.createAccount(account)) {
-            return new ResponseEntity<>(new MessageResponse("Account created successfully"), HttpStatus.CREATED);
+    ResponseEntity<Object> createAccount(@RequestBody @Valid Account account) {
+        Optional<String> token = authService.createAccount(account);
+        if (token.isPresent()) {
+            return new ResponseEntity<>(new TokenResponse(token.get()), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new MessageResponse("Account with such email already exists"), HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/auth/login")
-    ResponseEntity<Object> login(@RequestBody Account input) {
-        Account account = authService.findAccount (input.getEmail());
-        if (account != null && input.getPassword().equals(account.getPassword())) {
-            return new ResponseEntity<>(new MessageResponse("Login successful!"), HttpStatus.OK);
+    ResponseEntity<Object> login(@RequestBody Account account) {
+        Optional<String> token = authService.loginUser(account);
+        if (token.isPresent()) {
+            return new ResponseEntity<>(new TokenResponse(token.get()), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new MessageResponse("Invalid email or password!"), HttpStatus.UNAUTHORIZED);
     }

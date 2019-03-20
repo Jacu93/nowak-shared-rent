@@ -16,8 +16,9 @@ function login() {
       let errorElement = document.getElementById("error");
       if(res.ok) {
         res.json().then(json => {
+          window.localStorage.setItem("accessToken", json.message);
           console.log('Success:', JSON.stringify(json));
-          window.location.href = 'main.html';
+          window.location.href = 'index.html';
         })
       }
       else {
