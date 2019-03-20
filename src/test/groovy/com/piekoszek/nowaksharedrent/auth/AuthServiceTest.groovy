@@ -6,7 +6,6 @@ import com.piekoszek.nowaksharedrent.jwt.JwtService
 import spock.lang.Specification
 import spock.lang.Subject
 
-import javax.validation.ConstraintViolation
 import javax.validation.Validation
 import javax.validation.Validator
 import javax.validation.ValidatorFactory
@@ -76,27 +75,5 @@ class AuthServiceTest extends Specification {
         then: "only first account is created successfully, second one is not because of duplicated id (email)"
         authService.createAccount(firstAccount).isPresent()
         !authService.createAccount(secondAccount).isPresent()
-    }
-
-    def "Saving an account with wrong email" () {
-
-        given: "new account data is entered"
-        def account = new Account("example@@mail.com", "tester", "secret")
-        Set<ConstraintViolation<Account>> constraintViolations = validator.validate(account)
-
-        expect: "error message should appear"
-        constraintViolations.size() == 1
-        constraintViolations.iterator().next().getMessage() == "Invalid email"
-    }
-
-    def "Saving an account with too short password" () {
-
-        given: "new account data is entered"
-        def account = new Account("example@mail.com", "tester", "sec")
-        Set<ConstraintViolation<Account>> constraintViolations = validator.validate(account)
-
-        expect: "error message should appear"
-        constraintViolations.size() == 1
-        constraintViolations.iterator().next().getMessage() == "Too short password"
     }
 }

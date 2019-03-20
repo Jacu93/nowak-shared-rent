@@ -6,31 +6,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.Valid;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 class AuthController {
 
     private AuthService authService;
-    private ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-    private Validator validator = validatorFactory.getValidator();
 
     AuthController (AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping("/auth/signup")
-    ResponseEntity<Object> createAccount(@RequestBody Account account) {
+    ResponseEntity<Object> createAccount(@RequestBody @Valid Account account) {
         Optional<String> token = authService.createAccount(account);
-        Set<ConstraintViolation<Account>> constraintViolations = validator.validate(account);
-        if (constraintViolations.size()>0) {
-            return new ResponseEntity<>(new MessageResponse(constraintViolations.iterator().next().getMessage()), HttpStatus.BAD_REQUEST);
-        }
         if (token.isPresent()) {
             return new ResponseEntity<>(new TokenResponse(token.get()), HttpStatus.CREATED);
         }
