@@ -3,7 +3,7 @@ function login() {
     let email=document.getElementById("emailInput").value;
     let password=document.getElementById("passInput").value;
 
-    let url = '/auth/login';
+    let url = './auth/login';
     let data = {"email": email, "password": password};
 
     fetch(url, {

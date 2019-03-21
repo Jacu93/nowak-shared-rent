@@ -8,7 +8,7 @@
   
   <script src="scripts/checkToken.js"></script>
   
-  <title>Dashboard - Shared Rent</title>
+  <title>Apartments - Shared Rent</title>
   
 </head>
 <body>
@@ -23,13 +23,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="./index.html">Dashboard</a>
+          </li>
           <li class="nav-item active">
-            <a class="nav-link" href="./index.html">Dashboard
+            <a class="nav-link" href="./apartments.html">Apartments
               <span class="sr-only">(current)</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./apartments.html">Apartments</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">ToDo1</a>
@@ -44,17 +44,35 @@
   
   <!-- Page Content -->
   <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
-        <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
-        <ul class="list-unstyled">
-          <li>Bootstrap 4.2.1</li>
-          <li>jQuery 3.3.1</li>
-        </ul>
+
+      <div class="col-lg-12">
+        <h4 class="mt-5">Add new apartment</h4>
+        <form class="needs-validation" novalidate="">
+  
+          <div class="mb-3">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" placeholder="Example 15/8" required>
+            <div class="invalid-feedback">
+              Address required
+            </div>
+          </div>
+  
+          <div class="mb-3">
+              <label for="address">City</label>
+              <input type="text" class="form-control" id="city" placeholder="City name" required>
+              <div class="invalid-feedback">
+                City name required
+              </div>
+            </div>
+
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Create apartment</button>
+        </form>
+
+        <hr class="mb-4">
+
+
       </div>
     </div>
-  </div>
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
