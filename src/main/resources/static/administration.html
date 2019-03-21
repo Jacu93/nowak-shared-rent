@@ -8,7 +8,7 @@
   
   <script src="scripts/checkToken.js"></script>
   
-  <title>Apartments - Shared Rent</title>
+  <title>Administration - Shared Rent</title>
   
 </head>
 <body>
@@ -27,7 +27,7 @@
             <a class="nav-link" href="./index.html">Dashboard</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="./apartments.html">Apartments
+            <a class="nav-link" href="./administration.html">Administration
               <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -45,10 +45,11 @@
   <!-- Page Content -->
   <div class="container">
 
-      <div class="col-lg-12">
+    <div class="row justify-content-between">
+      <div class="col-md-5 order-md-1">
+
         <h4 class="mt-5">Add new apartment</h4>
-        <form class="needs-validation" novalidate="">
-  
+        <form class="needs-validation" novalidate>
           <div class="mb-3">
             <label for="address">Address</label>
             <input type="text" class="form-control" id="address" placeholder="Example 15/8" required>
@@ -56,26 +57,69 @@
               Address required
             </div>
           </div>
-  
           <div class="mb-3">
-              <label for="address">City</label>
-              <input type="text" class="form-control" id="city" placeholder="City name" required>
-              <div class="invalid-feedback">
-                City name required
-              </div>
+            <label for="address">City</label>
+            <input type="text" class="form-control" id="city" placeholder="City name" required>
+            <div class="invalid-feedback">
+              City name required
             </div>
-
+          </div>
           <button class="btn btn-primary btn-lg btn-block" type="submit">Create apartment</button>
         </form>
-
-        <hr class="mb-4">
-
-
       </div>
+
+      <div class="col-md-5 order-md-2">
+
+        <h4 class="mt-5">Invite roommate</h4>
+        <form class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="address">Email address</label>
+            <input type="text" class="form-control" id="address" placeholder="Example 15/8" required>
+            <div class="invalid-feedback">
+              Address required
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="apartment">Apartment</label>
+            <select class="custom-select d-block" id="apartment" required>
+              <option value="">Choose...</option>
+              <option>Apartment 1</option>
+            </select>
+            <div class="invalid-feedback">
+              Please provide valid apartment.
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Invite roommate</button>
+        </form>
+      </div>
+
     </div>
+  </div>
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+
 </body>
 </html>

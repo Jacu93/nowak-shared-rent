@@ -29,7 +29,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./apartments.html">Apartments</a>
+            <a class="nav-link" href="./administration.html">Administration</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">ToDo1</a>
@@ -44,14 +44,57 @@
   
   <!-- Page Content -->
   <div class="container">
+
     <div class="row">
-      <div class="col-lg-12 text-center">
-        <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
-        <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
-        <ul class="list-unstyled">
-          <li>Bootstrap 4.2.1</li>
-          <li>jQuery 3.3.1</li>
+      <div class="col-md-12">
+        <h4 class="mt-5">Pending invitations</h4>
+        <ul class="list-group mt-4">
+          <li class="list-group-item d-flex justify-content-between">
+            <div>
+              <h6 class="my-0">Street 3/5 New York</h6>
+              <small class="text-muted">jacu@gmail.com is the administrator</small>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-success" type="button">Accept</button>
+              <button class="btn btn btn-danger" type="button">Decline</button>
+            </div>
+          </li>
         </ul>
+      </div>
+    </div>
+
+    <div class="row justify-content-between">
+      <div class="col-md-5 order-md-1">
+        <h4 class="mt-5">Roommates of Szkolna 17 Białystok</h4>
+        <ul class="list-group mt-4">
+          <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <div>
+              <h6 class="my-0">Jan Łoś</h6>
+            </div>
+            <span class="text-muted">500 PLN</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <div>
+              <h6 class="my-0">Wojciech Suchodolski</h6>
+            </div>
+            <span class="text-muted">500 PLN</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-condensed">
+            <div>
+              <h6 class="my-0">Krzysztof Kononowicz</h6>
+            </div>
+            <span class="text-muted">500 PLN</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-5 order-md-2">
+        <h4 class="mt-5">Your apartments</h4>
+        <div class="list-group mt-4" id="myList" role="tablist">
+          <a class="list-group-item list-group-item-action active" data-toggle="list" href="#">Szkolna 17 Białystok</a>
+          <a class="list-group-item list-group-item-action" data-toggle="list" href="#">Urzędnicza 2/9 Toruń</a>
+          <a class="list-group-item list-group-item-action" data-toggle="list" href="#">Dziesięciny 67 Białystok</a>
+          <a class="list-group-item list-group-item-action" data-toggle="list" href="#">Wiartel 3/40 Warszawa</a>
+        </div>
       </div>
     </div>
   </div>
