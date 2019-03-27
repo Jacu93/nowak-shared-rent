@@ -1,5 +1,6 @@
 package com.piekoszek.nowaksharedrent.auth;
 
+import com.piekoszek.nowaksharedrent.response.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
