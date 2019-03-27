@@ -1,5 +1,6 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
+import com.piekoszek.nowaksharedrent.auth.AccountRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class ApartmentServiceConfiguration {
 
     @Bean
-    ApartmentService apartmentService (ApartmentRepository apartmentRepository) {
-        return new ApartmentServiceImpl(apartmentRepository);
+    ApartmentService apartmentService (ApartmentRepository apartmentRepository, AccountRepository accountRepository) {
+        return new ApartmentServiceImpl(apartmentRepository, accountRepository);
     }
 }

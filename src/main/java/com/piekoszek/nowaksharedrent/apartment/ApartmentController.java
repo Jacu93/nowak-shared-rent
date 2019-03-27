@@ -23,8 +23,18 @@ class ApartmentController {
     }
 
     @GetMapping("/apartment/get")
-    @ResponseBody
-    public List<Apartment> apartmentList(@RequestParam("owner") String email) {
+    List<Apartment> apartmentList(@RequestParam("owner") String email) {
         return apartmentService.getApartments(email);
+    }
+
+    @PostMapping("/apartment/new/tenant")
+    ResponseEntity<Object> addNewTenant(@RequestParam("email") String email, @RequestParam("apartment_id") String apartmentId) {
+        apartmentService.addTenant(email, apartmentId);
+        return new ResponseEntity<>(new MessageResponse("Tenant added."), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/apartment/get/one")
+    Apartment apartmentSingle(@RequestParam("id") String id) {
+        return apartmentService.getApartmentDetails(id);
     }
 }

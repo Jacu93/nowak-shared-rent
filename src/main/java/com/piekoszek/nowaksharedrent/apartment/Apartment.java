@@ -1,17 +1,12 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import java.util.Collection;
 
-@Builder
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 class Apartment {
 
     @Id
@@ -26,5 +21,18 @@ class Apartment {
         this.address = address;
         this.city = city;
         this.admin = admin;
+    }
+
+    void setOneTenant(Tenant tenant) {
+        this.tenants.add(tenant);
+    }
+
+    boolean getOneTenant(String email) {
+        while (this.tenants.iterator().hasNext()) {
+            if (this.tenants.iterator().next().getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
     }
 }
