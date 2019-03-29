@@ -34,8 +34,8 @@ class ApartmentServiceImpl implements ApartmentService {
     @Override
     public boolean addTenant(String email, String apartmentId) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
-        if(accountRepository.existsByEmail(email) && !apartment.getOneTenant(email)) {
-            apartment.setOneTenant(Tenant.builder()
+        if(accountRepository.existsByEmail(email) && !apartment.hasTenant(email)) {
+            apartment.addTenant(Tenant.builder()
                     .email(email)
                     .name(accountRepository.findByEmail(email).getName())
                     .build());
