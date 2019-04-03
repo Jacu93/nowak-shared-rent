@@ -81,7 +81,10 @@ class JwtServiceImpl implements JwtService {
     }
 
     private String removeBearerString(String token) {
-            if ((token.split(" ").length < 2) || (!token.toLowerCase().startsWith("bearer "))) {
+        if (token.startsWith("[")) {
+            token = token.substring(1, token.length()-1);
+        }
+        if ((token.split(" ").length < 2) || (!token.toLowerCase().startsWith("bearer "))) {
             throw new MalformedJwtException("Expected bearer authorization type!");
         }
         return token.split(" ")[1];

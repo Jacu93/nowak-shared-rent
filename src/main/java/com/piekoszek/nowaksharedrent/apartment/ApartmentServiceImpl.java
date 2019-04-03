@@ -16,8 +16,8 @@ class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void createApartment(Apartment apartment) {
-        Apartment apartmentToCreate = new Apartment(UUID.randomUUID().toString(), apartment.getAddress(), apartment.getCity(), apartment.getAdmin());
+    public void createApartment(String address, String city, String admin) {
+        Apartment apartmentToCreate = new Apartment(UUID.randomUUID().toString(), address, city, admin);
         apartmentRepository.save(apartmentToCreate);
     }
 
