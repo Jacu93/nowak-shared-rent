@@ -11,7 +11,7 @@ import javax.validation.constraints.Email;
 @Builder
 @Getter
 @AllArgsConstructor
-public class Account {
+class Account {
 
     @Id
     @Email(message = "Invalid email")

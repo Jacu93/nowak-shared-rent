@@ -1,6 +1,6 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
-import com.piekoszek.nowaksharedrent.auth.AccountRepository;
+import com.piekoszek.nowaksharedrent.dto.UserRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,11 +8,11 @@ import java.util.UUID;
 class ApartmentServiceImpl implements ApartmentService {
 
     private ApartmentRepository apartmentRepository;
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
-    ApartmentServiceImpl(ApartmentRepository apartmentRepository, AccountRepository accountRepository) {
+    ApartmentServiceImpl(ApartmentRepository apartmentRepository, UserRepository userRepository) {
         this.apartmentRepository = apartmentRepository;
-        this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,10 +34,10 @@ class ApartmentServiceImpl implements ApartmentService {
     @Override
     public boolean addTenant(String email, String apartmentId) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
-        if(accountRepository.existsByEmail(email) && !apartment.hasTenant(email)) {
+        if(userRepository.existsByEmail(email) && !apartment.hasTenant(email)) {
             apartment.addTenant(Tenant.builder()
                     .email(email)
-                    .name(accountRepository.findByEmail(email).getName())
+                    .name(userRepository.findByEmail(email).getName())
                     .build());
             apartmentRepository.save(apartment);
             return true;
