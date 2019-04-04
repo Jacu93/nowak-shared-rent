@@ -1,8 +1,9 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
+import com.piekoszek.nowaksharedrent.dto.User;
+import com.piekoszek.nowaksharedrent.dto.UserApartment;
 import com.piekoszek.nowaksharedrent.dto.UserRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 class ApartmentServiceImpl implements ApartmentService {
@@ -19,29 +20,31 @@ class ApartmentServiceImpl implements ApartmentService {
     public void createApartment(String address, String city, String admin) {
         Apartment apartmentToCreate = new Apartment(UUID.randomUUID().toString(), address, city, admin);
         apartmentRepository.save(apartmentToCreate);
+        addTenant(admin, apartmentToCreate.getId());
     }
 
     @Override
-    public Apartment getApartmentDetails(String id) {
+    public Apartment getApartment(String id) {
         return apartmentRepository.findById(id);
     }
 
     @Override
-    public List<Apartment> getApartments(String email) {
-        return apartmentRepository.findAllByAdmin(email);
-    }
-
-    @Override
-    public boolean addTenant(String email, String apartmentId) {
+    public void addTenant(String email, String apartmentId) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
-        if(userRepository.existsByEmail(email) && !apartment.hasTenant(email)) {
+        User user = userRepository.findByEmail(email);
+
+        if(user != null && !apartment.hasTenant(email)) {
             apartment.addTenant(Tenant.builder()
                     .email(email)
                     .name(userRepository.findByEmail(email).getName())
                     .build());
             apartmentRepository.save(apartment);
-            return true;
+
+            user.addApartment(UserApartment.builder()
+                    .id(apartment.getId())
+                    .name(apartment.getAddress() + ", " + apartment.getCity())
+                    .isOwner(apartment.getAdmin().equals(email))
+                    .build());
         }
-        return false;
     }
 }

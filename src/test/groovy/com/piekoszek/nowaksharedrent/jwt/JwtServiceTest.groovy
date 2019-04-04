@@ -1,5 +1,7 @@
 package com.piekoszek.nowaksharedrent.jwt
 
+import com.piekoszek.nowaksharedrent.apartment.ApartmentService
+import com.piekoszek.nowaksharedrent.dto.User
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException
 import com.piekoszek.nowaksharedrent.time.TimeService
 import io.jsonwebtoken.SignatureAlgorithm
@@ -13,25 +15,26 @@ class JwtServiceTest extends Specification {
 
     @Subject
     JwtService jwtService
+    ApartmentService apartmentService
 
     TimeService timeService = Mock(TimeService)
     SecretKey key
 
-    def jwtData = JwtData.builder()
+    def user = User.builder()
             .name("exampleName")
             .email("example@mail.com")
             .build()
 
     def setup() {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-        jwtService = new JwtServiceConfiguration().jwtService(key, timeService)
+        jwtService = new JwtServiceConfiguration().jwtService(key, timeService, apartmentService)
     }
 
     def "Generate correct token with user name and email"() {
 
         given: "JWT is generated at second 1 and checked at second 2"
         timeService.millisSinceEpoch() >>> [1000, 2000]
-        def token = jwtService.generateToken(jwtData)
+        def token = jwtService.generateToken(user)
 
         expect: "Information saved in and read from the token are the same"
         jwtService.readToken(token) == JwtData.builder().name("exampleName").email("example@mail.com").build()
@@ -41,7 +44,7 @@ class JwtServiceTest extends Specification {
 
         given: "JWT is generated at second 1 and checked at second 2"
         timeService.millisSinceEpoch() >>> [1000, 2000]
-        def token = jwtService.generateToken(jwtData)
+        def token = jwtService.generateToken(user)
 
         when: "Token is checked"
         jwtService.validateToken(token)
@@ -53,7 +56,7 @@ class JwtServiceTest extends Specification {
 
         given: "JWT is generated at second 1 and checked one hour later"
         timeService.millisSinceEpoch() >>> [1000, 1000 * 60 * 60 + 2000]
-        def token = jwtService.generateToken(jwtData)
+        def token = jwtService.generateToken(user)
 
         when: "Token is checked"
         jwtService.validateToken(token)
@@ -80,11 +83,11 @@ class JwtServiceTest extends Specification {
 
         given: "JWT is generated at second 1 and checked at second 2"
         timeService.millisSinceEpoch() >>> [1000, 2000]
-        def token = jwtService.generateToken(jwtData)
+        def token = jwtService.generateToken(user)
 
         and: "Incorrect secret is used for token validation"
         def secret = ")H@McQfTjWnZr4u7x!A%D*G-KaNdRgUk"
-        jwtService = new JwtServiceConfiguration().jwtService(Keys.hmacShaKeyFor(secret.getBytes()), timeService)
+        jwtService = new JwtServiceConfiguration().jwtService(Keys.hmacShaKeyFor(secret.getBytes()), timeService, apartmentService)
 
         when: "Token is checked"
         jwtService.validateToken(token)

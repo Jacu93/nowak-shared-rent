@@ -1,5 +1,8 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
+import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
+import com.piekoszek.nowaksharedrent.dto.User;
+import com.piekoszek.nowaksharedrent.dto.UserApartment;
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import io.jsonwebtoken.Claims;
@@ -10,30 +13,31 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.Setter;
 
 import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 @Setter
 class JwtServiceImpl implements JwtService {
 
     private SecretKey key;
     private TimeService timeService;
+    private ApartmentService apartmentService;
 
-    JwtServiceImpl(SecretKey key, TimeService timeService) {
+    JwtServiceImpl(SecretKey key, TimeService timeService, ApartmentService apartmentService) {
         this.key = key;
         this.timeService = timeService;
-    }
-
-    void setKey(SecretKey key) {
-        this.key = key;
+        this.apartmentService = apartmentService;
     }
 
     @Override
-    public String generateToken (JwtData jwtData) {
+    public String generateToken (User user) {
         Date now = new Date(timeService.millisSinceEpoch());
 
         String token = Jwts.builder()
-                .claim("name", jwtData.getName())
-                .claim("email", jwtData.getEmail())
+                .claim("name", user.getName())
+                .claim("email", user.getEmail())
+                .claim("apartments", user.getApartments())
                 .setIssuedAt(now)
                 .signWith(key)
                 .setExpiration(new Date(now.getTime() + 60 * 60 * 1000))
@@ -70,7 +74,20 @@ class JwtServiceImpl implements JwtService {
         return JwtData.builder()
                 .name(claimToString(claims, "name"))
                 .email(claimToString(claims, "email"))
+                .apartments(claimToHashSet(claims, "apartments"))
                 .build();
+    }
+
+    private HashSet<UserApartment> claimToHashSet(Claims claims, String name) {
+        HashSet<UserApartment> apartments = new HashSet<>();
+
+        if (!claims.containsKey(name)) {
+            return apartments;
+        }
+        @SuppressWarnings("unchecked")
+        ArrayList<UserApartment> apartmentsAsList = (ArrayList<UserApartment>) claims.get(name);
+        apartments.addAll(apartmentsAsList);
+        return apartments;
     }
 
     private String claimToString(Claims claims, String name) {
