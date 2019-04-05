@@ -2,6 +2,7 @@ package com.piekoszek.nowaksharedrent.jwt
 
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService
 import com.piekoszek.nowaksharedrent.dto.User
+import com.piekoszek.nowaksharedrent.dto.UserApartment
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException
 import com.piekoszek.nowaksharedrent.time.TimeService
 import io.jsonwebtoken.SignatureAlgorithm
@@ -37,7 +38,7 @@ class JwtServiceTest extends Specification {
         def token = jwtService.generateToken(user)
 
         expect: "Information saved in and read from the token are the same"
-        jwtService.readToken(token) == JwtData.builder().name("exampleName").email("example@mail.com").build()
+        jwtService.readToken(token) == JwtData.builder().name("exampleName").email("example@mail.com").apartments(new HashSet<UserApartment>()).build()
     }
 
     def "Check valid token"() {

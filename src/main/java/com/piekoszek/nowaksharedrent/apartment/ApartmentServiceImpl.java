@@ -45,6 +45,7 @@ class ApartmentServiceImpl implements ApartmentService {
                     .name(apartment.getAddress() + ", " + apartment.getCity())
                     .isOwner(apartment.getAdmin().equals(email))
                     .build());
+            userRepository.save(user);
         }
     }
 }

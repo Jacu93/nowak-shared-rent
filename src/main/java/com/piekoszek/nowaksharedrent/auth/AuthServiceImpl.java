@@ -5,6 +5,7 @@ import com.piekoszek.nowaksharedrent.dto.UserRepository;
 import com.piekoszek.nowaksharedrent.hash.HashService;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 class AuthServiceImpl implements AuthService {
@@ -29,6 +30,7 @@ class AuthServiceImpl implements AuthService {
             User userToCreate = User.builder()
                     .email(account.getEmail())
                     .name(account.getName())
+                    .apartments(new HashSet<>())
                     .build();
             accountRepository.save(accountToCreate);
             userRepository.save(userToCreate);
