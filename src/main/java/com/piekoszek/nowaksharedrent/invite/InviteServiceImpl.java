@@ -24,13 +24,11 @@ class InviteServiceImpl implements InviteService {
     }
 
     @Override
-    public boolean isAcceptedInvite(String to, String apartment, boolean isAccepted) {
+    public void resolveInvite(String to, String apartment, boolean isAccepted) {
         Invite existingInvite = inviteRepository.findByReceiverAndApartmentId(to, apartment);
         inviteRepository.deleteByReceiverAndApartmentId(existingInvite.getReceiver(), existingInvite.getApartmentId());
         if (isAccepted) {
             apartmentService.addTenant(to, apartment);
-            return true;
         }
-        return false;
     }
 }

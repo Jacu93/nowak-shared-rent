@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class Invite {
+class Invite {
 
     String sender;
     String receiver;
