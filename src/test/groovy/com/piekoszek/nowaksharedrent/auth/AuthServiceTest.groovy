@@ -51,18 +51,20 @@ class AuthServiceTest extends Specification {
         def firstUser = User.builder()
                 .email(firstAccount.getEmail())
                 .name(firstAccount.getName())
+                .apartments(new HashSet<UserApartment>())
                 .build()
         def secondAccount = new Account("testing@mail.com", "tester", "secret")
-        def SecondUser = User.builder()
+        def secondUser = User.builder()
                 .email(secondAccount.getEmail())
                 .name(secondAccount.getName())
+                .apartments(new HashSet<UserApartment>())
                 .build()
 
         when:
         hashService.encrypt(firstAccount.getPassword()) >> "D74FF0EE8DA3B9806B18C877DBF29BBDE50B5BD8E4DAD7A3A725000FEB82E8F1"
         hashService.encrypt(secondAccount.getPassword()) >> "2BB80D537B1DA3E38BD30361AA855686BDE0EACD7162FEF6A25FE97BF527A25B"
         jwtService.generateToken(firstUser) >> "bearer eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiSmFjZWsiLCJlbWFpbCI6ImphY2tpZS5uOTNAZ21haWwuY29tIiwiaWF0IjoxNTUzMDc0NjcwLCJleHAiOjE1NTMwNzgyNzB9.tMItmryL5GQfKWoOS8XL1iloCvrrkxBCcf-vLajdQvI_tJpg8QOGVM6obs56DU5m-ySIwMDkIj9s-krL-8E3iQ"
-        jwtService.generateToken(SecondUser) >> "bearer eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoicGVubnlzIiwiZW1haWwiOiJwZW5ueXNAdGVzdC5wbCIsImlhdCI6MTU1MzA3NTM2NCwiZXhwIjoxNTUzMDc4OTY0fQ.xL_YQUzM1tsA6e7r9XAB5CsSPmfTf3EbmOaw-CAVv27GxFL-osCd8qobDVkbAtGpHPPVeVurFzH9KCN1GQXt7g"
+        jwtService.generateToken(secondUser) >> "bearer eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoicGVubnlzIiwiZW1haWwiOiJwZW5ueXNAdGVzdC5wbCIsImlhdCI6MTU1MzA3NTM2NCwiZXhwIjoxNTUzMDc4OTY0fQ.xL_YQUzM1tsA6e7r9XAB5CsSPmfTf3EbmOaw-CAVv27GxFL-osCd8qobDVkbAtGpHPPVeVurFzH9KCN1GQXt7g"
 
         then: "both accounts are created successfully"
         authService.createAccount(firstAccount).isPresent()
@@ -76,11 +78,13 @@ class AuthServiceTest extends Specification {
         def firstUser = User.builder()
                 .email(firstAccount.getEmail())
                 .name(firstAccount.getName())
+                .apartments(new HashSet<UserApartment>())
                 .build()
         def secondAccount = new Account("example@mail.com", "example", "pass")
         def SecondUser = User.builder()
                 .email(secondAccount.getEmail())
                 .name(secondAccount.getName())
+                .apartments(new HashSet<UserApartment>())
                 .build()
 
         when:
