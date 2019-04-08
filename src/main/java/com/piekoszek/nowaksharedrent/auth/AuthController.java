@@ -32,7 +32,7 @@ class AuthController {
     ResponseEntity<Object> login(@RequestBody Account account) {
         Optional<String> token = authService.loginUser(account);
         if (token.isPresent()) {
-            return new ResponseEntity<>(new TokenResponse(token.get()), HttpStatus.CREATED);
+            return new ResponseEntity<>(new TokenResponse(token.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("Invalid email or password!"), HttpStatus.UNAUTHORIZED);
     }
