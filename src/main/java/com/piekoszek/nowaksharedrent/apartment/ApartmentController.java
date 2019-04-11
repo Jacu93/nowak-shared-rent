@@ -1,5 +1,7 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.piekoszek.nowaksharedrent.jwt.JwtData;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
@@ -27,6 +29,13 @@ class ApartmentController {
 
     @GetMapping("/apartment")
     ResponseEntity<Object> getApartment(@RequestParam("id") String id) {
-        return new ResponseEntity<>(apartmentService.getApartment(id).toString(), HttpStatus.OK);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String apartmentDetails = mapper.writeValueAsString(apartmentService.getApartment(id));
+            return new ResponseEntity<>(apartmentDetails, HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new MessageResponse("Error"), HttpStatus.BAD_REQUEST);
     }
 }

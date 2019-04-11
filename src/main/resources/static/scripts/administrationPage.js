@@ -18,10 +18,6 @@ function newApartment() {
         body: JSON.stringify(data),
         headers: headers
     })
-        .then(res => {
-            if (res.ok) {
-                console.log('Apartment created');
-            }
-        })
+        .then(res => console.log('Apartment created'))
         .catch(error => console.error('Error:', error));
 }

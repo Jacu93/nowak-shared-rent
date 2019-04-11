@@ -14,7 +14,7 @@ class InviteServiceImpl implements InviteService {
 
     @Override
     public void createInvite(String from, String to, String apartment) {
-        if (!inviteRepository.existsByReceiverAndApartmentId(to, apartment)) {
+        if (!inviteRepository.existsByReceiverAndApartmentId(to, apartment) && apartmentService.getApartment(apartment).getAdmin().equals(from)) {
             inviteRepository.save(Invite.builder()
                     .sender(from)
                     .receiver(to)
