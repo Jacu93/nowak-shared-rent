@@ -1,6 +1,6 @@
 window.onload = () => {
     checkToken();
-};
+}
 
 function newApartment() {
     let address = document.getElementById("address").value;

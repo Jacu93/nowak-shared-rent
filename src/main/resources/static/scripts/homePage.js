@@ -13,4 +13,4 @@ window.onload = () => {
         apartments.appendChild(a);
     }
     apartments.firstChild.className += " active";
-};
+}
