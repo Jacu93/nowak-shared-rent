@@ -1,5 +1,6 @@
 package com.piekoszek.nowaksharedrent.invite;
 
+import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 
 import java.util.ArrayList;
@@ -15,12 +16,14 @@ class InviteServiceImpl implements InviteService {
     }
 
     @Override
-    public void createInvite(String from, String to, String apartment) {
-        if (!inviteRepository.existsByReceiverAndApartmentId(to, apartment) && apartmentService.getApartment(apartment).getAdmin().equals(from)) {
+    public void createInvite(String from, String to, String apartmentId) {
+        if (!inviteRepository.existsByReceiverAndApartmentId(to, apartmentId) && apartmentService.getApartment(apartmentId).getAdmin().equals(from)) {
+            Apartment apartment = apartmentService.getApartment(apartmentId);
             inviteRepository.save(Invite.builder()
                     .sender(from)
                     .receiver(to)
-                    .apartmentId(apartment)
+                    .apartmentId(apartmentId)
+                    .apartmentName(apartment.getAddress() + ", " + apartment.getCity())
                     .build());
         }
     }

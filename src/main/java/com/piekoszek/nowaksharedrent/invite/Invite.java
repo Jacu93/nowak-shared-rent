@@ -10,4 +10,5 @@ public class Invite {
     String sender;
     String receiver;
     String apartmentId;
+    String apartmentName;
 }

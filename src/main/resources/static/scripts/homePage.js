@@ -21,13 +21,14 @@ window.onload = () => {
                 for (let i = 0; i < invitationsArray.length; i++) {
                     let a = document.createElement("LI");
                     a.className = "list-group-item d-flex justify-content-between";
+                    a.setAttribute("apartmentId", invitationsArray[i].apartmentId);
                     invitations.appendChild(a);
             
                     a = document.createElement("DIV")
                     invitations.lastChild.appendChild(a);
 
                     a = document.createElement("H6")
-                    a.innerText = invitationsArray[i].apartmentId;
+                    a.innerText = invitationsArray[i].apartmentName;
                     a.className = "my-0";
                     invitations.lastChild.lastChild.appendChild(a);
 
@@ -42,11 +43,13 @@ window.onload = () => {
                     a = document.createElement("BUTTON")
                     a.innerText = "Accept";
                     a.className = "btn btn-success";
+                    a.setAttribute("onclick", "resolveInvitation(" + i + ", true)");
                     invitations.lastChild.lastChild.appendChild(a);
 
                     a = document.createElement("BUTTON")
                     a.innerText = "Decline";
                     a.className = "btn btn btn-danger";
+                    a.setAttribute("onclick", "resolveInvitation(" + i + ", false)");
                     invitations.lastChild.lastChild.appendChild(a);
                 }
             })
@@ -131,5 +134,23 @@ function inviteTenant() {
         headers: headers
     })
         .then(res => console.log('Invitation sent'))
+        .catch(error => console.error('Error:', error));
+}
+
+function resolveInvitation(id, isAccepted) {
+    let invitations = document.getElementById("invitations").children;
+    let url = './invite/resolve?accepted=' + isAccepted;
+    let data = { "apartmentId": invitations[id].getAttribute("apartmentId") };
+    let headers = new Headers();
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
+
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: headers
+    })
+        .then(res => console.log('Invitation resolved'))
         .catch(error => console.error('Error:', error));
 }
