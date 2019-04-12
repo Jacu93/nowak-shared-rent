@@ -52,7 +52,8 @@
         <div class="row">
             <div class="col-md-12">
                 <h4 class="mt-5">Pending invitations</h4>
-                <ul class="list-group mt-4">
+                <ul id='invitations' class="list-group mt-4">
+                    <!-- EXAMPLE
                     <li class="list-group-item d-flex justify-content-between">
                         <div>
                             <h6 class="my-0">Street 3/5 New York</h6>
@@ -62,7 +63,7 @@
                             <button class="btn btn-success" type="button">Accept</button>
                             <button class="btn btn btn-danger" type="button">Decline</button>
                         </div>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -70,8 +71,16 @@
         <div class="row justify-content-between">
 
             <div class="col-md-5 order-md-1">
-                <h4 class="mt-5">Roommates of Szkolna 17 Białystok</h4>
-                <ul id="roommates" class="list-group mt-4"></ul>
+                <h4 id="apartmentName" class="mt-5">
+                    <!-- EXAMPLE Roommates of Szkolna 17 Białystok -->
+                </h4>
+                <ul id="roommates" class="list-group mt-4">
+                    <!-- EXAMPLE
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <h6 class="my-0">Jan Łoś</h6>
+                        <span class="text-muted">500 PLN</span>
+                    </li> -->
+                </ul>
 
                 <h4 class="mt-5">Invite roommate</h4>
                 <form class="needs-validation" novalidate>
@@ -88,7 +97,10 @@
 
             <div class="col-md-5 order-md-2">
                 <h4 class="mt-5">Your apartments</h4>
-                <div id="apartments" class="list-group mt-4 mb-4"></div>
+                <div id="apartments" class="list-group mt-4 mb-4">
+                    <!-- EXAMPLE
+                    <div class="list-group-item list-group-item-action active" data-toggle="list">Szkolna 17 Białystok</div> -->
+                </div>
             </div>
 
         </div>

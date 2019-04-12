@@ -3,6 +3,56 @@ var selectedApartmentId = null;
 window.onload = () => {
     checkToken();
 
+    let invitations = document.getElementById("invitations");
+    let url = './invite';
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
+    fetch(url, {
+        method: 'GET',
+        headers: headers
+    })
+        .then(res => {
+            res.json().then(json => {
+                console.log(json);
+
+                let invitationsArray = json;
+                
+                for (let i = 0; i < invitationsArray.length; i++) {
+                    let a = document.createElement("LI");
+                    a.className = "list-group-item d-flex justify-content-between";
+                    invitations.appendChild(a);
+            
+                    a = document.createElement("DIV")
+                    invitations.lastChild.appendChild(a);
+
+                    a = document.createElement("H6")
+                    a.innerText = invitationsArray[i].apartmentId;
+                    a.className = "my-0";
+                    invitations.lastChild.lastChild.appendChild(a);
+
+                    a = document.createElement("SMALL")
+                    a.innerText = invitationsArray[i].sender + " is the administrator";
+                    a.className = "text-muted";
+                    invitations.lastChild.lastChild.appendChild(a);
+            
+                    a = document.createElement("DIV")
+                    invitations.lastChild.appendChild(a);
+
+                    a = document.createElement("BUTTON")
+                    a.innerText = "Accept";
+                    a.className = "btn btn-success";
+                    invitations.lastChild.lastChild.appendChild(a);
+
+                    a = document.createElement("BUTTON")
+                    a.innerText = "Decline";
+                    a.className = "btn btn btn-danger";
+                    invitations.lastChild.lastChild.appendChild(a);
+                }
+            })
+        })
+        .catch(error => console.error('Error:', error));
+
     let apartmentsArray = payload.apartments;
     let apartments = document.getElementById("apartments");
 
@@ -32,6 +82,8 @@ function selectApartment(id) {
     while (roommates.firstChild) {
         roommates.removeChild(roommates.firstChild);
     }
+
+    document.getElementById("apartmentName").innerText = "Roommates of " + apartments[id].innerText;
 
     let url = './apartment?id=' + selectedApartmentId;
     fetch(url, {

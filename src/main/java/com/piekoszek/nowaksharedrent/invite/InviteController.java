@@ -25,6 +25,12 @@ class InviteController {
         return new ResponseEntity<>("Invitation sent", HttpStatus.OK);
     }
 
+    @GetMapping("/invite")
+    ResponseEntity<Object> getInvites(@RequestHeader("Authorization") String token) {
+        JwtData jwtData = jwtService.readToken(token);
+        return  new ResponseEntity<>(inviteService.getInvites(jwtData.getEmail()), HttpStatus.OK);
+    }
+
     @PostMapping("/invite/resolve")
     ResponseEntity<Object> resolveInvite(@RequestParam("accepted") Boolean isAccepted, @RequestBody Invite invite, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);

@@ -2,6 +2,8 @@ package com.piekoszek.nowaksharedrent.invite;
 
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 
+import java.util.ArrayList;
+
 class InviteServiceImpl implements InviteService {
 
     private InviteRepository inviteRepository;
@@ -30,5 +32,10 @@ class InviteServiceImpl implements InviteService {
         if (isAccepted) {
             apartmentService.addTenant(to, apartment);
         }
+    }
+
+    @Override
+    public ArrayList<Invite> getInvites (String to) {
+        return new ArrayList<>(inviteRepository.findAllByReceiver(to));
     }
 }
