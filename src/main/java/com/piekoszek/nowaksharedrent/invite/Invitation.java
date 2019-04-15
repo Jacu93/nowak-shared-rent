@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class Invite {
+public class Invitation {
 
     String sender;
     String receiver;
     String apartmentId;
     String apartmentName;
+    boolean isAccepted;
 }

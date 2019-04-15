@@ -13,9 +13,7 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.Setter;
 
 import javax.crypto.SecretKey;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.*;
 
 @Setter
 class JwtServiceImpl implements JwtService {
@@ -41,6 +39,21 @@ class JwtServiceImpl implements JwtService {
                 .setIssuedAt(now)
                 .signWith(key)
                 .setExpiration(new Date(now.getTime() + 60 * 60 * 1000))
+                .compact();
+        return ("bearer " + token);
+    }
+
+    @Override
+    public String generateToken (User user, Date exp) {
+        Date now = new Date(timeService.millisSinceEpoch());
+
+        String token = Jwts.builder()
+                .claim("name", user.getName())
+                .claim("email", user.getEmail())
+                .claim("apartments", user.getApartments())
+                .setIssuedAt(now)
+                .signWith(key)
+                .setExpiration(exp)
                 .compact();
         return ("bearer " + token);
     }
@@ -74,20 +87,26 @@ class JwtServiceImpl implements JwtService {
         return JwtData.builder()
                 .name(claimToString(claims, "name"))
                 .email(claimToString(claims, "email"))
+                .exp(claims.getExpiration())
                 .apartments(claimToHashSet(claims, "apartments"))
                 .build();
     }
 
-    private HashSet<UserApartment> claimToHashSet(Claims claims, String name) {
-        HashSet<UserApartment> apartments = new HashSet<>();
+    private Set<UserApartment> claimToHashSet(Claims claims, String name) {
+        Set<UserApartment> apartments = new HashSet<>();
 
         if (!claims.containsKey(name)) {
             return apartments;
         }
-        @SuppressWarnings("unchecked")
-        ArrayList<UserApartment> apartmentsAsList = (ArrayList<UserApartment>) claims.get(name);
-        apartments.addAll(apartmentsAsList);
-        return apartments;
+
+        try {
+            List<UserApartment> apartmentsAsList = (ArrayList<UserApartment>) claims.get(name);
+            apartments.addAll(apartmentsAsList);
+            return apartments;
+        }
+        catch (Throwable e) {
+            return apartments;
+        }
     }
 
     private String claimToString(Claims claims, String name) {
@@ -98,9 +117,6 @@ class JwtServiceImpl implements JwtService {
     }
 
     private String removeBearerString(String token) {
-        if (token.startsWith("[")) {
-            token = token.substring(1, token.length()-1);
-        }
         if ((token.split(" ").length < 2) || (!token.toLowerCase().startsWith("bearer "))) {
             throw new MalformedJwtException("Expected bearer authorization type!");
         }

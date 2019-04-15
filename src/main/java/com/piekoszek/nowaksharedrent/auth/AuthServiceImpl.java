@@ -3,6 +3,7 @@ package com.piekoszek.nowaksharedrent.auth;
 import com.piekoszek.nowaksharedrent.dto.User;
 import com.piekoszek.nowaksharedrent.dto.UserRepository;
 import com.piekoszek.nowaksharedrent.hash.HashService;
+import com.piekoszek.nowaksharedrent.jwt.JwtData;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
 
 import java.util.HashSet;
@@ -47,5 +48,17 @@ class AuthServiceImpl implements AuthService {
             return Optional.of(jwtService.generateToken(userRepository.findByEmail(account.getEmail())));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> refreshToken(String oldToken) {
+        JwtData oldTokenData = jwtService.readToken(oldToken);
+        try {
+            jwtService.validateToken(oldToken);
+            return Optional.of(jwtService.generateToken(userRepository.findByEmail(oldTokenData.getEmail()), oldTokenData.getExp()));
+        }
+        catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

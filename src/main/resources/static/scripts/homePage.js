@@ -1,21 +1,21 @@
 var selectedApartmentId = null;
 
 window.onload = () => {
+
     checkToken();
 
     let invitations = document.getElementById("invitations");
-    let url = './invite';
+    let url = '/invitation';
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', window.localStorage.getItem("accessToken"));
+
     fetch(url, {
         method: 'GET',
         headers: headers
     })
         .then(res => {
             res.json().then(json => {
-                console.log(json);
-
                 let invitationsArray = json;
                 
                 for (let i = 0; i < invitationsArray.length; i++) {
@@ -58,7 +58,6 @@ window.onload = () => {
 
     let apartmentsArray = payload.apartments;
     let apartments = document.getElementById("apartments");
-
     while (apartments.firstChild) {
         apartments.removeChild(apartments.firstChild);
     }
@@ -67,10 +66,8 @@ window.onload = () => {
         a.innerText = apartmentsArray[i].name;
         a.className = "list-group-item list-group-item-action";
         a.setAttribute("data-toggle", "list");
-
         a.setAttribute("onclick", "selectApartment(" + i + ")");
         a.setAttribute("apartmentId", apartmentsArray[i].id)
-
         apartments.appendChild(a);
     }
     apartments.firstChild.className += " active";
@@ -78,6 +75,7 @@ window.onload = () => {
 }
 
 function selectApartment(id) {
+
     let apartments = document.getElementById("apartments").children;
     selectedApartmentId = apartments[id].getAttribute("apartmentId");
 
@@ -85,10 +83,9 @@ function selectApartment(id) {
     while (roommates.firstChild) {
         roommates.removeChild(roommates.firstChild);
     }
-
     document.getElementById("apartmentName").innerText = "Roommates of " + apartments[id].innerText;
+    let url = '/apartment?id=' + selectedApartmentId;
 
-    let url = './apartment?id=' + selectedApartmentId;
     fetch(url, {
         method: 'GET',
         headers: {
@@ -120,11 +117,11 @@ function selectApartment(id) {
 }
 
 function inviteTenant() {
+
     let email = document.getElementById("email").value;
-    let url = './invite'
+    let url = '/invite'
     let data = { "receiver": email, "apartmentId": selectedApartmentId };
     let headers = new Headers();
-
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', window.localStorage.getItem("accessToken"));
 
@@ -133,16 +130,23 @@ function inviteTenant() {
         body: JSON.stringify(data),
         headers: headers
     })
-        .then(res => console.log('Invitation sent'))
-        .catch(error => console.error('Error:', error));
+    .then(res => {
+        if (res.ok) {
+            res.json().then(json => console.log('Success:', JSON.stringify(json)))
+        }
+        else {
+            res.json().then(json => console.log('Internal error:', JSON.stringify(json)))
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 function resolveInvitation(id, isAccepted) {
-    let invitations = document.getElementById("invitations").children;
-    let url = './invite/resolve?accepted=' + isAccepted;
-    let data = { "apartmentId": invitations[id].getAttribute("apartmentId") };
-    let headers = new Headers();
 
+    let invitations = document.getElementById("invitations").children;
+    let url = '/invitation';
+    let data = { "apartmentId": invitations[id].getAttribute("apartmentId"), "isAccepted": isAccepted };
+    let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', window.localStorage.getItem("accessToken"));
 
@@ -151,6 +155,16 @@ function resolveInvitation(id, isAccepted) {
         body: JSON.stringify(data),
         headers: headers
     })
-        .then(res => console.log('Invitation resolved'))
-        .catch(error => console.error('Error:', error));
+    .then(res => {
+        if (res.ok) {
+            res.json().then(json => {
+                console.log('Success:', JSON.stringify(json));
+                location.reload(true);
+            })
+        }
+        else {
+            res.json().then(json => console.log('Internal error:', JSON.stringify(json)))
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }

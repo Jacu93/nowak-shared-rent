@@ -4,8 +4,7 @@ function register() {
     let name = document.getElementById("nameInput").value;
     let password = document.getElementById("passInput").value;
     let repassword = document.getElementById("repassInput").value;
-
-    let url = './auth/signup';
+    let url = '/auth/signup';
     let data = { "email": email, "name": name, "password": password };
 
     if (password !== repassword) {
@@ -32,7 +31,6 @@ function register() {
         }
     }).then(res => {
         let errorElement = document.getElementById("error");
-        console.log('Success:', JSON.stringify(res));
         if (res.ok) {
             res.json().then(json => {
                 window.localStorage.setItem("accessToken", json.token);

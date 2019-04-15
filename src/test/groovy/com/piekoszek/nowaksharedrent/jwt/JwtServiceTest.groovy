@@ -38,7 +38,7 @@ class JwtServiceTest extends Specification {
         def token = jwtService.generateToken(user)
 
         expect: "Information saved in and read from the token are the same"
-        jwtService.readToken(token) == JwtData.builder().name("exampleName").email("example@mail.com").apartments(new HashSet<UserApartment>()).build()
+        jwtService.readToken(token) == JwtData.builder().name("exampleName").email("example@mail.com").exp(new Date(1000 + 60 * 60 * 1000)).apartments(new HashSet<UserApartment>()).build()
     }
 
     def "Check valid token"() {

@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.HashSet;
+import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -14,5 +15,6 @@ public class JwtData {
 
     private String email;
     private String name;
-    private HashSet<UserApartment> apartments;
+    private Date exp;
+    private Set<UserApartment> apartments;
 }

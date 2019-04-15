@@ -2,43 +2,55 @@ package com.piekoszek.nowaksharedrent.invite;
 
 import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
+import com.piekoszek.nowaksharedrent.dto.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 class InviteServiceImpl implements InviteService {
 
-    private InviteRepository inviteRepository;
+    private InvitationRepository invitationRepository;
     private ApartmentService apartmentService;
+    private UserRepository userRepository;
 
-    InviteServiceImpl (InviteRepository inviteRepository, ApartmentService apartmentService) {
-        this.inviteRepository = inviteRepository;
+    InviteServiceImpl (InvitationRepository invitationRepository, ApartmentService apartmentService, UserRepository userRepository) {
+        this.invitationRepository = invitationRepository;
         this.apartmentService = apartmentService;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void createInvite(String from, String to, String apartmentId) {
-        if (!inviteRepository.existsByReceiverAndApartmentId(to, apartmentId) && apartmentService.getApartment(apartmentId).getAdmin().equals(from)) {
+    public Optional<String> createInvitation(String from, String to, String apartmentId) {
+        if (!invitationRepository.existsByReceiverAndApartmentId(to, apartmentId) && apartmentService.getApartment(apartmentId).getAdmin().equals(from) && userRepository.existsByEmail(to)) {
             Apartment apartment = apartmentService.getApartment(apartmentId);
-            inviteRepository.save(Invite.builder()
+            invitationRepository.save(Invitation.builder()
                     .sender(from)
                     .receiver(to)
                     .apartmentId(apartmentId)
                     .apartmentName(apartment.getAddress() + ", " + apartment.getCity())
                     .build());
+            return Optional.of("Invitation created");
         }
+        return Optional.empty();
     }
 
     @Override
-    public void resolveInvite(String to, String apartment, boolean isAccepted) {
-        Invite existingInvite = inviteRepository.findByReceiverAndApartmentId(to, apartment);
-        inviteRepository.deleteByReceiverAndApartmentId(existingInvite.getReceiver(), existingInvite.getApartmentId());
-        if (isAccepted) {
-            apartmentService.addTenant(to, apartment);
+    public Optional<String> resolveInvitation(String to, String apartment, boolean isAccepted) {
+        Invitation existingInvitation = invitationRepository.findByReceiverAndApartmentId(to, apartment);
+        if (existingInvitation != null) {
+            invitationRepository.deleteByReceiverAndApartmentId(existingInvitation.getReceiver(), existingInvitation.getApartmentId());
+            if (isAccepted) {
+                apartmentService.addTenant(to, apartment);
+                return Optional.of("Invitation accepted");
+            }
+            return Optional.of("Invitation rejected");
         }
+        return Optional.empty();
     }
 
     @Override
-    public ArrayList<Invite> getInvites (String to) {
-        return new ArrayList<>(inviteRepository.findAllByReceiver(to));
+    public List<Invitation> getInvitations(String to) {
+        return new ArrayList<>(invitationRepository.findAllByReceiver(to));
     }
 }

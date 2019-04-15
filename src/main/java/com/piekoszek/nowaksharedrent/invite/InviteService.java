@@ -1,10 +1,11 @@
 package com.piekoszek.nowaksharedrent.invite;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public interface InviteService {
 
-    void createInvite (String from, String to, String apartment);
-    void resolveInvite(String to, String apartment, boolean isAccepted);
-    ArrayList<Invite> getInvites (String to);
+    Optional<String> createInvitation(String from, String to, String apartment);
+    Optional<String> resolveInvitation(String to, String apartment, boolean isAccepted);
+    List<Invitation> getInvitations(String to);
 }

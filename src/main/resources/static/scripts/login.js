@@ -1,9 +1,8 @@
 function login() {
-
+    
     let email=document.getElementById("emailInput").value;
     let password=document.getElementById("passInput").value;
-
-    let url = './auth/login';
+    let url = '/auth/login';
     let data = {"email": email, "password": password};
 
     fetch(url, {
@@ -12,7 +11,8 @@ function login() {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => {
+    })
+    .then(res => {
       let errorElement = document.getElementById("error");
       if(res.ok) {
         res.json().then(json => {

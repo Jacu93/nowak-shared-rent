@@ -14,7 +14,7 @@ public class Apartment {
     private String address;
     private String city;
     private String admin;
-    private HashSet<Tenant> tenants;
+    private Set<Tenant> tenants;
 
     Apartment(String id, String address, String city, String admin) {
         this.id = id;

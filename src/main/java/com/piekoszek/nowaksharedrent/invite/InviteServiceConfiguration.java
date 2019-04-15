@@ -1,6 +1,7 @@
 package com.piekoszek.nowaksharedrent.invite;
 
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
+import com.piekoszek.nowaksharedrent.dto.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 class InviteServiceConfiguration {
 
     @Bean
-    InviteService inviteService (InviteRepository inviteRepository, ApartmentService apartmentService) {
-        return new InviteServiceImpl(inviteRepository, apartmentService);
+    InviteService inviteService (InvitationRepository invitationRepository, ApartmentService apartmentService, UserRepository userRepository) {
+        return new InviteServiceImpl(invitationRepository, apartmentService, userRepository);
     }
 }
