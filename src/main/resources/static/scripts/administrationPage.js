@@ -17,18 +17,21 @@ function newApartment() {
         body: JSON.stringify(data),
         headers: headers
     })
-        .then(res => {
-            if (res.ok) {
-                res.json().then(json => {
+    .then(res => {
+        if (res.ok) {
+            res.json().then(json => {
                 console.log('Success:', JSON.stringify(json));
                 refreshToken();
-                })
-            }
-            else {
-                res.json().then(json => console.log('Internal error:', JSON.stringify(json)))
-            }
-        })
-        .catch(error => console.error('Error:', error));
+                alert ("Apartment created!", "alert-success");
+            })
+        }
+        else {
+            res.json().then(json => console.log('Internal error:', JSON.stringify(json)))
+        }
+    })
+    .catch(error => console.error('Error:', error));
 
-    
+    setTimeout(function () {
+        $('.alert').alert('close')
+    }, 5000);
 }
