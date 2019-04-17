@@ -1,6 +1,6 @@
 package com.piekoszek.nowaksharedrent.jwt.exceptions;
 
-public class InvalidTokenException extends RuntimeException{
+public class InvalidTokenException extends RuntimeException {
 
     public InvalidTokenException() {
         super("Provided token is invalid");

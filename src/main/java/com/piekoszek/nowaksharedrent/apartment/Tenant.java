@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Getter
 @Builder
-class Tenant {
+public class Tenant {
 
     @Id
     private String email;

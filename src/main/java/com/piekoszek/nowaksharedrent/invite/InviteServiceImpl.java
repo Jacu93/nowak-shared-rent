@@ -3,6 +3,7 @@ package com.piekoszek.nowaksharedrent.invite;
 import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.dto.UserRepository;
+import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +22,27 @@ class InviteServiceImpl implements InviteService {
     }
 
     @Override
-    public Optional<String> createInvitation(String from, String to, String apartmentId) {
-        if (!invitationRepository.existsByReceiverAndApartmentId(to, apartmentId) && apartmentService.getApartment(apartmentId).getAdmin().equals(from) && userRepository.existsByEmail(to)) {
-            Apartment apartment = apartmentService.getApartment(apartmentId);
-            invitationRepository.save(Invitation.builder()
-                    .sender(from)
-                    .receiver(to)
-                    .apartmentId(apartmentId)
-                    .apartmentName(apartment.getAddress() + ", " + apartment.getCity())
-                    .build());
-            return Optional.of("Invitation created");
+    public void createInvitation(String from, String to, String apartmentId) {
+        if (!userRepository.existsByEmail(to)) {
+            throw new InviteCreatorException("User with email " + to + " not found!");
         }
-        return Optional.empty();
+        if (invitationRepository.existsByReceiverAndApartmentId(to, apartmentId)) {
+            throw new InviteCreatorException("Duplicated invitation found!");
+        }
+        Apartment apartment = apartmentService.getApartment(apartmentId);
+        if (!apartment.getAdmin().equals(from)) {
+            throw new InviteCreatorException("You're not an administrator of this apartment!");
+        }
+        if (apartment.hasTenant(to)) {
+            throw new InviteCreatorException("User is already tenant of this apartment!");
+        }
+
+        invitationRepository.save(Invitation.builder()
+                .sender(from)
+                .receiver(to)
+                .apartmentId(apartmentId)
+                .apartmentName(apartment.getAddress() + ", " + apartment.getCity())
+                .build());
     }
 
     @Override

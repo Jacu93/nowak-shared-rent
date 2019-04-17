@@ -23,11 +23,8 @@ class InviteController {
     @PostMapping("/invite")
     ResponseEntity<Object> createInvitation(@RequestBody Invitation invitation, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);
-        Optional<String> result = inviteService.createInvitation(jwtData.getEmail(), invitation.getReceiver(), invitation.getApartmentId());
-        if (result.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse(result.get()), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Invalid apartment/receiver or you're not and admin of this apartment!"), HttpStatus.BAD_REQUEST);
+        inviteService.createInvitation(jwtData.getEmail(), invitation.getReceiver(), invitation.getApartmentId());
+        return new ResponseEntity<>(new MessageResponse("Invitation sent."), HttpStatus.OK);
     }
 
     @GetMapping("/invitation")

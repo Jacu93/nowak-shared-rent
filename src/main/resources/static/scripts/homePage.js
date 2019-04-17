@@ -147,8 +147,10 @@ function inviteTenant() {
             alert ("User with email " + email + " successfuly invited!", "alert-success");
         }
         else {
-            res.json().then(json => console.log('Internal error:', JSON.stringify(json)))
-            alert ("User with email " + email + " was not found in database!", "alert-danger");
+            res.json().then(json => {
+                console.log(JSON.stringify(json));
+                alert (json.message, "alert-danger");
+            })
         }
     })
     .catch(error => console.error('Error:', error));

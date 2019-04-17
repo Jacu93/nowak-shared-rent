@@ -28,7 +28,7 @@ public class Apartment {
         tenants.add(tenant);
     }
 
-    boolean hasTenant(String email) {
+    public boolean hasTenant(String email) {
         return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
     }
 }
