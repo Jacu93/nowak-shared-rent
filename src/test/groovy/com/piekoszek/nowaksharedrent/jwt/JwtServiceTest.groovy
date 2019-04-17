@@ -77,7 +77,7 @@ class JwtServiceTest extends Specification {
 
         then: "Token is in incorrect format"
         def ex = thrown(InvalidTokenException)
-        ex.message == "Invalid token format"
+        ex.message == "Expected bearer authorization type!"
     }
 
     def "Check token with incorrect signature"() {
