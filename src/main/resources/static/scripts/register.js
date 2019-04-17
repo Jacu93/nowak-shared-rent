@@ -35,8 +35,7 @@ function register() {
             res.json().then(json => {
                 window.localStorage.setItem("accessToken", json.token);
                 console.log('Success:', JSON.stringify(json));
-                errorElement.innerHTML = "Account registered successfully!";
-                errorElement.style.color = "#009933";
+                window.location.href = 'index.html';
             })
         }
         else {

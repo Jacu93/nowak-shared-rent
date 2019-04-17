@@ -2,10 +2,11 @@ var selectedApartmentId = null;
 
 window.onload = () => {
 
-    checkToken();
-    loadInvitations();
-    loadApartments();
-    selectApartment(0);
+    if (checkToken()) {
+        loadInvitations();
+        loadApartments();
+        selectApartment(0);
+    }
 }
 
 function loadInvitations() {
@@ -114,6 +115,10 @@ function loadRoommates(ApartmentId) {
                 a.className = "text-muted";
                 roommates.lastChild.appendChild(a);
             }
+
+            if (json.admin != payload.email) {
+                document.getElementById("invite-form").setAttribute("disabled","");
+            }
         })
     })
     .catch(error => console.error('Error:', error));
@@ -121,6 +126,7 @@ function loadRoommates(ApartmentId) {
 
 function selectApartment(id) {
 
+    document.getElementById("invite-form").removeAttribute("disabled");
     let apartments = document.getElementById("apartments").children;
     selectedApartmentId = apartments[id].getAttribute("apartmentId");
     document.getElementById("apartmentName").innerText = "Roommates of " + apartments[id].innerText;

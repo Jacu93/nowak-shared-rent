@@ -95,15 +95,14 @@
                 </ul>
 
                 <h4 class="mt-5">Invite roommate</h4>
-                <form class="needs-validation" novalidate>
-                    <div class="mb-3">
-                        <label for="email">Email address</label>
-                        <input type="text" class="form-control" id="email" placeholder="example@email.com" required>
-                        <div class="invalid-feedback">
-                            Email required
+                <form>
+                    <fieldset id="invite-form">
+                        <div class="mb-3">
+                            <label for="email">Email address</label>
+                            <input type="text" class="form-control" id="email" placeholder="example@email.com">
                         </div>
-                    </div>
-                    <button class="btn btn-primary btn-lg btn-block mb-4" type="button" onclick="inviteTenant()">Invite roommate</button>
+                        <button class="btn btn-primary btn-lg btn-block mb-4" type="button" onclick="inviteTenant()">Invite roommate</button>
+                    </fieldset>
                 </form>
             </div>
 

@@ -11,13 +11,18 @@ function decodeToken(token) {
 function checkToken() {
 
     let token = window.localStorage.getItem("accessToken");
-    if (token == null) {
-        window.location.href = "login.html"
+    if (token == null || token.length < 1) {
+        window.location.href = "login.html";
+        return false;
     }
     else {
         decodeToken(token);
-        if (payload.exp < Date.now() / 1000) {
-            window.location.href = "login.html"
+        if (payload.exp > Date.now() / 1000) {
+            return true;
+        }
+        else {
+            window.location.href = "login.html";
+            return false;
         }
     }
 }
