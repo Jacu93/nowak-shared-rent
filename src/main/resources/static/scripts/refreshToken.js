@@ -1,6 +1,6 @@
 function refreshToken() {
     
-    let url = '/auth/refresh';
+    let url = '/auth/update';
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', window.localStorage.getItem("accessToken"));

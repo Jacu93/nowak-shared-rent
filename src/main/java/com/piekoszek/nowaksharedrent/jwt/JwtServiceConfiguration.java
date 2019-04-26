@@ -1,6 +1,5 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
-import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +14,12 @@ class JwtServiceConfiguration {
     @Value("${jwt.secret}")
     private String secret;
 
-    JwtService jwtService(SecretKey secretKey, TimeService timeService, ApartmentService apartmentService) {
-        return new JwtServiceImpl(secretKey, timeService, apartmentService);
+    JwtService jwtService(SecretKey secretKey, TimeService timeService) {
+        return new JwtServiceImpl(secretKey, timeService);
     }
 
     @Bean
-    JwtService jwtService(TimeService timeService, ApartmentService apartmentService) {
-        return new JwtServiceImpl(Keys.hmacShaKeyFor(secret.getBytes()), timeService, apartmentService);
+    JwtService jwtService(TimeService timeService) {
+        return new JwtServiceImpl(Keys.hmacShaKeyFor(secret.getBytes()), timeService);
     }
 }

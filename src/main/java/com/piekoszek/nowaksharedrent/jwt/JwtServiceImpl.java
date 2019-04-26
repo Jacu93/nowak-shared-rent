@@ -1,6 +1,5 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
-import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.dto.User;
 import com.piekoszek.nowaksharedrent.dto.UserApartment;
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException;
@@ -20,12 +19,10 @@ class JwtServiceImpl implements JwtService {
 
     private SecretKey key;
     private TimeService timeService;
-    private ApartmentService apartmentService;
 
-    JwtServiceImpl(SecretKey key, TimeService timeService, ApartmentService apartmentService) {
+    JwtServiceImpl(SecretKey key, TimeService timeService) {
         this.key = key;
         this.timeService = timeService;
-        this.apartmentService = apartmentService;
     }
 
     @Override
@@ -44,16 +41,16 @@ class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken (User user, Date exp) {
+    public String updateTokenData(JwtData jwtData, User userData) {
         Date now = new Date(timeService.millisSinceEpoch());
 
         String token = Jwts.builder()
-                .claim("name", user.getName())
-                .claim("email", user.getEmail())
-                .claim("apartments", user.getApartments())
+                .claim("name", userData.getName())
+                .claim("email", userData.getEmail())
+                .claim("apartments", userData.getApartments())
                 .setIssuedAt(now)
                 .signWith(key)
-                .setExpiration(exp)
+                .setExpiration(jwtData.getExp())
                 .compact();
         return ("bearer " + token);
     }

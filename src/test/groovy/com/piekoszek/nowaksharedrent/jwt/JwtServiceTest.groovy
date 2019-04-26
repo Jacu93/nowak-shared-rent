@@ -1,6 +1,6 @@
 package com.piekoszek.nowaksharedrent.jwt
 
-import com.piekoszek.nowaksharedrent.apartment.ApartmentService
+
 import com.piekoszek.nowaksharedrent.dto.User
 import com.piekoszek.nowaksharedrent.dto.UserApartment
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException
@@ -16,7 +16,6 @@ class JwtServiceTest extends Specification {
 
     @Subject
     JwtService jwtService
-    ApartmentService apartmentService
 
     TimeService timeService = Mock(TimeService)
     SecretKey key
@@ -28,7 +27,7 @@ class JwtServiceTest extends Specification {
 
     def setup() {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-        jwtService = new JwtServiceConfiguration().jwtService(key, timeService, apartmentService)
+        jwtService = new JwtServiceConfiguration().jwtService(key, timeService)
     }
 
     def "Generate correct token with user name and email"() {
@@ -88,7 +87,7 @@ class JwtServiceTest extends Specification {
 
         and: "Incorrect secret is used for token validation"
         def secret = ")H@McQfTjWnZr4u7x!A%D*G-KaNdRgUk"
-        jwtService = new JwtServiceConfiguration().jwtService(Keys.hmacShaKeyFor(secret.getBytes()), timeService, apartmentService)
+        jwtService = new JwtServiceConfiguration().jwtService(Keys.hmacShaKeyFor(secret.getBytes()), timeService)
 
         when: "Token is checked"
         jwtService.validateToken(token)

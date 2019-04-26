@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/auth")
 class AuthController {
 
     private AuthService authService;
@@ -17,7 +18,7 @@ class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/auth/signup")
+    @PostMapping("/signup")
     ResponseEntity<Object> createAccount(@RequestBody @Valid Account account) {
         Optional<String> token = authService.createAccount(account);
         if (token.isPresent()) {
@@ -26,7 +27,7 @@ class AuthController {
         return new ResponseEntity<>(new MessageResponse("Account with such email already exists"), HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     ResponseEntity<Object> login(@RequestBody Account account) {
         Optional<String> token = authService.loginUser(account);
         if (token.isPresent()) {
@@ -35,8 +36,8 @@ class AuthController {
         return new ResponseEntity<>(new MessageResponse("Invalid email or password!"), HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/auth/refresh")
-    ResponseEntity<Object> refreshToken(@RequestHeader("Authorization") String oldToken) {
+    @GetMapping("/update")
+    ResponseEntity<Object> updateTokenData(@RequestHeader("Authorization") String oldToken) {
         Optional<String> token = authService.refreshToken(oldToken);
         if (token.isPresent()) {
             return new ResponseEntity<>(new TokenResponse(token.get()), HttpStatus.OK);

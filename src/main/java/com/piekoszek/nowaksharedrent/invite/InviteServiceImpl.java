@@ -4,8 +4,8 @@ import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.dto.UserRepository;
 import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException;
+import com.piekoszek.nowaksharedrent.uuid.UuidService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,11 +14,13 @@ class InviteServiceImpl implements InviteService {
     private InvitationRepository invitationRepository;
     private ApartmentService apartmentService;
     private UserRepository userRepository;
+    private UuidService uuidService;
 
-    InviteServiceImpl (InvitationRepository invitationRepository, ApartmentService apartmentService, UserRepository userRepository) {
+    InviteServiceImpl (InvitationRepository invitationRepository, ApartmentService apartmentService, UserRepository userRepository, UuidService uuidService) {
         this.invitationRepository = invitationRepository;
         this.apartmentService = apartmentService;
         this.userRepository = userRepository;
+        this.uuidService = uuidService;
     }
 
     @Override
@@ -38,6 +40,7 @@ class InviteServiceImpl implements InviteService {
         }
 
         invitationRepository.save(Invitation.builder()
+                .id(uuidService.generateUuid())
                 .sender(from)
                 .receiver(to)
                 .apartmentId(apartmentId)
@@ -46,12 +49,12 @@ class InviteServiceImpl implements InviteService {
     }
 
     @Override
-    public Optional<String> resolveInvitation(String to, String apartment, boolean isAccepted) {
-        Invitation existingInvitation = invitationRepository.findByReceiverAndApartmentId(to, apartment);
-        if (existingInvitation != null) {
-            invitationRepository.deleteByReceiverAndApartmentId(existingInvitation.getReceiver(), existingInvitation.getApartmentId());
+    public Optional<String> resolveInvitation(String to, String id, boolean isAccepted) {
+        Invitation existingInvitation = invitationRepository.findById(id);
+        if (existingInvitation != null && existingInvitation.receiver.equals(to)) {
+            invitationRepository.deleteById(id);
             if (isAccepted) {
-                apartmentService.addTenant(to, apartment);
+                apartmentService.addTenant(to, existingInvitation.apartmentId);
                 return Optional.of("Invitation accepted");
             }
             return Optional.of("Invitation rejected");
@@ -61,6 +64,6 @@ class InviteServiceImpl implements InviteService {
 
     @Override
     public List<Invitation> getInvitations(String to) {
-        return new ArrayList<>(invitationRepository.findAllByReceiver(to));
+        return invitationRepository.findAllByReceiver(to);
     }
 }

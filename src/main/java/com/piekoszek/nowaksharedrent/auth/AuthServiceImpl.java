@@ -55,7 +55,8 @@ class AuthServiceImpl implements AuthService {
         JwtData oldTokenData = jwtService.readToken(oldToken);
         try {
             jwtService.validateToken(oldToken);
-            return Optional.of(jwtService.generateToken(userRepository.findByEmail(oldTokenData.getEmail()), oldTokenData.getExp()));
+            User updatedData = userRepository.findByEmail(oldTokenData.getEmail());
+            return Optional.of(jwtService.updateTokenData(oldTokenData, updatedData));
         }
         catch (Exception e) {
             return Optional.empty();

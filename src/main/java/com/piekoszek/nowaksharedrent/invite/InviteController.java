@@ -33,10 +33,20 @@ class InviteController {
         return new ResponseEntity<>(inviteService.getInvitations(jwtData.getEmail()), HttpStatus.OK);
     }
 
-    @PostMapping("/invitation")
-    ResponseEntity<Object> resolveInvitation(@RequestBody Invitation invitation, @RequestHeader("Authorization") String token) {
+    @PostMapping("/invitation/{id}/accept")
+    ResponseEntity<Object> acceptInvitation(@PathVariable("id") String id, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);
-        Optional<String> result = inviteService.resolveInvitation(jwtData.getEmail(), invitation.getApartmentId(), invitation.isAccepted);
+        Optional<String> result = inviteService.resolveInvitation(jwtData.getEmail(), id, true);
+        if (result.isPresent()) {
+            return new ResponseEntity<>(new MessageResponse(result.get()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MessageResponse("Invitation not found!"), HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/invitation/{id}/reject")
+    ResponseEntity<Object> rejectInvitation(@PathVariable("id") String id, @RequestHeader("Authorization") String token) {
+        JwtData jwtData = jwtService.readToken(token);
+        Optional<String> result = inviteService.resolveInvitation(jwtData.getEmail(), id, false);
         if (result.isPresent()) {
             return new ResponseEntity<>(new MessageResponse(result.get()), HttpStatus.OK);
         }

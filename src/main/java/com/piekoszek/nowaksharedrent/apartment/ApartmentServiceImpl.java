@@ -3,24 +3,25 @@ package com.piekoszek.nowaksharedrent.apartment;
 import com.piekoszek.nowaksharedrent.dto.User;
 import com.piekoszek.nowaksharedrent.dto.UserApartment;
 import com.piekoszek.nowaksharedrent.dto.UserRepository;
-
-import java.util.UUID;
+import com.piekoszek.nowaksharedrent.uuid.UuidService;
 
 class ApartmentServiceImpl implements ApartmentService {
 
     private ApartmentRepository apartmentRepository;
     private UserRepository userRepository;
+    private UuidService uuidService;
 
-    ApartmentServiceImpl(ApartmentRepository apartmentRepository, UserRepository userRepository) {
+    ApartmentServiceImpl(ApartmentRepository apartmentRepository, UserRepository userRepository, UuidService uuidService) {
         this.apartmentRepository = apartmentRepository;
         this.userRepository = userRepository;
+        this.uuidService = uuidService;
     }
 
     @Override
-    public void createApartment(String address, String city, String admin) {
-        Apartment apartmentToCreate = new Apartment(UUID.randomUUID().toString(), address, city, admin);
+    public void createApartment(String address, String city, String adminEmail) {
+        Apartment apartmentToCreate = new Apartment(uuidService.generateUuid(), address, city, adminEmail);
         apartmentRepository.save(apartmentToCreate);
-        addTenant(admin, apartmentToCreate.getId());
+        addTenant(adminEmail, apartmentToCreate.getId());
     }
 
     @Override

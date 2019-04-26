@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/apartment")
 class ApartmentController {
 
     private ApartmentService apartmentService;
@@ -18,15 +19,15 @@ class ApartmentController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/apartment")
+    @PostMapping
     ResponseEntity<Object> createApartment(@RequestBody Apartment apartment, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);
         apartmentService.createApartment(apartment.getAddress(), apartment.getCity(), jwtData.getEmail());
         return new ResponseEntity<>(new MessageResponse("Apartment created."), HttpStatus.CREATED);
     }
 
-    @GetMapping("/apartment")
-    ResponseEntity<Object> getApartment(@RequestParam("id") String id) {
+    @GetMapping("/{id}")
+    ResponseEntity<Object> getApartment(@PathVariable("id") String id) {
         return new ResponseEntity<>(apartmentService.getApartment(id), HttpStatus.OK);
     }
 }

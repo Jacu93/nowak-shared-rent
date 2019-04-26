@@ -8,7 +8,7 @@ public interface InvitationRepository extends Repository<Invitation, String> {
 
     boolean existsByReceiverAndApartmentId(String to, String apartment);
     void save(Invitation invitation);
-    Invitation findByReceiverAndApartmentId(String to, String apartment);
-    void deleteByReceiverAndApartmentId(String to, String apartment);
+    Invitation findById(String id);
+    void deleteById(String id);
     List<Invitation> findAllByReceiver(String to);
 }

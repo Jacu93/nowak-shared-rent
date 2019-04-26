@@ -21,4 +21,9 @@ class ExceptionHandlerController {
     public ResponseEntity<Object> handleInvalidTokenException (InvalidTokenException ex, WebRequest request) {
         return new ResponseEntity<>(new MessageResponse("Invalid token: " + ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Object> handleThrowableException (Throwable ex, WebRequest request) {
+        return new ResponseEntity<>(new MessageResponse("Undefined error! Sorry, we are working on that"), HttpStatus.BAD_REQUEST);
+    }
 }

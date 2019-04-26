@@ -2,12 +2,10 @@ package com.piekoszek.nowaksharedrent.jwt;
 
 import com.piekoszek.nowaksharedrent.dto.User;
 
-import java.util.Date;
-
 public interface JwtService {
 
     String generateToken(User user);
-    String generateToken (User user, Date exp);
+    String updateTokenData(JwtData jwtData, User userData);
     void validateToken(String token);
     JwtData readToken(String token);
 }

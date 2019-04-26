@@ -28,7 +28,6 @@ function loadInvitations() {
             for (let i = 0; i < invitationsArray.length; i++) {
                 let a = document.createElement("LI");
                 a.className = "list-group-item d-flex justify-content-between";
-                a.setAttribute("apartmentId", invitationsArray[i].apartmentId);
                 invitations.appendChild(a);
         
                 a = document.createElement("DIV")
@@ -50,13 +49,13 @@ function loadInvitations() {
                 a = document.createElement("BUTTON")
                 a.innerText = "Accept";
                 a.className = "btn btn-success";
-                a.setAttribute("onclick", "resolveInvitation(" + i + ", true)");
+                a.setAttribute("onclick", "resolveInvitation(\'" + invitationsArray[i].id + "\', \'accept\')");
                 invitations.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("BUTTON")
                 a.innerText = "Decline";
                 a.className = "btn btn btn-danger";
-                a.setAttribute("onclick", "resolveInvitation(" + i + ", false)");
+                a.setAttribute("onclick", "resolveInvitation(\'" + invitationsArray[i].id + "\', \'reject\')");
                 invitations.lastChild.lastChild.appendChild(a);
             }
         })
@@ -89,7 +88,7 @@ function loadRoommates(ApartmentId) {
     while (roommates.firstChild) {
         roommates.removeChild(roommates.firstChild);
     }
-    let url = '/apartment?id=' + ApartmentId;
+    let url = '/apartment/' + ApartmentId;
     fetch(url, {
         method: 'GET',
         headers: {
@@ -166,18 +165,16 @@ function inviteTenant() {
     }, 5000);
 }
 
-function resolveInvitation(id, isAccepted) {
+function resolveInvitation(id, action) {
 
     let invitations = document.getElementById("invitations").children;
-    let url = '/invitation';
-    let data = { "apartmentId": invitations[id].getAttribute("apartmentId"), "isAccepted": isAccepted };
+    let url = '/invitation/' + id + '/' + action;
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', window.localStorage.getItem("accessToken"));
 
     fetch(url, {
         method: 'POST',
-        body: JSON.stringify(data),
         headers: headers
     })
     .then(res => {
