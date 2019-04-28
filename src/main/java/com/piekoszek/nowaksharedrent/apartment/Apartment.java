@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import java.util.*;
 
 @Getter
-@NoArgsConstructor
 public class Apartment {
 
     @Id
@@ -16,7 +15,7 @@ public class Apartment {
     private String admin;
     private Set<Tenant> tenants;
 
-    Apartment(String id, String address, String city, String admin) {
+    public Apartment(String id, String address, String city, String admin) {
         this.id = id;
         this.address = address;
         this.city = city;
@@ -28,7 +27,7 @@ public class Apartment {
         tenants.add(tenant);
     }
 
-    public boolean hasTenant(String email) {
+    boolean hasTenant(String email) {
         return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
     }
 }

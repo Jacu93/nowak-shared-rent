@@ -19,7 +19,7 @@ public class User {
     private String name;
     private Set<UserApartment> apartments;
 
-    public void addApartment(UserApartment userApartment) {
+    void addApartment(UserApartment userApartment) {
         apartments.add(userApartment);
     }
 }

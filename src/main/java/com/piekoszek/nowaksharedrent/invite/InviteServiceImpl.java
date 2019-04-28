@@ -2,30 +2,25 @@ package com.piekoszek.nowaksharedrent.invite;
 
 import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
-import com.piekoszek.nowaksharedrent.dto.UserRepository;
+import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 class InviteServiceImpl implements InviteService {
 
     private InvitationRepository invitationRepository;
     private ApartmentService apartmentService;
-    private UserRepository userRepository;
+    private UserService userService;
     private UuidService uuidService;
-
-    InviteServiceImpl (InvitationRepository invitationRepository, ApartmentService apartmentService, UserRepository userRepository, UuidService uuidService) {
-        this.invitationRepository = invitationRepository;
-        this.apartmentService = apartmentService;
-        this.userRepository = userRepository;
-        this.uuidService = uuidService;
-    }
 
     @Override
     public void createInvitation(String from, String to, String apartmentId) {
-        if (!userRepository.existsByEmail(to)) {
+        if (!userService.isAccountExists(to)) {
             throw new InviteCreatorException("User with email " + to + " not found!");
         }
         if (invitationRepository.existsByReceiverAndApartmentId(to, apartmentId)) {
@@ -35,7 +30,7 @@ class InviteServiceImpl implements InviteService {
         if (!apartment.getAdmin().equals(from)) {
             throw new InviteCreatorException("You're not an administrator of this apartment!");
         }
-        if (apartment.hasTenant(to)) {
+        if (apartmentService.hasTenant(apartment, to)) {
             throw new InviteCreatorException("User is already tenant of this apartment!");
         }
 

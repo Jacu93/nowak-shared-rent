@@ -16,7 +16,6 @@ class JwtServiceTest extends Specification {
 
     @Subject
     JwtService jwtService
-
     TimeService timeService = Mock(TimeService)
     SecretKey key
 

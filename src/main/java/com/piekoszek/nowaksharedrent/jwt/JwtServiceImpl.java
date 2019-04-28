@@ -9,21 +9,18 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 import javax.crypto.SecretKey;
 import java.util.*;
 
 @Setter
+@AllArgsConstructor
 class JwtServiceImpl implements JwtService {
 
     private SecretKey key;
     private TimeService timeService;
-
-    JwtServiceImpl(SecretKey key, TimeService timeService) {
-        this.key = key;
-        this.timeService = timeService;
-    }
 
     @Override
     public String generateToken (User user) {

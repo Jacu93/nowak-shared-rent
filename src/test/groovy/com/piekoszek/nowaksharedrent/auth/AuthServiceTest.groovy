@@ -2,6 +2,7 @@ package com.piekoszek.nowaksharedrent.auth
 
 import com.piekoszek.nowaksharedrent.dto.User
 import com.piekoszek.nowaksharedrent.dto.UserApartment
+import com.piekoszek.nowaksharedrent.dto.UserService
 import com.piekoszek.nowaksharedrent.hash.HashService
 import com.piekoszek.nowaksharedrent.jwt.JwtService
 import spock.lang.Specification
@@ -19,9 +20,10 @@ class AuthServiceTest extends Specification {
     Validator validator
     HashService hashService = Mock(HashService)
     JwtService jwtService = Mock(JwtService)
+    UserService userService = Mock(UserService)
 
     def setup() {
-        authService = new AuthServiceConfiguration().authService(hashService, jwtService)
+        authService = new AuthServiceConfiguration().authService(hashService, userService, jwtService)
         validatorFactory = Validation.buildDefaultValidatorFactory()
         validator = validatorFactory.getValidator()
     }

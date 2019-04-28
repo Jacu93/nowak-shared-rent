@@ -1,27 +1,24 @@
 package com.piekoszek.nowaksharedrent.auth;
 
 import com.piekoszek.nowaksharedrent.dto.User;
-import com.piekoszek.nowaksharedrent.dto.UserRepository;
+import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.hash.HashService;
 import com.piekoszek.nowaksharedrent.jwt.JwtData;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Optional;
 
+@Slf4j
+@AllArgsConstructor
 class AuthServiceImpl implements AuthService {
 
     private AccountRepository accountRepository;
-    private UserRepository userRepository;
+    private UserService userService;
     private HashService hashService;
     private JwtService jwtService;
-
-    AuthServiceImpl (AccountRepository accountRepository, UserRepository userRepository, HashService hashService, JwtService jwtService) {
-        this.accountRepository = accountRepository;
-        this.userRepository = userRepository;
-        this.hashService = hashService;
-        this.jwtService = jwtService;
-    }
 
     @Override
     public Optional<String> createAccount(Account account) {
@@ -34,7 +31,7 @@ class AuthServiceImpl implements AuthService {
                     .apartments(new HashSet<>())
                     .build();
             accountRepository.save(accountToCreate);
-            userRepository.save(userToCreate);
+            userService.createUser(userToCreate);
             return Optional.of(jwtService.generateToken(userToCreate));
         }
         return Optional.empty();
@@ -45,20 +42,21 @@ class AuthServiceImpl implements AuthService {
         Account registeredAccount = accountRepository.findByEmail(account.getEmail());
         if (registeredAccount != null && hashService.compareWithHash(account.getPassword(), registeredAccount.getPassword()))
         {
-            return Optional.of(jwtService.generateToken(userRepository.findByEmail(account.getEmail())));
+            return Optional.of(jwtService.generateToken(userService.getUser(account.getEmail())));
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<String> refreshToken(String oldToken) {
-        JwtData oldTokenData = jwtService.readToken(oldToken);
         try {
             jwtService.validateToken(oldToken);
-            User updatedData = userRepository.findByEmail(oldTokenData.getEmail());
+            JwtData oldTokenData = jwtService.readToken(oldToken);
+            User updatedData = userService.getUser(oldTokenData.getEmail());
             return Optional.of(jwtService.updateTokenData(oldTokenData, updatedData));
         }
         catch (Exception e) {
+            log.error("Invalid token: " + e.getMessage());
             return Optional.empty();
         }
     }
