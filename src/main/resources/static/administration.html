@@ -9,12 +9,11 @@
     <link rel="stylesheet" href="css/override-style.css">
 
     <script src="scripts/checkToken.js"></script>
-    <script src="scripts/homePage.js"></script>
-    <script src="scripts/alert.js"></script>
     <script src="scripts/refreshToken.js"></script>
+    <script src="scripts/administrationPage.js"></script>
+    <script src="scripts/alert.js"></script>
 
-    <title>Dashboard - Shared Rent</title>
-
+    <title>Administration - Shared Rent</title>
 </head>
 
 <body>
@@ -29,13 +28,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">Dashboard</a>
+                    </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="./index.html">Dashboard
+                        <a class="nav-link" href="./administration.html">Administration
                             <span class="sr-only">(current)</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./administration.html">Administration</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">ToDo1</a>
@@ -61,59 +60,33 @@
             </div> -->
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="mt-5">Pending invitations</h4>
-                <ul id='invitations' class="list-group mt-4">
-                    <!-- EXAMPLE
-                    <li class="list-group-item d-flex justify-content-between">
-                        <div>
-                            <h6 class="my-0">Street 3/5 New York</h6>
-                            <small class="text-muted">jacu@gmail.com is the administrator</small>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button class="btn btn-success" type="button">Accept</button>
-                            <button class="btn btn btn-danger" type="button">Decline</button>
-                        </div>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-
         <div class="row justify-content-between">
-
+            
             <div class="col-md-5 order-md-1">
-                <h4 id="apartmentName" class="mt-5">
-                    <!-- EXAMPLE Roommates of Szkolna 17 Białystok -->
-                </h4>
-                <ul id="roommates" class="list-group mt-4">
-                    <!-- EXAMPLE
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <h6 class="my-0">Jan Łoś</h6>
-                        <span class="text-muted">500 PLN</span>
-                    </li> -->
-                </ul>
-
-                <h4 class="mt-5">Invite roommate</h4>
-                <form>
-                    <fieldset id="invite-form">
-                        <div class="mb-3">
-                            <label for="email">Email address</label>
-                            <input type="text" class="form-control" id="email" placeholder="example@email.com">
+                <h4 class="mt-5">Add new apartment</h4>
+                <form class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Example 15/8" required>
+                        <div class="invalid-feedback">
+                            Address required
                         </div>
-                        <button class="btn btn-primary btn-lg btn-block mb-4" type="button" onclick="inviteTenant()">Invite roommate</button>
-                    </fieldset>
+                    </div>
+                    <div class="mb-3">
+                        <label for="city">City</label>
+                        <input type="text" class="form-control" id="city" placeholder="City name" required>
+                        <div class="invalid-feedback">
+                            City name required
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block" type="button" onclick="newApartment()">Create
+                        apartment</button>
                 </form>
             </div>
 
             <div class="col-md-5 order-md-2">
-                <h4 class="mt-5">Your apartments</h4>
-                <div id="apartments" class="list-group mt-4 mb-4">
-                    <!-- EXAMPLE
-                    <div class="list-group-item list-group-item-action active" data-toggle="list">Szkolna 17 Białystok</div> -->
-                </div>
+                <!-- placeholder -->
             </div>
-
         </div>
     </div>
 

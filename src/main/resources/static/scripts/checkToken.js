@@ -1,18 +1,28 @@
+var payload = null;
+
+function decodeToken(token) {
+    
+    let encodedPayload = token.split(' ')[1];
+    encodedPayload = encodedPayload.split('.')[1];
+    let decodedPayload = atob(encodedPayload);
+    payload = JSON.parse(decodedPayload);
+}
+
 function checkToken() {
 
     let token = window.localStorage.getItem("accessToken");
-
-    if(token == null) {
-        window.location.href = "/login.html"
+    if (token == null || token.length < 1) {
+        window.location.href = "login.html";
+        return false;
     }
     else {
-        let encodedPayload = token.split(' ')[1];
-        encodedPayload = encodedPayload.split('.')[1];
-        let decodedPayload = atob(encodedPayload);
-        let payload = JSON.parse(decodedPayload);
-
-        if(payload.exp < Date.now()/1000) {
-            window.location.href = "/login.html"
+        decodeToken(token);
+        if (payload.exp > Date.now() / 1000) {
+            return true;
+        }
+        else {
+            window.location.href = "login.html";
+            return false;
         }
     }
 }
