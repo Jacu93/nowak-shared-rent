@@ -12,6 +12,7 @@
     <script src="scripts/homePage.js"></script>
     <script src="scripts/alert.js"></script>
     <script src="scripts/refreshToken.js"></script>
+    <script src="scripts/base64js.min.js"></script>
 
     <title>Dashboard - Shared Rent</title>
 
@@ -88,8 +89,16 @@
                 </h4>
                 <ul id="roommates" class="list-group mt-4">
                     <!-- EXAMPLE
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <h6 class="my-0">Jan Łoś</h6>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="my-0">Jan Łoś</h6>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col">
+                                <small class="form-text text-muted">Administrator</small>
+                            </div>
+                        </div>
                         <span class="text-muted">500 PLN</span>
                     </li> -->
                 </ul>

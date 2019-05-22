@@ -5,6 +5,8 @@ function decodeToken(token) {
     let encodedPayload = token.split(' ')[1];
     encodedPayload = encodedPayload.split('.')[1];
     let decodedPayload = atob(encodedPayload);
+    // let decodedPayloadUTF = Base64Decode(encodedPayload);
+    // console.log(JSON.parse(decodedPayloadUTF));
     payload = JSON.parse(decodedPayload);
 }
 
@@ -25,4 +27,9 @@ function checkToken() {
             return false;
         }
     }
+}
+
+function Base64Decode(str, encoding = 'utf-8') {
+    var bytes = base64js.toByteArray(str);
+    return new (typeof TextDecoder === "undefined" ? TextDecoderLite : TextDecoder)(encoding).decode(bytes);
 }
