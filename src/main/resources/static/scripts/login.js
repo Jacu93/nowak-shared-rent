@@ -30,4 +30,6 @@ function login() {
       }
     })
     .catch(error => console.error('Error:', error));
+
+    return false;
 }

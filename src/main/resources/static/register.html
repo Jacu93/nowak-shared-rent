@@ -15,15 +15,16 @@
 <body>
   <div class="login-page">
     <div class="form">
-      <div class="register-form">
+      <form class="register-form" onsubmit="return register()">
         <input id="emailInput" type="text" placeholder="email address" />
         <input id="nameInput" type="text" placeholder="name" />
         <input id="passInput" type="password" placeholder="password" />
         <input id="repassInput" type="password" placeholder="repeat password" />
+        <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1"/>
         <button class="normal-button" onclick="register()">create</button>
         <p class="message">Already registered? <a href="login.html">Sign In</a></p>
         <p class="error-message" id="error"></p>
-      </div>
+      </form>
     </div>
   </div>
 </body>

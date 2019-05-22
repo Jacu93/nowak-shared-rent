@@ -163,6 +163,8 @@ function inviteTenant() {
     setTimeout(function () {
         $('.alert').alert('close')
     }, 5000);
+
+    return false;
 }
 
 function resolveInvitation(id, action) {
