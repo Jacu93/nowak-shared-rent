@@ -4,9 +4,7 @@ function decodeToken(token) {
     
     let encodedPayload = token.split(' ')[1];
     encodedPayload = encodedPayload.split('.')[1];
-    let decodedPayload = atob(encodedPayload);
-    // let decodedPayloadUTF = Base64Decode(encodedPayload);
-    // console.log(JSON.parse(decodedPayloadUTF));
+    let decodedPayload = Base64.decode(encodedPayload);
     payload = JSON.parse(decodedPayload);
 }
 

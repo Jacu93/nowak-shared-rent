@@ -12,6 +12,7 @@
     <script src="scripts/refreshToken.js"></script>
     <script src="scripts/administrationPage.js"></script>
     <script src="scripts/alert.js"></script>
+    <script src="scripts/base64.js"></script>
 
     <title>Administration - Shared Rent</title>
 </head>
@@ -109,8 +110,8 @@
             var validation = Array.prototype.filter.call(forms, function(form) {
             form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
                 }
                 form.classList.add('was-validated');
             }, false);
