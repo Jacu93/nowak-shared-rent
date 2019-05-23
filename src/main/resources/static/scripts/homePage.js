@@ -101,15 +101,41 @@ function loadRoommates(ApartmentId) {
             
             for (let i = 0; i < tenantsArray.length; i++) {
                 let a = document.createElement("LI");
-                a.className = "list-group-item d-flex justify-content-between lh-condensed";
+                a.className = "list-group-item d-flex justify-content-between align-items-center";
                 roommates.appendChild(a);
-        
-                a = document.createElement("H6")
-                a.innerText = tenantsArray[i].name;
-                a.className = "my-0";
+                
+                a = document.createElement("DIV");
+                a.className = "row";
                 roommates.lastChild.appendChild(a);
-        
-                a = document.createElement("SPAN")
+
+                a = document.createElement("DIV");
+                a.className = "col";
+                roommates.lastChild.lastChild.appendChild(a);
+
+                a = document.createElement("H6");
+                a.innerText = tenantsArray[i].name;
+                if (payload.email == tenantsArray[i].email) {
+                    a.innerText += " (you)";
+                }
+                a.className = "my-0";
+                roommates.lastChild.lastChild.lastChild.appendChild(a);
+                
+                if (json.admin == tenantsArray[i].email) {
+                    a = document.createElement("DIV");
+                    a.className = "w-100";
+                    roommates.lastChild.lastChild.appendChild(a);
+
+                    a = document.createElement("DIV");
+                    a.className = "col";
+                    roommates.lastChild.lastChild.appendChild(a);
+
+                    a = document.createElement("SMALL");
+                    a.innerText = "Administrator";
+                    a.className = "form-text text-muted";
+                    roommates.lastChild.lastChild.lastChild.appendChild(a);
+                } 
+
+                a = document.createElement("SPAN");
                 a.innerText = "100 PLN";
                 a.className = "text-muted";
                 roommates.lastChild.appendChild(a);
@@ -163,6 +189,8 @@ function inviteTenant() {
     setTimeout(function () {
         $('.alert').alert('close')
     }, 5000);
+
+    return false;
 }
 
 function resolveInvitation(id, action) {

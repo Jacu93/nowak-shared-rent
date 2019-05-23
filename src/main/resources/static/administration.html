@@ -12,6 +12,8 @@
     <script src="scripts/refreshToken.js"></script>
     <script src="scripts/administrationPage.js"></script>
     <script src="scripts/alert.js"></script>
+    <script src="scripts/base64.js"></script>
+    <script src="scripts/formValidator.js"></script>
 
     <title>Administration - Shared Rent</title>
 </head>
@@ -64,7 +66,7 @@
             
             <div class="col-md-5 order-md-1">
                 <h4 class="mt-5">Add new apartment</h4>
-                <form class="needs-validation" novalidate>
+                <form id="apartment-form" class="needs-validation" novalidate onsubmit="return newApartment()">
                     <div class="mb-3">
                         <label for="address">Address</label>
                         <input type="text" class="form-control" id="address" placeholder="Example 15/8" required>
@@ -79,8 +81,7 @@
                             City name required
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-lg btn-block" type="button" onclick="newApartment()">Create
-                        apartment</button>
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Create apartment">
                 </form>
             </div>
 
@@ -98,8 +99,8 @@
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
+        crossorigin="anonymous"></script> 
+    
 </body>
 
 </html>
