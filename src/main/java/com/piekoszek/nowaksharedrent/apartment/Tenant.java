@@ -13,6 +13,7 @@ public class Tenant {
     @Id
     private String email;
     private String name;
+    private int balance;
 
     @Override
     public int hashCode() {
@@ -32,5 +33,9 @@ public class Tenant {
         }
         Tenant other = (Tenant) obj;
         return email.equals(other.email);
+    }
+
+    void updateBalance(int value) {
+        this.balance += value;
     }
 }

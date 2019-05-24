@@ -6,6 +6,8 @@ import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
+import java.util.Set;
+
 @AllArgsConstructor
 class ApartmentServiceImpl implements ApartmentService {
 
@@ -34,6 +36,7 @@ class ApartmentServiceImpl implements ApartmentService {
             apartment.addTenant(Tenant.builder()
                     .email(user.getEmail())
                     .name(user.getName())
+                    .balance(0)
                     .build());
             apartmentRepository.save(apartment);
 
@@ -49,5 +52,12 @@ class ApartmentServiceImpl implements ApartmentService {
     @Override
     public boolean hasTenant(Apartment apartment, String email) {
         return apartment.hasTenant(email);
+    }
+
+    @Override
+    public void updateBalance(Set<String> excluded, String apartmentId, int value) {
+        Apartment apartment = apartmentRepository.findById(apartmentId);
+        apartment.updateBalance(excluded, value);
+        apartmentRepository.save(apartment);
     }
 }

@@ -30,4 +30,12 @@ public class Apartment {
     boolean hasTenant(String email) {
         return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
     }
+
+    void updateBalance(Set<String> excluded, int value) {
+        for (Tenant tenant : this.tenants) {
+            if (!excluded.contains(tenant.getEmail())) {
+                tenant.updateBalance(value);
+            }
+        }
+    }
 }
