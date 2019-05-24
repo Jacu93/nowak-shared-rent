@@ -28,7 +28,7 @@ class MonthlyPaymentsServiceImpl implements MonthlyPaymentsService {
         }
 
         Payment newPayment = Payment.builder()
-                .createdAt(currDate)
+                .createdAt(currDate.getTimeInMillis())
                 .id(uuidService.generateUuid())
                 .apartmentId(payment.getApartmentId())
                 .title(payment.getTitle())
