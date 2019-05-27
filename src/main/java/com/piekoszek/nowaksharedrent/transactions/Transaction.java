@@ -1,4 +1,4 @@
-package com.piekoszek.nowaksharedrent.payment;
+package com.piekoszek.nowaksharedrent.transactions;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 
 @Builder
 @Getter
-public class Payment {
+public class Transaction {
 
     @Id
     private String id;

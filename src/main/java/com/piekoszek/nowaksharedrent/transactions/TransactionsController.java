@@ -1,4 +1,4 @@
-package com.piekoszek.nowaksharedrent.payment;
+package com.piekoszek.nowaksharedrent.transactions;
 
 import com.piekoszek.nowaksharedrent.jwt.JwtData;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MonthlyPaymentsController {
+public class TransactionsController {
 
-    private MonthlyPaymentsService monthlyPaymentsService;
+    private TransactionsService transactionsService;
     private JwtService jwtService;
 
-    MonthlyPaymentsController(MonthlyPaymentsService monthlyPaymentsService, JwtService jwtService) {
-        this.monthlyPaymentsService = monthlyPaymentsService;
+    TransactionsController(TransactionsService transactionsService, JwtService jwtService) {
+        this.transactionsService = transactionsService;
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/payment")
-    ResponseEntity<Object> addPayment(@RequestBody Payment payment, @RequestHeader("Authorization") String token) {
+    @PostMapping("/transaction")
+    ResponseEntity<Object> addPayment(@RequestBody Transaction transaction, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);
-        monthlyPaymentsService.addPayment(payment, jwtData.getEmail());
-        return new ResponseEntity<>(new MessageResponse("Payment added."), HttpStatus.CREATED);
+        transactionsService.addPayment(transaction, jwtData.getEmail());
+        return new ResponseEntity<>(new MessageResponse("Transaction added."), HttpStatus.CREATED);
     }
 }
