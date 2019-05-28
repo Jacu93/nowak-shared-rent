@@ -31,11 +31,19 @@ public class Apartment {
         return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
     }
 
-    void updateBalance(Set<String> excluded, int value) {
+    void updateBalance(String payerEmail, int transactionValue) {
         for (Tenant tenant : this.tenants) {
-            if (!excluded.contains(tenant.getEmail())) {
-                tenant.updateBalance(value);
+            if (tenant.getEmail().equals(payerEmail)) {
+                tenant.updateBalance(transactionValue / tenants.size() - transactionValue);
+            } else {
+                tenant.updateBalance(transactionValue / tenants.size());
             }
+        }
+    }
+
+    void updateBalance(int transactionValue) {
+        for (Tenant tenant : this.tenants) {
+            tenant.updateBalance(transactionValue / tenants.size());
         }
     }
 }

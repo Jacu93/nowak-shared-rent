@@ -6,8 +6,6 @@ import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
-import java.util.Set;
-
 @AllArgsConstructor
 class ApartmentServiceImpl implements ApartmentService {
 
@@ -55,9 +53,16 @@ class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void updateBalance(Set<String> excluded, String apartmentId, int value) {
+    public void updateBalance(String payerEmail, String apartmentId, int value) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
-        apartment.updateBalance(excluded, value);
+        apartment.updateBalance(payerEmail, value);
+        apartmentRepository.save(apartment);
+    }
+
+    @Override
+    public void updateBalance(String apartmentId, int value) {
+        Apartment apartment = apartmentRepository.findById(apartmentId);
+        apartment.updateBalance(value);
         apartmentRepository.save(apartment);
     }
 }

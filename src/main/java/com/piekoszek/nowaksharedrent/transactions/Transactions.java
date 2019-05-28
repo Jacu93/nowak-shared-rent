@@ -16,7 +16,7 @@ public class Transactions {
         this.transactions = new HashSet<>();
     }
 
-    void addPayment (Transaction transaction) {
+    void newTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
 }

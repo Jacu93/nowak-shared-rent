@@ -1,12 +1,16 @@
 package com.piekoszek.nowaksharedrent.transactions;
 
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
-import com.piekoszek.nowaksharedrent.apartment.Tenant;
+import com.piekoszek.nowaksharedrent.dto.UserService;
+import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -14,13 +18,32 @@ class TransactionsServiceImpl implements TransactionsService {
 
     TransactionsRepository transactionsRepository;
     ApartmentService apartmentService;
+    UserService userService;
     UuidService uuidService;
 
     @Override
-    public void addPayment(Transaction transaction, String email) {
+    public void newTransaction(Transaction transaction, String email) {
+
+        Validator validator;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+        Set<ConstraintViolation<Transaction>> constraintViolations = validator.validate (transaction);
+
+        if (!userService.isAccountExists(email)) {
+            throw new TransactionCreatorException("User with email " + email + " not found!");
+        }
+        if (apartmentService.getApartment(transaction.getApartmentId()) == null) {
+            throw new TransactionCreatorException("Apartment doesn't exist!");
+        }
+        if (!TransactionType.contains(transaction.getType().toString())) {
+            throw new TransactionCreatorException("Incorrect transaction type!");
+        }
+        if (constraintViolations.size()>0) {
+            throw new TransactionCreatorException(constraintViolations.iterator().next().getMessage());
+        }
 
         Calendar currDate = Calendar.getInstance();
-        String monthlyPaymentsId = transaction.getApartmentId() + "m" + (currDate.get(Calendar.MONTH)+1) + "y" + currDate.get(Calendar.YEAR);
+        String monthlyPaymentsId = (currDate.get(Calendar.MONTH)+1) + "_" + currDate.get(Calendar.YEAR) + "_" + transaction.getApartmentId();
 
         Transactions currTransactions = transactionsRepository.findById(monthlyPaymentsId);
         if (currTransactions == null) {
@@ -33,28 +56,19 @@ class TransactionsServiceImpl implements TransactionsService {
                 .apartmentId(transaction.getApartmentId())
                 .title(transaction.getTitle())
                 .type(transaction.getType())
-                .paidBy(email)
+                .paidBy((transaction.getType().toString().equals("BILL")) ? null : email)
                 .value(transaction.getValue())
                 .build();
 
-        currTransactions.addPayment(newTransaction);
+        currTransactions.newTransaction(newTransaction);
         transactionsRepository.save(currTransactions);
 
-        Set<Tenant> tenants = apartmentService.getApartment(transaction.getApartmentId()).getTenants();
-        int amountToPay = transaction.getValue()/tenants.size();
 
-        if (transaction.getType().equals("bill")) {
-            apartmentService.updateBalance(new HashSet<>(), transaction.getApartmentId(), amountToPay);
+        if (transaction.getType().name().equals("BILL")) {
+            apartmentService.updateBalance(transaction.getApartmentId(), transaction.getValue());
         } else {
-            Set<String> excluded = new HashSet<>();
-            excluded.add(email);
-            apartmentService.updateBalance(excluded, transaction.getApartmentId(), amountToPay);
-            excluded.clear();
-            for (Tenant tenant : tenants) {
-                if (!tenant.getEmail().equals(email))
-                excluded.add(tenant.getEmail());
-            }
-            apartmentService.updateBalance(excluded, transaction.getApartmentId(), -transaction.getValue()+amountToPay);
+            apartmentService.updateBalance(email, transaction.getApartmentId(), transaction.getValue());
+
         }
     }
 }

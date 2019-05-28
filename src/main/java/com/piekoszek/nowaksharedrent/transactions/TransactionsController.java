@@ -22,9 +22,9 @@ public class TransactionsController {
     }
 
     @PostMapping("/transaction")
-    ResponseEntity<Object> addPayment(@RequestBody Transaction transaction, @RequestHeader("Authorization") String token) {
+    ResponseEntity<Object> newTransaction(@RequestBody Transaction transaction, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);
-        transactionsService.addPayment(transaction, jwtData.getEmail());
+        transactionsService.newTransaction(transaction, jwtData.getEmail());
         return new ResponseEntity<>(new MessageResponse("Transaction added."), HttpStatus.CREATED);
     }
 }
