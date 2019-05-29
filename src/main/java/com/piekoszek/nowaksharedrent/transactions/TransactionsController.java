@@ -5,10 +5,7 @@ import com.piekoszek.nowaksharedrent.jwt.JwtService;
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TransactionsController {
@@ -26,5 +23,14 @@ public class TransactionsController {
         JwtData jwtData = jwtService.readToken(token);
         transactionsService.newTransaction(transaction, jwtData.getEmail());
         return new ResponseEntity<>(new MessageResponse("Transaction added."), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/transactions/{id}")
+    ResponseEntity<Object> getTransactionsFromMonth(@PathVariable("id") String id) {
+        Transactions transactions = transactionsService.getTransactionsFromMonth(id);
+        if (transactions == null) {
+            return new ResponseEntity<>(new MessageResponse("No transactions with given id found."), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }

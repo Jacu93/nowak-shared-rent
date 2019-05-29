@@ -12,4 +12,15 @@ public enum TransactionType {
         }
         return false;
     }
+
+    public static StringBuilder getTransactionTypes() {
+
+        StringBuilder types = new StringBuilder();
+        for (TransactionType transactionType : TransactionType.values()) {
+            types.append(transactionType.name());
+            types.append(", ");
+        }
+        types.setLength(types.length() - 2);
+        return types;
+    }
 }
