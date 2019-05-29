@@ -35,9 +35,6 @@ class TransactionsServiceImpl implements TransactionsService {
         if (apartmentService.getApartment(transaction.getApartmentId()) == null) {
             throw new TransactionCreatorException("Apartment doesn't exist!");
         }
-        if (!TransactionType.contains(transaction.getType().toString())) {
-            throw new TransactionCreatorException("Incorrect transaction type!");
-        }
         if (constraintViolations.size()>0) {
             throw new TransactionCreatorException(constraintViolations.iterator().next().getMessage());
         }
@@ -56,7 +53,7 @@ class TransactionsServiceImpl implements TransactionsService {
                 .apartmentId(transaction.getApartmentId())
                 .title(transaction.getTitle())
                 .type(transaction.getType())
-                .paidBy((transaction.getType().toString().equals("BILL")) ? null : email)
+                .paidBy((transaction.getType() == TransactionType.BILL) ? null : email)
                 .value(transaction.getValue())
                 .build();
 
@@ -64,7 +61,7 @@ class TransactionsServiceImpl implements TransactionsService {
         transactionsRepository.save(currTransactions);
 
 
-        if (transaction.getType().name().equals("BILL")) {
+        if (transaction.getType() == TransactionType.BILL) {
             apartmentService.updateBalance(transaction.getApartmentId(), transaction.getValue());
         } else {
             apartmentService.updateBalance(email, transaction.getApartmentId(), transaction.getValue());
