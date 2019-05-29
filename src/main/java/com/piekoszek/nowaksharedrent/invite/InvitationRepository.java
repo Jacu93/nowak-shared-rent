@@ -4,7 +4,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface InvitationRepository extends Repository<Invitation, String> {
+interface InvitationRepository extends Repository<Invitation, String> {
 
     boolean existsByReceiverAndApartmentId(String to, String apartment);
     void save(Invitation invitation);

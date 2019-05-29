@@ -16,10 +16,10 @@ import java.util.Set;
 @AllArgsConstructor
 class TransactionsServiceImpl implements TransactionsService {
 
-    TransactionsRepository transactionsRepository;
-    ApartmentService apartmentService;
-    UserService userService;
-    UuidService uuidService;
+    private TransactionsRepository transactionsRepository;
+    private ApartmentService apartmentService;
+    private UserService userService;
+    private UuidService uuidService;
 
     @Override
     public void newTransaction(Transaction transaction, String email) {
@@ -68,7 +68,6 @@ class TransactionsServiceImpl implements TransactionsService {
             apartmentService.updateBalance(transaction.getApartmentId(), transaction.getValue());
         } else {
             apartmentService.updateBalance(email, transaction.getApartmentId(), transaction.getValue());
-
         }
     }
 

@@ -7,7 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TransactionsServiceConfiguration {
+class TransactionsServiceConfiguration {
+
+    TransactionsService transactionsService (ApartmentService apartmentService, UserService userService, UuidService uuidService) {
+        return new TransactionsServiceImpl(new InMemoryTransactionRepository(), apartmentService, userService, uuidService);
+    }
 
     @Bean
     TransactionsService transactionsService (TransactionsRepository transactionsRepository, ApartmentService apartmentService, UserService userService, UuidService uuidService) {
