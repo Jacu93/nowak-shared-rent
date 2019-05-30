@@ -10,7 +10,7 @@
 
     <script src="scripts/checkToken.js"></script>
     <script src="scripts/refreshToken.js"></script>
-    <script src="scripts/administrationPage.js"></script>
+    <script src="scripts/transactionsPage.js"></script>
     <script src="scripts/alert.js"></script>
     <script src="scripts/base64.js"></script>
     <script src="scripts/formValidator.js"></script>
@@ -33,13 +33,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="./index.html">Dashboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./administration.html">Administration</a>
+                    </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="./administration.html">Administration
+                        <a class="nav-link" href="./transactions.html">Transactions
                             <span class="sr-only">(current)</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./transactions.html">Transactions</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">ToDo2</a>
@@ -62,33 +62,45 @@
             </div> -->
         </div>
 
-        <div class="row justify-content-between">
-            
-            <div class="col-md-5 order-md-1">
-                <h4 class="mt-5">Add new apartment</h4>
-                <form id="apartment-form" class="needs-validation" novalidate onsubmit="return newApartment()">
-                    <div class="mb-3">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="Example 15/8" required>
+        <div>
+            <h4 class="mt-5">Add new transaction</h4>
+            <form id="transactions-form" class="needs-validation" novalidate onsubmit="return newTransaction()">
+                <div class="form-row">
+                    <div class="form-group col-md-7 mb-3">
+                        <label for="apartmentId">Apartment</label>
+                        <select id="apartmentId" class="form-control">
+                            <option selected>Szkolna 17, Białystok</option>
+                            <option>Urzędnicza 2, Toruń</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="transactionType">Transaction type</label>
+                        <select id="transactionType" class="form-control">
+                            <option selected value="COMMON_PRODUCT">Common product</option>
+                            <option value="BILL">Bill</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-9 mb-3">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" placeholder="Example transaction" required>
                         <div class="invalid-feedback">
-                            Address required
+                            Transaction name required
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="city">City</label>
-                        <input type="text" class="form-control" id="city" placeholder="City name" required>
+                    <div class="form-group col-md-3 mb-3">
+                        <label for="value">Value</label>
+                        <input type="number" class="form-control" id="value" placeholder="100" required>
                         <div class="invalid-feedback">
-                            City name required
+                            Transaction value required
                         </div>
                     </div>
-                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Create apartment">
-                </form>
-            </div>
-
-            <div class="col-md-5 order-md-2">
-                <!-- placeholder -->
-            </div>
+                </div>
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Add transaction">
+            </form>
         </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -3,19 +3,19 @@ package com.piekoszek.nowaksharedrent.transactions;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Transactions {
 
     @Id
     private String id;
-    private Set<Transaction> transactions;
+    private List<Transaction> transactions;
 
     Transactions(String id) {
         this.id = id;
-        this.transactions = new HashSet<>();
+        this.transactions = new ArrayList<>();
     }
 
     void newTransaction(Transaction transaction) {
