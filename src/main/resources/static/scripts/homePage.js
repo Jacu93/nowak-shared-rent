@@ -136,7 +136,7 @@ function loadRoommates(ApartmentId) {
                 } 
 
                 a = document.createElement("SPAN");
-                a.innerText = "100 PLN";
+                a.innerText = tenantsArray[i].balance/100 + ' PLN';
                 a.className = "text-muted";
                 roommates.lastChild.appendChild(a);
             }

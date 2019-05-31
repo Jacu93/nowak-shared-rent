@@ -11,6 +11,7 @@
     <script src="scripts/checkToken.js"></script>
     <script src="scripts/refreshToken.js"></script>
     <script src="scripts/transactionsPage.js"></script>
+    <script src="scripts/converters.js"></script>
     <script src="scripts/alert.js"></script>
     <script src="scripts/base64.js"></script>
     <script src="scripts/formValidator.js"></script>
@@ -67,10 +68,11 @@
             <form id="transactions-form" class="needs-validation" novalidate onsubmit="return newTransaction()">
                 <div class="form-row">
                     <div class="form-group col-md-7 mb-3">
-                        <label for="apartmentId">Apartment</label>
-                        <select id="apartmentId" class="form-control">
+                        <label for="apartmentId-newTran">Apartment</label>
+                        <select id="apartmentId-newTran" class="form-control">
+                            <!-- EXAMPLE
                             <option selected>Szkolna 17, Białystok</option>
-                            <option>Urzędnicza 2, Toruń</option>
+                            <option>Urzędnicza 2, Toruń</option> -->
                         </select>
                     </div>
                     <div class="form-group col-md-5 mb-3">
@@ -91,14 +93,49 @@
                     </div>
                     <div class="form-group col-md-3 mb-3">
                         <label for="value">Value</label>
-                        <input type="number" class="form-control" id="value" placeholder="100" required>
+                        <input type="text" class="form-control" id="value" placeholder="123.45" pattern="[0-9]+(\.?[0-9]{1,2})?" required>
                         <div class="invalid-feedback">
-                            Transaction value required
+                            Value required (separator ".")
                         </div>
                     </div>
                 </div>
                 <input class="btn btn-primary btn-lg btn-block" type="submit" value="Add transaction">
             </form>
+        </div>
+
+        <hr>
+
+        <div>
+            <h4 class="mt-5">Transactions history</h4>
+            <div class="form-row form-group col-md-6 mb-3">
+                <label for="apartmentId-history">Apartment</label>
+                <select id="apartmentId-history" class="form-control" onchange="loadTransactions()">
+                    <!-- EXAMPLE
+                    <option selected>Szkolna 17, Białystok</option>
+                    <option>Urzędnicza 2, Toruń</option> -->
+                </select>
+            </div>
+            <ul id="transactions" class="list-group mt-4 mb-4">
+                <!-- EXAMPLE
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="my-0">Toilet paper</h6>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <span>10.5 PLN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="col-md-4">
+                            <small class="form-text text-muted">12.03.2019 14:34</small>
+                        </div>
+                        <div class="col-md-8 text-right">
+                            <small class="form-text text-muted">Bill</small>
+                        </div>
+                    </div>
+                </li> -->
+            </ul>
         </div>
 
     </div>
