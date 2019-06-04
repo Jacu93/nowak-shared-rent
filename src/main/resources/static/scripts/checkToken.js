@@ -8,24 +8,24 @@ function decodeToken(token) {
     payload = JSON.parse(decodedPayload);
 }
 
-function checkToken() {
+// function checkToken() {
 
-    let token = window.localStorage.getItem("accessToken");
-    if (token == null || token.length < 1) {
-        window.location.href = "login.html";
-        return false;
-    }
-    else {
-        decodeToken(token);
-        if (payload.exp > Date.now() / 1000) {
-            return true;
-        }
-        else {
-            window.location.href = "login.html";
-            return false;
-        }
-    }
-}
+//     let token = window.localStorage.getItem("accessToken");
+//     if (token == null || token.length < 1) {
+//         window.location.href = "login.html";
+//         return false;
+//     }
+//     else {
+//         decodeToken(token);
+//         if (payload.exp > Date.now() / 1000) {
+//             return true;
+//         }
+//         else {
+//             window.location.href = "login.html";
+//             return false;
+//         }
+//     }
+// }
 
 function Base64Decode(str, encoding = 'utf-8') {
     var bytes = base64js.toByteArray(str);

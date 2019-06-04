@@ -1,5 +1,8 @@
 package com.piekoszek.nowaksharedrent.transactions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TransactionType {
     BILL, COMMON_PRODUCT;
 
@@ -13,7 +16,7 @@ public enum TransactionType {
         return false;
     }
 
-    public static StringBuilder getTransactionTypes() {
+    public static StringBuilder getTransactionTypesAsString() {
 
         StringBuilder types = new StringBuilder();
         for (TransactionType transactionType : TransactionType.values()) {
@@ -21,6 +24,15 @@ public enum TransactionType {
             types.append(", ");
         }
         types.setLength(types.length() - 2);
+        return types;
+    }
+
+    public static List<String> getTransactionTypesAsList() {
+
+        List<String> types = new ArrayList<>();
+        for (TransactionType transactionType : TransactionType.values()) {
+            types.add(transactionType.name());
+        }
         return types;
     }
 }

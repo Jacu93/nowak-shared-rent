@@ -33,4 +33,9 @@ class TransactionsController {
         }
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
+    @GetMapping("/transactions/types")
+    ResponseEntity<Object> getTransactionTypes() {
+        return new ResponseEntity<>(TransactionType.getTransactionTypesAsList(), HttpStatus.OK);
+    }
 }

@@ -1,7 +1,40 @@
+var transactionTypesEnum = null;
+
 window.onload = () => {
     if (checkToken()) {
         loadApartmentsDropdown();
+        loadTransactionTypesDropdown();
         loadTransactions();
+        getTransactionTypesEnum();
+    }
+}
+
+function getTransactionTypesEnum() {
+    fetch('/transactions/types', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => {
+        res.json().then(json => {
+            transactionTypesEnum = json;
+            console.log(payload);
+            console.log(transactionTypesEnum);
+            }
+        )
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function transactionTypes(enumValue) {
+    switch (enumValue) {
+        case 'BILL':
+            return 'Bill';
+        case 'COMMON_PRODUCT':
+            return 'Common product';
+        default:
+            return 'Undefined';
     }
 }
 
@@ -21,12 +54,34 @@ function loadApartmentsDropdown() {
         apartmentsNewTran.appendChild(a);
         apartmentsHistory.appendChild(a.cloneNode(true));
     }
-    // for (let i = 0; i < apartmentsArray.length; i++) {
-    //     let a = document.createElement("OPTION");
-    //     a.innerText = apartmentsArray[i].name;
-    //     a.setAttribute("apartmentId", apartmentsArray[i].id)
-    //     apartmentsHistory.appendChild(a);
-    // }
+}
+
+function loadTransactionTypesDropdown() {
+    let apartmentId = document.getElementById("apartmentId-newTran");
+    let apartmentsArray = payload.apartments;
+    let selectedApartmentId = apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
+    let isOwner = false;
+    for (let apartment of apartmentsArray) {
+        if(apartment.id == selectedApartmentId && apartment.owner) {
+            isOwner = true;
+        }
+    }
+    let transactionType = document.getElementById("transactionType");
+    while (transactionType.firstChild) {
+        transactionType.removeChild(transactionType.firstChild);
+    }
+    for (let i = 0; i < transactionTypesEnum.length; i++) {
+        let a = document.createElement("OPTION");
+        a.innerText = transactionTypes(transactionTypesEnum[i]);
+        a.value = transactionTypesEnum[i];
+        if (transactionTypesEnum[i] == 'BILL') {
+            if(isOwner) {
+                transactionType.appendChild(a);
+            }
+        } else {
+            transactionType.appendChild(a);
+        }
+    }
 }
 
 function newTransaction() {
@@ -139,19 +194,7 @@ function loadTransactions() {
                 transactions.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SMALL");
-                let transactionType
-                switch (transactionsArray[i].type) {
-                    case 'BILL':
-                        transactionType = 'Bill';
-                        break;
-                    case 'COMMON_PRODUCT':
-                        transactionType = 'Common product';
-                        break;
-                    default:
-                        transactionType = 'Undefined';
-                        break;
-                }
-                a.innerText = transactionType;
+                a.innerText = transactionTypes(transactionsArray[i].type);
                 a.className = "form-text text-muted";
                 transactions.lastChild.lastChild.lastChild.appendChild(a);
             }

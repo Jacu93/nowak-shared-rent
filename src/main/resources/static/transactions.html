@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/override-style.css">
+    <link rel="stylesheet" href="css/datepicker.css">
 
     <script src="scripts/checkToken.js"></script>
     <script src="scripts/refreshToken.js"></script>
@@ -15,6 +16,7 @@
     <script src="scripts/alert.js"></script>
     <script src="scripts/base64.js"></script>
     <script src="scripts/formValidator.js"></script>
+    <script src="scripts/bootstrap-datepicker.js"></script>
 
     <title>Administration - Shared Rent</title>
 </head>
@@ -69,7 +71,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-7 mb-3">
                         <label for="apartmentId-newTran">Apartment</label>
-                        <select id="apartmentId-newTran" class="form-control">
+                        <select id="apartmentId-newTran" class="form-control" onchange="loadTransactionTypesDropdown()">
                             <!-- EXAMPLE
                             <option selected>Szkolna 17, Białystok</option>
                             <option>Urzędnicza 2, Toruń</option> -->
@@ -78,8 +80,9 @@
                     <div class="form-group col-md-5 mb-3">
                         <label for="transactionType">Transaction type</label>
                         <select id="transactionType" class="form-control">
+                            <!-- EXAMPLE
                             <option selected value="COMMON_PRODUCT">Common product</option>
-                            <option value="BILL">Bill</option>
+                            <option value="BILL">Bill</option> -->
                         </select>
                     </div>
                 </div>
@@ -107,14 +110,31 @@
 
         <div>
             <h4 class="mt-5">Transactions history</h4>
-            <div class="form-row form-group col-md-6 mb-3">
-                <label for="apartmentId-history">Apartment</label>
-                <select id="apartmentId-history" class="form-control" onchange="loadTransactions()">
-                    <!-- EXAMPLE
-                    <option selected>Szkolna 17, Białystok</option>
-                    <option>Urzędnicza 2, Toruń</option> -->
-                </select>
-            </div>
+            <form id="transactions-form" class="needs-validation" novalidate onsubmit="return newTransaction()">
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="apartmentId-history">Apartment</label>
+                        <select id="apartmentId-history" class="form-control" onchange="loadTransactions()">
+                            <!-- EXAMPLE
+                            <option selected>Szkolna 17, Białystok</option>
+                            <option>Urzędnicza 2, Toruń</option> -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="dateInterval">Date interval</label>
+                        <div class="well">
+                            <div class="input-append date" id="dpMonths" data-date="102/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                              <input class="span2" size="16" type="text" value="02/2012" readonly="">
+                              <span class="add-on"><i class="icon-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group-append col-md-2 mb-3">
+                        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Search">
+                    </div>
+                </div>
+            </form>
+            
             <ul id="transactions" class="list-group mt-4 mb-4">
                 <!-- EXAMPLE
                 <li class="list-group-item">

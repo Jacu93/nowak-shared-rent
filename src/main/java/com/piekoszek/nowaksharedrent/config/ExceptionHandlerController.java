@@ -36,7 +36,7 @@ class ExceptionHandlerController {
     @ExceptionHandler(InvalidFormatException.class)
     public ResponseEntity<Object> handleInviteCreatorException (InvalidFormatException ex, WebRequest request) {
         if (ex.getTargetType().isEnum()) {
-            return new ResponseEntity<>(new MessageResponse(ex.getValue() + " is not value of: " + ex.getTargetType().getSimpleName() + " type. Available types: " + TransactionType.getTransactionTypes()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse(ex.getValue() + " is not value of: " + ex.getTargetType().getSimpleName() + " type. Available types: " + TransactionType.getTransactionTypesAsString()), HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(new MessageResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
