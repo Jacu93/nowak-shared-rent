@@ -9,16 +9,7 @@
     <link rel="stylesheet" href="css/override-style.css">
     <link rel="stylesheet" href="css/datepicker.css">
 
-    <script src="scripts/checkToken.js"></script>
-    <script src="scripts/refreshToken.js"></script>
-    <script src="scripts/transactionsPage.js"></script>
-    <script src="scripts/converters.js"></script>
-    <script src="scripts/alert.js"></script>
-    <script src="scripts/base64.js"></script>
-    <script src="scripts/formValidator.js"></script>
-    <script src="scripts/bootstrap-datepicker.js"></script>
-
-    <title>Administration - Shared Rent</title>
+    <title>Transactions - Shared Rent</title>
 </head>
 
 <body>
@@ -110,27 +101,22 @@
 
         <div>
             <h4 class="mt-5">Transactions history</h4>
-            <form id="transactions-form" class="needs-validation" novalidate onsubmit="return newTransaction()">
+            <form id="transactions-form" onsubmit="return loadTransactions()">
                 <div class="form-row align-items-end">
-                    <div class="form-group col-md-5 mb-3">
+                    <div class="form-group col-md-8 mb-3">
                         <label for="apartmentId-history">Apartment</label>
-                        <select id="apartmentId-history" class="form-control" onchange="loadTransactions()">
+                        <select id="apartmentId-history" class="form-control">
                             <!-- EXAMPLE
                             <option selected>Szkolna 17, Białystok</option>
                             <option>Urzędnicza 2, Toruń</option> -->
                         </select>
                     </div>
-                    <div class="form-group col-md-5 mb-3">
-                        <label for="dateInterval">Date interval</label>
-                        <div class="well">
-                            <div class="input-append date" id="dpMonths" data-date="102/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                              <input class="span2" size="16" type="text" value="02/2012" readonly="">
-                              <span class="add-on"><i class="icon-calendar"></i></span>
-                            </div>
-                        </div>
+                    <div class="form-group col-md-2 mb-3 input-append date" data-date="1/2000" data-date-format="m/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                        <label for="datepicker">Date interval</label>
+                        <input id="datepicker" class="form-control datepicker" size="16" type="text" value="6/2019" readonly>
                     </div>
-                    <div class="input-group-append col-md-2 mb-3">
-                        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Search">
+                    <div class="form-group col-md-2 mb-3">
+                        <input class="btn btn-primary btn-block" type="submit" value="Search">
                     </div>
                 </div>
             </form>
@@ -169,7 +155,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script> 
-    
+    <script src="scripts/bootstrap-datepicker.js"></script>
+    <script src="scripts/checkToken.js"></script>
+    <script src="scripts/refreshToken.js"></script>
+    <script src="scripts/transactionsPage.js"></script>
+    <script src="scripts/converters.js"></script>
+    <script src="scripts/alert.js"></script>
+    <script src="scripts/base64.js"></script>
+    <script src="scripts/formValidator.js"></script>
 </body>
 
 </html>

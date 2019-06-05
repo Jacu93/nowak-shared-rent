@@ -3,13 +3,19 @@ var transactionTypesEnum = null;
 window.onload = () => {
     if (checkToken()) {
         loadApartmentsDropdown();
-        loadTransactionTypesDropdown();
+        getTransactionTypesEnum(loadTransactionTypesDropdown);
         loadTransactions();
-        getTransactionTypesEnum();
+        let currDate = new Date();
+        $('.datepicker').datepicker({
+            format: "m/yyyy",
+            viewMode: 1,
+            minViewMode: 1
+        });
+        $('.datepicker').datepicker('setValue', (currDate.getMonth() + 1) + "/" + currDate.getFullYear());
     }
 }
 
-function getTransactionTypesEnum() {
+function getTransactionTypesEnum(callback) {
     fetch('/transactions/types', {
         method: 'GET',
         headers: {
@@ -19,10 +25,8 @@ function getTransactionTypesEnum() {
     .then(res => {
         res.json().then(json => {
             transactionTypesEnum = json;
-            console.log(payload);
-            console.log(transactionTypesEnum);
-            }
-        )
+            callback();
+        })
     })
     .catch(error => console.error('Error:', error));
 }
@@ -133,13 +137,13 @@ function newTransaction() {
 function loadTransactions() {
 
     let apartmentId = document.getElementById("apartmentId-history");
-    let currDate = new Date()
+    let date = document.getElementById("datepicker").value;
 
     let transactions = document.getElementById("transactions");
     while (transactions.firstChild) {
         transactions.removeChild(transactions.firstChild);
     }
-    let url = '/transactions/' + (currDate.getMonth() + 1) + '_' + currDate.getFullYear() + '_' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
+    let url = '/transactions/' + date.substring(0, date.length-5) + '_' + date.substring(date.length-4, date.length+1) + '_' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
     fetch(url, {
         method: 'GET',
         headers: {
@@ -201,4 +205,6 @@ function loadTransactions() {
         })
     })
     .catch(error => console.error('Error:', error));
+
+    return false;
 }

@@ -1,5 +1,6 @@
 package com.piekoszek.nowaksharedrent.transactions;
 
+import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException;
@@ -28,15 +29,19 @@ class TransactionsServiceImpl implements TransactionsService {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         Set<ConstraintViolation<Transaction>> constraintViolations = validator.validate (transaction);
+        Apartment apartment = apartmentService.getApartment(transaction.getApartmentId());
 
         if (!userService.isAccountExists(email)) {
             throw new TransactionCreatorException("User with email " + email + " not found!");
         }
-        if (apartmentService.getApartment(transaction.getApartmentId()) == null) {
+        if (apartment == null) {
             throw new TransactionCreatorException("Apartment doesn't exist!");
         }
         if (constraintViolations.size()>0) {
             throw new TransactionCreatorException(constraintViolations.iterator().next().getMessage());
+        }
+        if (transaction.getType() == TransactionType.BILL && !apartment.getAdmin().equals(email)) {
+            throw new TransactionCreatorException("Bill transaction type is available only for admin of an apartment!");
         }
 
         Calendar currDate = Calendar.getInstance();
