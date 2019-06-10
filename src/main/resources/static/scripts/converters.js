@@ -6,8 +6,8 @@ function timeConverter(UNIX_timestamp){
     let month = months[a.getMonth()];
     let date = a.getDate();
     let hour = a.getHours();
-    let min = a.getMinutes() < 10 ? '0' + a.getMinutes() : (a.getMinutes()%10 == 0 ? a.getMinutes() + '0' : a.getMinutes()); 
-    let sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : (a.getSeconds()%10 == 0 ? a.getSeconds() + '0' : a.getSeconds()); 
+    let min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(); 
+    let sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); 
     let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     return time;
   }

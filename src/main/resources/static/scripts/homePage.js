@@ -141,8 +141,8 @@ function loadRoommates(ApartmentId) {
                 roommates.lastChild.appendChild(a);
             }
 
-            if (json.admin != payload.email) {
-                document.getElementById("invite-form").setAttribute("disabled","");
+            if (json.admin == payload.email) {
+                document.getElementById("invite-form").removeAttribute("disabled");
             }
         })
     })
@@ -151,7 +151,7 @@ function loadRoommates(ApartmentId) {
 
 function selectApartment(id) {
 
-    document.getElementById("invite-form").removeAttribute("disabled");
+    document.getElementById("invite-form").setAttribute("disabled","");
     let apartments = document.getElementById("apartments").children;
     selectedApartmentId = apartments[id].getAttribute("apartmentId");
     document.getElementById("apartmentName").innerText = "Roommates of " + apartments[id].innerText;
@@ -195,7 +195,6 @@ function inviteTenant() {
 
 function resolveInvitation(id, action) {
 
-    let invitations = document.getElementById("invitations").children;
     let url = '/invitation/' + id + '/' + action;
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

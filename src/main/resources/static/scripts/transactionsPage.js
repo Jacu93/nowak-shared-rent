@@ -117,7 +117,7 @@ function newTransaction() {
                 res.json().then(json => {
                     console.log('Success:', JSON.stringify(json));
                     refreshToken();
-                    alert ("Transaction added!", "alert-success");
+                    location.reload(true);
                 })
             }
             else {
@@ -143,7 +143,7 @@ function loadTransactions() {
     while (transactions.firstChild) {
         transactions.removeChild(transactions.firstChild);
     }
-    let url = '/transactions/' + date.substring(0, date.length-5) + '_' + date.substring(date.length-4, date.length+1) + '_' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
+    let url = '/transactions/' + date.substring(0, date.length-5) + '/' + date.substring(date.length-4, date.length+1) + '/' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
     fetch(url, {
         method: 'GET',
         headers: {
