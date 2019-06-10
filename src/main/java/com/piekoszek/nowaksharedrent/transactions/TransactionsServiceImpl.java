@@ -3,6 +3,7 @@ package com.piekoszek.nowaksharedrent.transactions;
 import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.dto.UserService;
+import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
@@ -21,14 +22,11 @@ class TransactionsServiceImpl implements TransactionsService {
     private ApartmentService apartmentService;
     private UserService userService;
     private UuidService uuidService;
+    private TimeService timeService;
 
     @Override
     public void newTransaction(Transaction transaction, String email) {
 
-        Validator validator;
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-        Set<ConstraintViolation<Transaction>> constraintViolations = validator.validate (transaction);
         Apartment apartment = apartmentService.getApartment(transaction.getApartmentId());
 
         if (!userService.isAccountExists(email)) {
@@ -37,14 +35,12 @@ class TransactionsServiceImpl implements TransactionsService {
         if (apartment == null) {
             throw new TransactionCreatorException("Apartment doesn't exist!");
         }
-        if (constraintViolations.size()>0) {
-            throw new TransactionCreatorException(constraintViolations.iterator().next().getMessage());
-        }
         if (transaction.getType() == TransactionType.BILL && !apartment.getAdmin().equals(email)) {
             throw new TransactionCreatorException("Bill transaction type is available only for admin of an apartment!");
         }
 
         Calendar currDate = Calendar.getInstance();
+        currDate.setTimeInMillis(timeService.millisSinceEpoch());
         String monthlyPaymentsId = (currDate.get(Calendar.MONTH)+1) + "_" + currDate.get(Calendar.YEAR) + "_" + transaction.getApartmentId();
 
         Transactions currTransactions = transactionsRepository.findById(monthlyPaymentsId);

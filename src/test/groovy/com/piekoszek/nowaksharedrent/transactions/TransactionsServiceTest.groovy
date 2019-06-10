@@ -3,10 +3,15 @@ package com.piekoszek.nowaksharedrent.transactions
 import com.piekoszek.nowaksharedrent.apartment.Apartment
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService
 import com.piekoszek.nowaksharedrent.dto.UserService
+import com.piekoszek.nowaksharedrent.time.TimeService
 import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException
 import com.piekoszek.nowaksharedrent.uuid.UuidService
 import spock.lang.Specification
 import spock.lang.Subject
+
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
 
 class TransactionsServiceTest extends Specification {
 
@@ -15,9 +20,11 @@ class TransactionsServiceTest extends Specification {
     ApartmentService apartmentService = Mock(ApartmentService)
     UserService userService = Mock(UserService)
     UuidService uuidService = Mock(UuidService)
+    TimeService timeService = Mock(TimeService)
 
     def setup() {
-        transactionsService = new TransactionsServiceConfiguration().transactionsService(apartmentService, userService, uuidService)
+        transactionsService = new TransactionsServiceConfiguration().transactionsService(apartmentService, userService, uuidService, timeService)
+        timeService.millisSinceEpoch() >> 1556697600000
     }
 
     def "Adding first transaction (with payer) of the given month" () {
@@ -51,10 +58,10 @@ class TransactionsServiceTest extends Specification {
         transactions[0].getValue() == 15
     }
 
-    def "Adding first transaction (without payer - bill type) of the given month" () {
+    def "Adding first transaction (without payer - bill type) of the given month as an administrator" () {
 
         given: "User chose an apartment, transaction type and provided transaction title and value"
-        def userId = "tenant1@mail.com"
+        def userId = "admin@mail.com"
         def apartmentId = "9dc8bd06-6a89-455a-bc31-9f85f5036b5a"
         def transactionType = TransactionType.BILL
         def title = "Toilet paper"
@@ -180,6 +187,32 @@ class TransactionsServiceTest extends Specification {
         ex.message == "Apartment doesn't exist!"
     }
 
+    def "Adding bill type transaction (without payer) of the given month as a tenant" () {
+
+        given: "User chose an apartment, transaction type and provided transaction title and value"
+        def userId = "tenant@mail.com"
+        def apartmentId = "9dc8bd06-6a89-455a-bc31-9f85f5036b5a"
+        def transactionType = TransactionType.BILL
+        def title = "Toilet paper"
+        def value = 15
+
+        when:
+        userService.isAccountExists(userId) >> true
+        apartmentService.getApartment("9dc8bd06-6a89-455a-bc31-9f85f5036b5a") >> new Apartment("9dc8bd06-6a89-455a-bc31-9f85f5036b5a", "Street 1", "City", "admin@mail.com")
+        Transaction transaction = Transaction.builder()
+                .paidBy(userId)
+                .apartmentId(apartmentId)
+                .title(title)
+                .value(value)
+                .type(transactionType)
+                .build()
+        transactionsService.newTransaction(transaction, userId)
+
+        then: "Transaction is not added because user is not an administrator"
+        def ex = thrown(TransactionCreatorException)
+        ex.message == "Bill transaction type is available only for admin of an apartment!"
+    }
+
     def "Adding transaction but it doesn't have any known transaction type" () {
 
         given: "User chose an apartment, transaction type and provided transaction title and value"
@@ -205,36 +238,11 @@ class TransactionsServiceTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def "Adding transaction with negative value" () {
-
-        given: "User chose an apartment, transaction type and provided transaction title and value"
-        def userId = "tenant1@mail.com"
-        def apartmentId = "9dc8bd06-6a89-455a-bc31-9f85f5036b5a"
-        def transactionType = TransactionType.COMMON_PRODUCT
-        def title = "Toilet paper"
-        def value = -15
-
-        when:
-        userService.isAccountExists(userId) >> true
-        apartmentService.getApartment("9dc8bd06-6a89-455a-bc31-9f85f5036b5a") >> new Apartment("9dc8bd06-6a89-455a-bc31-9f85f5036b5a", "Street 1", "City", "admin@mail.com")
-        Transaction transaction = Transaction.builder()
-                .paidBy(userId)
-                .apartmentId(apartmentId)
-                .title(title)
-                .value(value)
-                .type(transactionType)
-                .build()
-        transactionsService.newTransaction(transaction, userId)
-
-        then: "Transaction is not added and proper message is returned"
-        def ex = thrown(TransactionCreatorException)
-        ex.message == "Transaction value has to be greater than 0!"
-    }
-
     def "Extracting transactions from a current month" () {
 
         given: "User in order to check transaction history chose month, year and apartment"
         def currDate = Calendar.getInstance()
+        currDate.setTimeInMillis(1556697600000)
         def apartmentId = "9dc8bd06-6a89-455a-bc31-9f85f5036b5a"
         def month = currDate.get(Calendar.MONTH)+1
         def year = currDate.get(Calendar.YEAR)

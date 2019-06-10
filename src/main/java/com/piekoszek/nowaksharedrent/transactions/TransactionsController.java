@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 class TransactionsController {
 
@@ -19,7 +21,7 @@ class TransactionsController {
     }
 
     @PostMapping("/transaction")
-    ResponseEntity<Object> newTransaction(@RequestBody Transaction transaction, @RequestHeader("Authorization") String token) {
+    ResponseEntity<Object> newTransaction(@RequestBody @Valid Transaction transaction, @RequestHeader("Authorization") String token) {
         JwtData jwtData = jwtService.readToken(token);
         transactionsService.newTransaction(transaction, jwtData.getEmail());
         return new ResponseEntity<>(new MessageResponse("Transaction added."), HttpStatus.CREATED);

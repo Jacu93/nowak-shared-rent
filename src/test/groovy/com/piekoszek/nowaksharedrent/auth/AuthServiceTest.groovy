@@ -16,16 +16,12 @@ class AuthServiceTest extends Specification {
 
     @Subject
     AuthService authService
-    ValidatorFactory validatorFactory
-    Validator validator
     HashService hashService = Mock(HashService)
     JwtService jwtService = Mock(JwtService)
     UserService userService = Mock(UserService)
 
     def setup() {
         authService = new AuthServiceConfiguration().authService(hashService, userService, jwtService)
-        validatorFactory = Validation.buildDefaultValidatorFactory()
-        validator = validatorFactory.getValidator()
     }
 
     def "Save an account in database"() {
