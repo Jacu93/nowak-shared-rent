@@ -50,7 +50,9 @@ class TransactionsServiceTest extends Specification {
 
         then: "Transaction is added and balance of all tenants is updated"
         1 * apartmentService.updateBalance(userId, apartmentId, value)
-        Set<Transaction> transactions = transactionsService.getTransactionsFromMonth("5_2019_9dc8bd06-6a89-455a-bc31-9f85f5036b5a").getTransactions()
+        def currDate = Calendar.getInstance()
+        currDate.setTimeInMillis(timeService.millisSinceEpoch())
+        Set<Transaction> transactions = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId).getTransactions()
         transactions[0].getApartmentId() == apartmentId
         transactions[0].getPaidBy() == userId
         transactions[0].getTitle() == title
@@ -81,7 +83,9 @@ class TransactionsServiceTest extends Specification {
 
         then: "Transaction is added and balance of all tenants is updated"
         1 * apartmentService.updateBalance(apartmentId, value)
-        Set<Transaction> transactions = transactionsService.getTransactionsFromMonth("5_2019_9dc8bd06-6a89-455a-bc31-9f85f5036b5a").getTransactions()
+        def currDate = Calendar.getInstance()
+        currDate.setTimeInMillis(timeService.millisSinceEpoch())
+        Set<Transaction> transactions = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId).getTransactions()
         transactions[0].getApartmentId() == apartmentId
         transactions[0].getPaidBy() == null
         transactions[0].getTitle() == title
@@ -123,7 +127,9 @@ class TransactionsServiceTest extends Specification {
         then: "Both transactions are added and balance of all tenants is updated"
         1 * apartmentService.updateBalance(userId, apartmentId, firstTransactionValue)
         1 * apartmentService.updateBalance(userId, apartmentId, secondTransactionValue)
-        Set<Transaction> transactions = transactionsService.getTransactionsFromMonth("5_2019_9dc8bd06-6a89-455a-bc31-9f85f5036b5a").getTransactions()
+        def currDate = Calendar.getInstance()
+        currDate.setTimeInMillis(timeService.millisSinceEpoch())
+        Set<Transaction> transactions = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId).getTransactions()
         transactions.size() == 2
         for (Transaction transaction : transactions) {
             assert transaction.getApartmentId() == apartmentId
@@ -242,10 +248,8 @@ class TransactionsServiceTest extends Specification {
 
         given: "User in order to check transaction history chose month, year and apartment"
         def currDate = Calendar.getInstance()
-        currDate.setTimeInMillis(1556697600000)
+        currDate.setTimeInMillis(timeService.millisSinceEpoch())
         def apartmentId = "9dc8bd06-6a89-455a-bc31-9f85f5036b5a"
-        def month = currDate.get(Calendar.MONTH)+1
-        def year = currDate.get(Calendar.YEAR)
         def transactionType = TransactionType.COMMON_PRODUCT
         def firstTransactionTitle = "Toilet paper"
         def firstTransactionValue = 15
@@ -271,8 +275,7 @@ class TransactionsServiceTest extends Specification {
                 .build()
         transactionsService.newTransaction(firstTransaction, "tenant1@mail.com")
         transactionsService.newTransaction(secondTransaction, "tenant1@mail.com")
-        def monthlyPaymentsId = month + "_" + year + "_" + apartmentId
-        def transactionsHistory = transactionsService.getTransactionsFromMonth(monthlyPaymentsId)
+        def transactionsHistory = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId)
 
         then: "Two transactions added earlier are presented to the user"
         Set<Transaction> transactions = transactionsHistory.getTransactions()

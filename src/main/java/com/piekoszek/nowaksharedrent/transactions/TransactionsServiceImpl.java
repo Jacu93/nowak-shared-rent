@@ -70,8 +70,9 @@ class TransactionsServiceImpl implements TransactionsService {
     }
 
     @Override
-    public Transactions getTransactionsFromMonth(String transactionsId) {
+    public Transactions getTransactionsFromMonth(int month, int year, String apartmentId) {
 
-        return transactionsRepository.findById(transactionsId);
+        String monthlyPaymentsId = month + "_" + year + "_" + apartmentId;
+        return transactionsRepository.findById(monthlyPaymentsId);
     }
 }

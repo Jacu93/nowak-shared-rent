@@ -27,9 +27,9 @@ class TransactionsController {
         return new ResponseEntity<>(new MessageResponse("Transaction added."), HttpStatus.CREATED);
     }
 
-    @GetMapping("/transactions/{id}")
-    ResponseEntity<Object> getTransactionsFromMonth(@PathVariable("id") String id) {
-        Transactions transactions = transactionsService.getTransactionsFromMonth(id);
+    @GetMapping("/transactions/{month}/{year}/{apartmentId}")
+    ResponseEntity<Object> getTransactionsFromMonth(@PathVariable("month") int month, @PathVariable("year") int year, @PathVariable("apartmentId") String apartmentId) {
+        Transactions transactions = transactionsService.getTransactionsFromMonth(month, year, apartmentId);
         if (transactions == null) {
             return new ResponseEntity<>(new MessageResponse("No transactions with given id found."), HttpStatus.BAD_REQUEST);
         }
