@@ -1,5 +1,6 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
+import com.piekoszek.nowaksharedrent.jwt.Jwt;
 import com.piekoszek.nowaksharedrent.jwt.JwtData;
 import com.piekoszek.nowaksharedrent.jwt.JwtService;
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
@@ -20,8 +21,8 @@ class ApartmentController {
     }
 
     @PostMapping
-    ResponseEntity<Object> createApartment(@RequestBody Apartment apartment, @RequestHeader("Authorization") String token) {
-        JwtData jwtData = jwtService.readToken(token);
+    ResponseEntity<Object> createApartment(@RequestBody Apartment apartment, @Jwt JwtData jwtData) {
+        //JwtData jwtData = jwtService.readToken(token);
         apartmentService.createApartment(apartment.getAddress(), apartment.getCity(), jwtData.getEmail());
         return new ResponseEntity<>(new MessageResponse("Apartment created."), HttpStatus.CREATED);
     }
