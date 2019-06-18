@@ -1,6 +1,7 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
 import com.piekoszek.nowaksharedrent.dto.UserApartment;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Getter
 @Builder
 @EqualsAndHashCode
+@AllArgsConstructor
 public class JwtData {
 
     private String email;
