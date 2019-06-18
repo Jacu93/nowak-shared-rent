@@ -1,4 +1,4 @@
-function refreshToken() {
+function refreshToken(callback) {
     
     let url = '/auth/update';
     let headers = new Headers();
@@ -14,6 +14,7 @@ function refreshToken() {
           res.json().then(json => {
             window.localStorage.setItem("accessToken", json.token);
             console.log('Success:', JSON.stringify(json));
+            callback();
           })
         }
         else {
@@ -23,4 +24,11 @@ function refreshToken() {
         }
       })
       .catch(error => console.error('Error:', error));
+}
+
+function emptyCallback() {
+}
+
+function pageReload() {
+    location.reload(true);
 }
