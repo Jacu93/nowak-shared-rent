@@ -8,12 +8,6 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/override-style.css">
 
-    <script src="scripts/checkToken.js"></script>
-    <script src="scripts/homePage.js"></script>
-    <script src="scripts/alert.js"></script>
-    <script src="scripts/refreshToken.js"></script>
-    <script src="scripts/base64.js"></script>
-
     <title>Dashboard - Shared Rent</title>
 
 </head>
@@ -39,10 +33,10 @@
                         <a class="nav-link" href="./administration.html">Administration</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">ToDo1</a>
+                        <a class="nav-link" href="./transactions.html">Transactions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">ToDo2</a>
+                        <a class="nav-link" onclick="logout()">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -105,7 +99,7 @@
 
                 <h4 class="mt-5">Invite roommate</h4>
                 <form onsubmit="return inviteTenant()">
-                    <fieldset id="invite-form">
+                    <fieldset disabled id="invite-form">
                         <div class="mb-3">
                             <label for="email">Email address</label>
                             <input type="text" class="form-control" id="email" placeholder="example@email.com">
@@ -135,6 +129,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="scripts/checkToken.js"></script>
+    <script src="scripts/homePage.js"></script>
+    <script src="scripts/alert.js"></script>
+    <script src="scripts/refreshToken.js"></script>
+    <script src="scripts/base64.js"></script>
+    <script src="scripts/logout.js"></script>
 
 </body>
 

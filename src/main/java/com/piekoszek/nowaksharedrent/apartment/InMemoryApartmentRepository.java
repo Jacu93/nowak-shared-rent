@@ -3,7 +3,7 @@ package com.piekoszek.nowaksharedrent.apartment;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryApartmentRepository implements ApartmentRepository {
+class InMemoryApartmentRepository implements ApartmentRepository {
 
     private Map<String, Apartment> map = new ConcurrentHashMap<>();
 

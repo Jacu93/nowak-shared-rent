@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/override-style.css">
+    <link rel="stylesheet" href="css/datepicker.css">
+
+    <title>Transactions - Shared Rent</title>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="./index.html">Shared Rent</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./administration.html">Administration</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="./transactions.html">Transactions
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div id="alerts">
+            <!-- EXAMPLE
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div> -->
+        </div>
+
+        <div>
+            <h4 class="mt-5">Add new transaction</h4>
+            <form id="transactions-form" class="needs-validation" novalidate onsubmit="return newTransaction()">
+                <div class="form-row">
+                    <div class="form-group col-md-7 mb-3">
+                        <label for="apartmentId-newTran">Apartment</label>
+                        <select id="apartmentId-newTran" class="form-control" onchange="loadTransactionTypesDropdown()">
+                            <!-- EXAMPLE
+                            <option selected>Szkolna 17, Białystok</option>
+                            <option>Urzędnicza 2, Toruń</option> -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="transactionType">Transaction type</label>
+                        <select id="transactionType" class="form-control">
+                            <!-- EXAMPLE
+                            <option selected value="COMMON_PRODUCT">Common product</option>
+                            <option value="BILL">Bill</option> -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-9 mb-3">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" placeholder="Example transaction" required>
+                        <div class="invalid-feedback">
+                            Transaction name required
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 mb-3">
+                        <label for="value">Value</label>
+                        <input type="text" class="form-control" id="value" placeholder="123.45" pattern="[0-9]+(\.?[0-9]{1,2})?" required>
+                        <div class="invalid-feedback">
+                            Value required (separator ".")
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Add transaction">
+            </form>
+        </div>
+
+        <hr>
+
+        <div>
+            <h4 class="mt-5">Transactions history</h4>
+            <form id="transactions-form" onsubmit="return loadTransactions()">
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-8 mb-3">
+                        <label for="apartmentId-history">Apartment</label>
+                        <select id="apartmentId-history" class="form-control">
+                            <!-- EXAMPLE
+                            <option selected>Szkolna 17, Białystok</option>
+                            <option>Urzędnicza 2, Toruń</option> -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 mb-3 input-append date" data-date="1/2000" data-date-format="m/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                        <label for="datepicker">Date interval</label>
+                        <input id="datepicker" class="form-control datepicker" size="16" type="text" value="6/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2 mb-3">
+                        <input class="btn btn-primary btn-block" type="submit" value="Search">
+                    </div>
+                </div>
+            </form>
+            
+            <ul id="transactions" class="list-group mt-4 mb-4">
+                <!-- EXAMPLE
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="my-0">Toilet paper</h6>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <span>10.5 PLN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="col-md-4">
+                            <small class="form-text text-muted">12.03.2019 14:34</small>
+                        </div>
+                        <div class="col-md-8 text-right">
+                            <small class="form-text text-muted">Bill</small>
+                        </div>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script> 
+    <script src="scripts/bootstrap-datepicker.js"></script>
+    <script src="scripts/checkToken.js"></script>
+    <script src="scripts/refreshToken.js"></script>
+    <script src="scripts/transactionsPage.js"></script>
+    <script src="scripts/converters.js"></script>
+    <script src="scripts/alert.js"></script>
+    <script src="scripts/base64.js"></script>
+    <script src="scripts/formValidator.js"></script>
+    <script src="scripts/logout.js"></script>
+    
+</body>
+
+</html>

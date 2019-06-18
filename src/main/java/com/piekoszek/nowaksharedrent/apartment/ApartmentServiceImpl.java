@@ -34,6 +34,7 @@ class ApartmentServiceImpl implements ApartmentService {
             apartment.addTenant(Tenant.builder()
                     .email(user.getEmail())
                     .name(user.getName())
+                    .balance(0)
                     .build());
             apartmentRepository.save(apartment);
 
@@ -49,5 +50,19 @@ class ApartmentServiceImpl implements ApartmentService {
     @Override
     public boolean hasTenant(Apartment apartment, String email) {
         return apartment.hasTenant(email);
+    }
+
+    @Override
+    public void updateBalance(String payerEmail, String apartmentId, int value) {
+        Apartment apartment = apartmentRepository.findById(apartmentId);
+        apartment.updateBalance(payerEmail, value);
+        apartmentRepository.save(apartment);
+    }
+
+    @Override
+    public void updateBalance(String apartmentId, int value) {
+        Apartment apartment = apartmentRepository.findById(apartmentId);
+        apartment.updateBalance(value);
+        apartmentRepository.save(apartment);
     }
 }

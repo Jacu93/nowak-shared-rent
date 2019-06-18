@@ -6,4 +6,6 @@ public interface ApartmentService {
     Apartment getApartment(String id);
     void addTenant(String email, String apartmentId);
     boolean hasTenant(Apartment apartment, String email);
+    void updateBalance(String payerEmail, String apartmentId, int value);
+    void updateBalance(String apartmentId, int value);
 }

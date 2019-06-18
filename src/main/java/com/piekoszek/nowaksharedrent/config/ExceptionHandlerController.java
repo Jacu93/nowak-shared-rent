@@ -1,8 +1,13 @@
 package com.piekoszek.nowaksharedrent.config;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException;
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException;
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
+import com.piekoszek.nowaksharedrent.transactions.TransactionType;
+import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 class ExceptionHandlerController {
 
     @ExceptionHandler(InviteCreatorException.class)
@@ -22,8 +28,17 @@ class ExceptionHandlerController {
         return new ResponseEntity<>(new MessageResponse("Invalid token: " + ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(Throwable.class)
-    public ResponseEntity<Object> handleThrowableException (Throwable ex, WebRequest request) {
-        return new ResponseEntity<>(new MessageResponse("Undefined error! Sorry, we are working on that"), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(TransactionCreatorException.class)
+    public ResponseEntity<Object> handleTransactionCreatorException (TransactionCreatorException ex, WebRequest request) {
+        return new ResponseEntity<>(new MessageResponse("Transaction could not be added: " + ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<Object> handleInviteCreatorException (InvalidFormatException ex, WebRequest request) {
+        if (ex.getTargetType().isEnum()) {
+            return new ResponseEntity<>(new MessageResponse(ex.getValue() + " is not value of: " + ex.getTargetType().getSimpleName() + " type. Available types: " + TransactionType.getTransactionTypesAsString()), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(new MessageResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }

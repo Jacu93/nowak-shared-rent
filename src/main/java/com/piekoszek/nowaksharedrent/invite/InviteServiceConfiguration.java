@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 class InviteServiceConfiguration {
 
     InviteService inviteService (ApartmentService apartmentService, UserService userService, UuidService uuidService) {
-        return  new InviteServiceImpl(new InMemoryInvitationRepository(), apartmentService, userService, uuidService);
+        return new InviteServiceImpl(new InMemoryInvitationRepository(), apartmentService, userService, uuidService);
     }
 
     @Bean
