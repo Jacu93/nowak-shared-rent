@@ -1,28 +1,23 @@
 package com.piekoszek.nowaksharedrent.transactions;
 
+import com.piekoszek.nowaksharedrent.jwt.Jwt;
 import com.piekoszek.nowaksharedrent.jwt.JwtData;
-import com.piekoszek.nowaksharedrent.jwt.JwtService;
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@AllArgsConstructor
 @RestController
 class TransactionsController {
 
     private TransactionsService transactionsService;
-    private JwtService jwtService;
-
-    TransactionsController(TransactionsService transactionsService, JwtService jwtService) {
-        this.transactionsService = transactionsService;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping("/transaction")
-    ResponseEntity<Object> newTransaction(@RequestBody @Valid Transaction transaction, @RequestHeader("Authorization") String token) {
-        JwtData jwtData = jwtService.readToken(token);
+    ResponseEntity<Object> newTransaction(@RequestBody @Valid Transaction transaction, @Jwt JwtData jwtData) {
         transactionsService.newTransaction(transaction, jwtData.getEmail());
         return new ResponseEntity<>(new MessageResponse("Transaction added."), HttpStatus.CREATED);
     }

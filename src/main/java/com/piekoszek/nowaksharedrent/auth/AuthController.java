@@ -1,6 +1,7 @@
 package com.piekoszek.nowaksharedrent.auth;
 
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,15 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
 class AuthController {
 
     private AuthService authService;
-
-    AuthController (AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/signup")
     ResponseEntity<Object> createAccount(@RequestBody @Valid Account account) {

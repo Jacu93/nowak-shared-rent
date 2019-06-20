@@ -23,7 +23,7 @@ function newApartment() {
             if (res.ok) {
                 res.json().then(json => {
                     console.log('Success:', JSON.stringify(json));
-                    refreshToken();
+                    refreshToken(emptyCallback);
                     alert ("Apartment created!", "alert-success");
                 })
             }

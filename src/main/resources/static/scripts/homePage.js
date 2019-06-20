@@ -208,8 +208,7 @@ function resolveInvitation(id, action) {
         if (res.ok) {
             res.json().then(json => {
                 console.log('Success:', JSON.stringify(json));
-                refreshToken();
-                location.reload(true);
+                refreshToken(pageReload);
             })
         }
         else {
