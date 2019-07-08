@@ -6,6 +6,8 @@ import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
+import java.util.Calendar;
+
 @AllArgsConstructor
 class ApartmentServiceImpl implements ApartmentService {
 
@@ -63,6 +65,23 @@ class ApartmentServiceImpl implements ApartmentService {
     public void updateBalance(String apartmentId, int value) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         apartment.updateBalance(value);
+        apartmentRepository.save(apartment);
+    }
+
+    @Override
+    public void updateRent(String apartmentId, Rent newRent) {
+        Apartment apartment = apartmentRepository.findById(apartmentId);
+        Calendar currDate = Calendar.getInstance();
+        currDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH)+1);
+        currDate.set(Calendar.DAY_OF_MONTH, 1);
+        currDate.set(Calendar.HOUR_OF_DAY, 0);
+        currDate.set(Calendar.MINUTE, 0);
+        currDate.set(Calendar.SECOND, 0);
+        currDate.set(Calendar.MILLISECOND, 0);
+        apartment.updateRent(Rent.builder()
+                .borderDate(currDate.getTimeInMillis())
+                .value(newRent.getValue())
+                .build());
         apartmentRepository.save(apartment);
     }
 }

@@ -14,6 +14,7 @@ public class Apartment {
     private String city;
     private String admin;
     private Set<Tenant> tenants;
+    private List<Rent> rents;
 
     public Apartment(String id, String address, String city, String admin) {
         this.id = id;
@@ -21,6 +22,7 @@ public class Apartment {
         this.city = city;
         this.admin = admin;
         this.tenants = new HashSet<>();
+        this.rents = new ArrayList<>();
     }
 
     void addTenant(Tenant tenant) {
@@ -45,5 +47,9 @@ public class Apartment {
         for (Tenant tenant : this.tenants) {
             tenant.updateBalance(transactionValue / tenants.size());
         }
+    }
+
+    void updateRent(Rent newRent) {
+        this.rents.add(newRent);
     }
 }
