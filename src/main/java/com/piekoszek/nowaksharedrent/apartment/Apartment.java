@@ -33,22 +33,6 @@ public class Apartment {
         return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
     }
 
-    void updateBalance(String payerEmail, int transactionValue) {
-        for (Tenant tenant : this.tenants) {
-            if (tenant.getEmail().equals(payerEmail)) {
-                tenant.updateBalance(transactionValue / tenants.size() - transactionValue);
-            } else {
-                tenant.updateBalance(transactionValue / tenants.size());
-            }
-        }
-    }
-
-    void updateBalance(int transactionValue) {
-        for (Tenant tenant : this.tenants) {
-            tenant.updateBalance(transactionValue / tenants.size());
-        }
-    }
-
     void updateRent(Rent newRent) {
         this.rents.add(newRent);
     }

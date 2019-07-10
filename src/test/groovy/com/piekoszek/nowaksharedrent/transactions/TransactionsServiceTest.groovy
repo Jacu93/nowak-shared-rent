@@ -9,10 +9,6 @@ import com.piekoszek.nowaksharedrent.uuid.UuidService
 import spock.lang.Specification
 import spock.lang.Subject
 
-import javax.validation.Validation
-import javax.validation.Validator
-import javax.validation.ValidatorFactory
-
 class TransactionsServiceTest extends Specification {
 
     @Subject
@@ -49,7 +45,6 @@ class TransactionsServiceTest extends Specification {
         transactionsService.newTransaction(transaction, userId)
 
         then: "Transaction is added and balance of all tenants is updated"
-        1 * apartmentService.updateBalance(userId, apartmentId, value)
         def currDate = Calendar.getInstance()
         currDate.setTimeInMillis(timeService.millisSinceEpoch())
         Set<Transaction> transactions = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId).getTransactions()
@@ -82,7 +77,6 @@ class TransactionsServiceTest extends Specification {
         transactionsService.newTransaction(transaction, userId)
 
         then: "Transaction is added and balance of all tenants is updated"
-        1 * apartmentService.updateBalance(apartmentId, value)
         def currDate = Calendar.getInstance()
         currDate.setTimeInMillis(timeService.millisSinceEpoch())
         Set<Transaction> transactions = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId).getTransactions()
@@ -125,8 +119,6 @@ class TransactionsServiceTest extends Specification {
         transactionsService.newTransaction(secondTransaction, userId)
 
         then: "Both transactions are added and balance of all tenants is updated"
-        1 * apartmentService.updateBalance(userId, apartmentId, firstTransactionValue)
-        1 * apartmentService.updateBalance(userId, apartmentId, secondTransactionValue)
         def currDate = Calendar.getInstance()
         currDate.setTimeInMillis(timeService.millisSinceEpoch())
         Set<Transaction> transactions = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId).getTransactions()

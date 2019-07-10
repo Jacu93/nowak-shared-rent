@@ -3,6 +3,7 @@ package com.piekoszek.nowaksharedrent.apartment;
 import com.piekoszek.nowaksharedrent.dto.User;
 import com.piekoszek.nowaksharedrent.dto.UserApartment;
 import com.piekoszek.nowaksharedrent.dto.UserService;
+import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
@@ -14,11 +15,14 @@ class ApartmentServiceImpl implements ApartmentService {
     private ApartmentRepository apartmentRepository;
     private UserService userService;
     private UuidService uuidService;
+    private TimeService timeService;
 
     @Override
     public void createApartment(String address, String city, String adminEmail) {
-        Apartment apartmentToCreate = new Apartment(uuidService.generateUuid(), address, city, adminEmail);
+        String apartmentId = uuidService.generateUuid();
+        Apartment apartmentToCreate = new Apartment(apartmentId, address, city, adminEmail);
         apartmentRepository.save(apartmentToCreate);
+        updateRent(apartmentId, Rent.builder().value(0).build());
         addTenant(adminEmail, apartmentToCreate.getId());
     }
 
@@ -36,7 +40,6 @@ class ApartmentServiceImpl implements ApartmentService {
             apartment.addTenant(Tenant.builder()
                     .email(user.getEmail())
                     .name(user.getName())
-                    .balance(0)
                     .build());
             apartmentRepository.save(apartment);
 
@@ -55,23 +58,9 @@ class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void updateBalance(String payerEmail, String apartmentId, int value) {
-        Apartment apartment = apartmentRepository.findById(apartmentId);
-        apartment.updateBalance(payerEmail, value);
-        apartmentRepository.save(apartment);
-    }
-
-    @Override
-    public void updateBalance(String apartmentId, int value) {
-        Apartment apartment = apartmentRepository.findById(apartmentId);
-        apartment.updateBalance(value);
-        apartmentRepository.save(apartment);
-    }
-
-    @Override
     public void updateRent(String apartmentId, Rent newRent) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
-        Calendar currDate = Calendar.getInstance();
+        Calendar currDate = timeService.currentDateAndTime();
         currDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH)+1);
         currDate.set(Calendar.DAY_OF_MONTH, 1);
         currDate.set(Calendar.HOUR_OF_DAY, 0);
