@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import java.util.*;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class Apartment {
 
     @Id
