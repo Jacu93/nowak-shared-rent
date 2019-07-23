@@ -2,7 +2,7 @@ var transactionTypesEnum = null;
 
 window.onload = () => {
     if (checkToken()) {
-        loadApartmentsDropdown();
+        loadAllApartmentsDropdowns();
         getTransactionTypesEnum(loadTransactionTypesDropdown);
         loadTransactions();
         let currDate = new Date();
@@ -42,22 +42,10 @@ function transactionTypes(enumValue) {
     }
 }
 
-function loadApartmentsDropdown() {
+function loadAllApartmentsDropdowns() {
 
-    let apartmentsArray = payload.apartments;
-    let apartmentsNewTran = document.getElementById("apartmentId-newTran");
-    let apartmentsHistory = document.getElementById("apartmentId-history");
-    while (apartmentsNewTran.firstChild || apartmentsHistory.firstChild) {
-        apartmentsNewTran.removeChild(apartmentsNewTran.firstChild);
-        apartmentsHistory.removeChild(apartmentsHistory.firstChild);
-    }
-    for (let i = 0; i < apartmentsArray.length; i++) {
-        let a = document.createElement("OPTION");
-        a.innerText = apartmentsArray[i].name;
-        a.setAttribute("apartmentId", apartmentsArray[i].id)
-        apartmentsNewTran.appendChild(a);
-        apartmentsHistory.appendChild(a.cloneNode(true));
-    }
+    loadApartmentsDropdown("apartmentId-newTran");
+    loadApartmentsDropdown("apartmentId-history");
 }
 
 function loadTransactionTypesDropdown() {

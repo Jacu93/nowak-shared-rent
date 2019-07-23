@@ -79,7 +79,25 @@
             </div>
 
             <div class="col-md-5 order-md-2">
-                <!-- placeholder -->
+                <h4 class="mt-5">Add new rent value</h4>
+                <form id="rent-form" class="needs-validation" novalidate onsubmit="return newRentValue()">
+                    <div class="mb-3">
+                        <label for="apartmentId">Apartment</label>
+                        <select id="apartmentId" class="form-control">
+                            <!-- EXAMPLE
+                            <option selected>Szkolna 17, Białystok</option>
+                            <option>Urzędnicza 2, Toruń</option> -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="value">Value</label>
+                        <input type="text" class="form-control" id="value" placeholder="1234" pattern="[0-9]+" required>
+                        <div class="invalid-feedback">
+                            Value required
+                        </div>
+                    </div>
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Add new rent value">
+                </form>
             </div>
         </div>
     </div>
@@ -95,6 +113,7 @@
         crossorigin="anonymous"></script> 
     <script src="scripts/checkToken.js"></script>
     <script src="scripts/refreshToken.js"></script>
+    <script src="scripts/loadApartmentsDropdown.js"></script>
     <script src="scripts/administrationPage.js"></script>
     <script src="scripts/alert.js"></script>
     <script src="scripts/base64.js"></script>

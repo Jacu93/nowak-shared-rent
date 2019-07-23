@@ -7,6 +7,7 @@ import java.util.*;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Apartment {
 
