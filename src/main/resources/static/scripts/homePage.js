@@ -88,12 +88,13 @@ function loadRoommates(ApartmentId) {
     while (roommates.firstChild) {
         roommates.removeChild(roommates.firstChild);
     }
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
     let url = '/apartment/' + ApartmentId;
     fetch(url, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        headers: headers
     })
     .then(res => {
         res.json().then(json => {

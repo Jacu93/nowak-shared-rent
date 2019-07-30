@@ -22,12 +22,12 @@ class ApartmentController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<Object> getApartment(@PathVariable("id") String id) {
+    ResponseEntity<Object> getApartment(@PathVariable("id") String id, @Jwt JwtData jwtData) {
         return new ResponseEntity<>(apartmentService.getApartment(id), HttpStatus.OK);
     }
 
     @PostMapping("/rent/{id}")
-    ResponseEntity<Object> updateRent(@PathVariable("id") String id, @RequestBody Rent newRent) {
+    ResponseEntity<Object> updateRent(@PathVariable("id") String id, @RequestBody Rent newRent, @Jwt JwtData jwtData) {
         apartmentService.updateRent(id, newRent);
         return new ResponseEntity<>(new MessageResponse("Rent value updated."), HttpStatus.OK);
     }

@@ -23,7 +23,7 @@ class TransactionsController {
     }
 
     @GetMapping("/transactions/{month}/{year}/{apartmentId}")
-    ResponseEntity<Object> getTransactionsFromMonth(@PathVariable("month") int month, @PathVariable("year") int year, @PathVariable("apartmentId") String apartmentId) {
+    ResponseEntity<Object> getTransactionsFromMonth(@PathVariable("month") int month, @PathVariable("year") int year, @PathVariable("apartmentId") String apartmentId, @Jwt JwtData jwtData) {
         Transactions transactions = transactionsService.getTransactionsFromMonth(month, year, apartmentId);
         if (transactions == null) {
             return new ResponseEntity<>(new MessageResponse("No transactions with given id found."), HttpStatus.BAD_REQUEST);
@@ -32,7 +32,12 @@ class TransactionsController {
     }
 
     @GetMapping("/transactions/types")
-    ResponseEntity<Object> getTransactionTypes() {
+    ResponseEntity<Object> getTransactionTypes(@Jwt JwtData jwtData) {
         return new ResponseEntity<>(TransactionType.getTransactionTypesAsList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/transactions/balance/{apartmentId}")
+    ResponseEntity<Object> getLastMonthsBalance(@PathVariable("apartmentId") String apartmentId, @Jwt JwtData jwtData) {
+        return new ResponseEntity<>(transactionsService.getLastMonthsBalance(apartmentId), HttpStatus.OK);
     }
 }

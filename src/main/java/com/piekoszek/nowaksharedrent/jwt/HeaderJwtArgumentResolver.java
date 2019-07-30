@@ -27,6 +27,7 @@ public class HeaderJwtArgumentResolver implements HandlerMethodArgumentResolver 
             WebDataBinderFactory webDataBinderFactory) throws Exception {
 
                 HttpServletRequest request = (HttpServletRequest) nativeWebRequest.getNativeRequest();
+                jwtService.validateToken(request.getHeader("Authorization"));
                 return jwtService.readToken(request.getHeader("Authorization"));
     }
 }

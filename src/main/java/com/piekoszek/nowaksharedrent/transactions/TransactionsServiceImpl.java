@@ -9,9 +9,7 @@ import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorE
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 class TransactionsServiceImpl implements TransactionsService {
@@ -80,5 +78,22 @@ class TransactionsServiceImpl implements TransactionsService {
 
         String monthlyPaymentsId = month + "_" + year + "_" + apartmentId;
         return transactionsRepository.findById(monthlyPaymentsId);
+    }
+
+    @Override
+    public Map<Integer, Set<Payer>> getLastMonthsBalance(String apartmentId) {
+        Calendar currDate = timeService.currentDateAndTime();
+        String monthlyPaymentsId = (currDate.get(Calendar.MONTH)+1) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
+        Map<Integer, Set<Payer>> balanceMap = new HashMap<>();
+        Transactions transactions = transactionsRepository.findById(monthlyPaymentsId);
+        if (transactions != null) {
+            balanceMap.put(1, transactions.getPayers());
+        }
+        monthlyPaymentsId = currDate.get(Calendar.MONTH) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
+        transactions = transactionsRepository.findById(monthlyPaymentsId);
+        if (transactions != null) {
+            balanceMap.put(2, transactions.getPayers());
+        }
+        return balanceMap;
     }
 }

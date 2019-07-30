@@ -16,11 +16,12 @@ window.onload = () => {
 }
 
 function getTransactionTypesEnum(callback) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
     fetch('/transactions/types', {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        headers: headers
     })
     .then(res => {
         res.json().then(json => {
@@ -131,11 +132,12 @@ function loadTransactions() {
         transactions.removeChild(transactions.firstChild);
     }
     let url = '/transactions/' + date.substring(0, date.length-5) + '/' + date.substring(date.length-4, date.length+1) + '/' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
     fetch(url, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        headers: headers
     })
     .then(res => {
         res.json().then(json => {
