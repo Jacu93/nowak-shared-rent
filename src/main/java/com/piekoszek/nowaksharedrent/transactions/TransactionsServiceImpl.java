@@ -81,18 +81,18 @@ class TransactionsServiceImpl implements TransactionsService {
     }
 
     @Override
-    public Map<Integer, Set<Payer>> getLastMonthsBalance(String apartmentId) {
+    public Map<String, Set<Payer>> getLastMonthsBalance(String apartmentId) {
         Calendar currDate = timeService.currentDateAndTime();
         String monthlyPaymentsId = (currDate.get(Calendar.MONTH)+1) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
-        Map<Integer, Set<Payer>> balanceMap = new HashMap<>();
+        Map<String, Set<Payer>> balanceMap = new HashMap<>();
         Transactions transactions = transactionsRepository.findById(monthlyPaymentsId);
         if (transactions != null) {
-            balanceMap.put(1, transactions.getPayers());
+            balanceMap.put("currentMonth", transactions.getPayers());
         }
         monthlyPaymentsId = currDate.get(Calendar.MONTH) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
         transactions = transactionsRepository.findById(monthlyPaymentsId);
         if (transactions != null) {
-            balanceMap.put(2, transactions.getPayers());
+            balanceMap.put("lastMonth", transactions.getPayers());
         }
         return balanceMap;
     }

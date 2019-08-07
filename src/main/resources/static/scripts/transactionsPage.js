@@ -174,7 +174,7 @@ function loadTransactions() {
                 transactions.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
-                a.className = "col-md-4";
+                a.className = "col-md-8";
                 transactions.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SMALL");
@@ -183,7 +183,7 @@ function loadTransactions() {
                 transactions.lastChild.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
-                a.className = "col-md-8 text-right";
+                a.className = "col-md-4 text-right";
                 transactions.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SMALL");
