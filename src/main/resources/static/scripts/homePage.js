@@ -126,9 +126,9 @@ function loadRoommates(ApartmentId) {
                 a.className = "col-md-6 text-right";
                 roommates.lastChild.lastChild.appendChild(a);
 
-                /* a = document.createElement("SPAN");
-                a.innerText = transactionsArray[i].value/100 + ' PLN';
-                roommates.lastChild.lastChild.lastChild.appendChild(a); */
+                a = document.createElement("SPAN");
+                a.innerText = 'Current month: 0 PLN';
+                roommates.lastChild.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
                 a.className = "d-flex justify-content-between align-items-center";
@@ -138,40 +138,52 @@ function loadRoommates(ApartmentId) {
                 a.className = "col-md-6";
                 roommates.lastChild.lastChild.appendChild(a);
 
-                if (json.admin == tenantsArray[i].email) {
-                    a = document.createElement("SMALL");
-                    a.innerText = "Administrator";
-                    a.className = "text-muted";
-                    roommates.lastChild.lastChild.lastChild.appendChild(a);
-                } 
+                a = document.createElement("SMALL");
+                a.innerText = tenantsArray[i].email;
+                a.className = "text-muted";
+                roommates.lastChild.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
                 a.className = "col-md-6 text-right";
                 roommates.lastChild.lastChild.appendChild(a);
 
-                /* a = document.createElement("SMALL");
-                a.innerText = transactionsArray[i].value/100 + ' PLN';
+                a = document.createElement("SMALL");
+                a.innerText = 'Last month: 0 PLN';
                 a.className = "text-muted";
-                roommates.lastChild.lastChild.lastChild.appendChild(a); */
+                roommates.lastChild.lastChild.lastChild.appendChild(a);
+
+                if (json.admin == tenantsArray[i].email) {
+
+                    a = document.createElement("DIV");
+                    a.className = "d-flex justify-content-center align-items-center mt-2";
+                    roommates.lastChild.appendChild(a)
+                         
+                    a = document.createElement("DIV");
+                    a.className = "col-md-6 text-center rounded-pill bg-info text-light";
+                    roommates.lastChild.lastChild.appendChild(a);
+
+                    a = document.createElement("SMALL");
+                    a.innerText = "Administrator";
+                    roommates.lastChild.lastChild.lastChild.appendChild(a);
+                }
             }
 
             if (json.admin == payload.email) {
                 document.getElementById("invite-form").removeAttribute("disabled");
             }
         })
-    })
-    .catch(error => console.error('Error:', error));
 
+        headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', window.localStorage.getItem("accessToken"));
+        url = '/transactions/balance/' + ApartmentId;
+
+        return fetch(url, {
+            method: 'GET',
+            headers: headers
+        });
+    })
     //loading balance for the last 2 months
-
-    headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', window.localStorage.getItem("accessToken"));
-    url = '/transactions/balance/' + ApartmentId;
-    fetch(url, {
-        method: 'GET',
-        headers: headers
-    })
     .then(res => {
         res.json().then(json => {
             let currentMonthBalance = json.currentMonth;
@@ -179,22 +191,17 @@ function loadRoommates(ApartmentId) {
             let roommatesChildren = roommates.children;
 
             for (let i = 0; i < roommatesChildren.length; i++) {
-                a = document.createElement("SPAN");
                 for (tenantBalance of currentMonthBalance) {
-                    if (tenantBalance.email === roommatesChildren[i].getAttribute("tenantId")) {
-                        a.innerText = currentMonthBalance[i].balance/100 + ' PLN';
+                    if (tenantBalance.email == roommatesChildren[i].getAttribute("tenantId")) {
+                        roommatesChildren[i].children[0].children[1].children[0].innerText = 'Current month: ' + currentMonthBalance[i].balance/100 + ' PLN';
                     }
                 }
-                roommatesChildren[i].children[0].children[1].appendChild(a);
 
-                a = document.createElement("SMALL");
                 for (tenantBalance of lastMonthBalance) {
-                    if (tenantBalance.email === roommatesChildren[i].getAttribute("tenantId")) {
-                        a.innerText = lastMonthBalance[i].balance/100 + ' PLN';
+                    if (tenantBalance.email == roommatesChildren[i].getAttribute("tenantId")) {
+                        roommatesChildren[i].children[1].children[1].children[0].innerText = 'Last month: ' + lastMonthBalance[i].balance/100 + ' PLN';
                     }
                 }
-                a.className = "text-muted";
-                roommatesChildren[i].children[1].children[1].appendChild(a);
             }
         })
     })
