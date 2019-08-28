@@ -61,12 +61,17 @@ class ApartmentServiceImpl implements ApartmentService {
     public void updateRent(String apartmentId, Rent newRent) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Calendar currDate = timeService.currentDateAndTime();
-        currDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH)+1);
+        if (currDate.get(Calendar.MONTH) == Calendar.DECEMBER) {
+            currDate.set(Calendar.MONTH, 0);
+            currDate.set(Calendar.YEAR, currDate.get(Calendar.YEAR)+1);
+        } else {
+            currDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH)+1);
+        }
         currDate.set(Calendar.DAY_OF_MONTH, 1);
         currDate.set(Calendar.HOUR_OF_DAY, 0);
         currDate.set(Calendar.MINUTE, 0);
         currDate.set(Calendar.SECOND, 0);
-        currDate.set(Calendar.MILLISECOND, 0);
+        currDate.set(Calendar.MILLISECOND, 1);
         apartment.updateRent(Rent.builder()
                 .borderDate(currDate.getTimeInMillis())
                 .value(newRent.getValue())
