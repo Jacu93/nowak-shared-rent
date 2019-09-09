@@ -92,39 +92,38 @@ function loadRoommates(ApartmentId) {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', window.localStorage.getItem("accessToken"));
     let url = '/apartment/' + ApartmentId;
+    var currentMonthRent = 0;
+    var lastMonthRent = 0;
+    var tenantsArrayLength = 0;
     fetch(url, {
         method: 'GET',
         headers: headers
     })
     .then(res => {
-        res.json().then(json => {
-            let tenantsArray = json.tenants;
+        res.json().then(json => { 
             let rentsArray = json.rents;
+            let tenantsArray = json.tenants;
             let currentDate = new Date();
-            let i = json.rents.size();
-            let borderDate = new Date(rentsArray[i].borderDate);
-            let currentMonthRent = 0;
-            let lastMonthRent = 0;
-            while (i>0) {
-                i--;
-                borderDate = new Date(rentsArray[i].borderDate);
-                if (borderDate.getMonth() == currentDate.getMonth() && currentMonthRent == 0) {
-                    currentMonthRent = rentsArray[i];
+            let borderDate = new Date();
+            let rentsArrayLength = rentsArray.length;
+            tenantsArrayLength = tenantsArray.length;
+            while (rentsArrayLength>0) {
+                rentsArrayLength--;
+                borderDate = new Date(rentsArray[rentsArrayLength].borderDate);
+                if (borderDate.getTime() <= currentDate.getTime()) {
+                    currentMonthRent = rentsArray[rentsArrayLength];
                 }
 
-                if (borderDate.getFullYear() <= currentDate.getFullYear() || borderDate.getMonth() <= (currentDate.getMonth()-1)) {
-                    if (currentMonthRent == 0) {
-                        currentMonthRent = rentsArray[i];
-                    }
-                    lastMonthRent = rentsArray[i];
-                    i = 0;
+                if (borderDate.getFullYear() < currentDate.getFullYear() || (borderDate.getMonth() <= (currentDate.getMonth()-1) && borderDate.getFullYear() == currentDate.getFullYear())) {
+                    lastMonthRent = rentsArray[rentsArrayLength];
+                    rentsArrayLength = 0;
                 }
             }
-            
+
             for (let i = 0; i < tenantsArray.length; i++) {
                 let a = document.createElement("LI");
                 a.className = "list-group-item";
-                a.setAttribute("tenantId", tenantsArray[i].email)
+                a.setAttribute("tenantId", tenantsArray[i].email);
                 roommates.appendChild(a);
                 
                 a = document.createElement("DIV");
@@ -208,24 +207,33 @@ function loadRoommates(ApartmentId) {
     .then(res => {
         res.json().then(json => {
 
-            let currentMonthBalance = json.currentMonth;
-            let lastMonthBalance = json.lastMonth;
+            var currentMonthBalance = json.currentMonth;
+            console.log("json.currentMonth: " + json.currentMonth)
+            var lastMonthBalance = json.lastMonth;
             let roommatesChildren = roommates.children;
 
             for (let i = 0; i < roommatesChildren.length; i++) {
 
+                console.log("roommatesChildren.length: " + roommatesChildren.length + " and iterator: " + i)
+                console.log("currentMonthBalance: " + currentMonthBalance[i].email)
                 if (currentMonthBalance !== undefined) {
-                    for (tenantBalance of currentMonthBalance) {
+                    console.log("currentMonthBalance: " + currentMonthBalance[i].email)
+                    for (let tenantBalance of currentMonthBalance) {
+                        console.log("roommatesChildren[i].getAttribute(tenantId): " + roommatesChildren[i].getAttribute("tenantId"))
+                        console.log("tenantBalance.email: " + tenantBalance.email)
                         if (tenantBalance.email == roommatesChildren[i].getAttribute("tenantId")) {
-                            roommatesChildren[i].children[0].children[1].children[0].innerText = 'Current month: ' + (currentMonthBalance[i].balance/100 + currentMonthRent) + ' PLN';
+                            roommatesChildren[i].children[0].children[1].children[0].innerText = 'Current month: ' + (tenantBalance.balance/100 + currentMonthRent/tenantsArrayLength) + ' PLN';
+                            console.log("tenantBalance.balance: " + tenantBalance.balance)
+                            console.log("currentMonthRent: " + currentMonthRent)
+                            console.log("tenantsArrayLength: " + tenantsArrayLength)
                         }
                     }
                 }
 
                 if (lastMonthBalance !== undefined) {
-                    for (tenantBalance of lastMonthBalance) {
+                    for (let tenantBalance of lastMonthBalance) {
                         if (tenantBalance.email == roommatesChildren[i].getAttribute("tenantId")) {
-                            roommatesChildren[i].children[1].children[1].children[0].innerText = 'Last month: ' + (lastMonthBalance[i].balance/100 + lastMonthRent) + ' PLN';
+                            roommatesChildren[i].children[1].children[1].children[0].innerText = 'Last month: ' + (tenantBalance.balance/100 + lastMonthRent/tenantsArrayLength) + ' PLN';
                         }
                     }
                 }
