@@ -4,7 +4,6 @@ window.onload = () => {
     if (checkToken()) {
         loadAllApartmentsDropdowns();
         getTransactionTypesEnum(loadTransactionTypesDropdown);
-        loadTransactions();
         let currDate = new Date();
         $('.datepicker').datepicker({
             format: "m/yyyy",
@@ -12,6 +11,7 @@ window.onload = () => {
             minViewMode: 1
         });
         $('.datepicker').datepicker('setValue', (currDate.getMonth() + 1) + "/" + currDate.getFullYear());
+        loadTransactions();
     }
 }
 

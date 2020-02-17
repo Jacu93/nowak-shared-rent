@@ -220,7 +220,7 @@ function loadRoommates(ApartmentId) {
                     for (let tenantBalance of currentMonthBalance) {
                         if (tenantBalance.email == roommatesChildren[i].getAttribute("tenantId")) {
                             roommatesChildren[i].children[0].children[1].children[0].innerText = 
-                            'Current month: ' + (tenantBalance.balance/100 + roommatesChildren[i].children[0].children[1].children[0].getAttribute("currentMonthBalance")) + ' PLN';
+                            'Current month: ' + Number(Number(tenantBalance.balance/100) + Number(roommatesChildren[i].children[0].children[1].children[0].getAttribute("currentMonthBalance"))) + ' PLN';
                         }
                     }
                 }
@@ -229,10 +229,11 @@ function loadRoommates(ApartmentId) {
                     for (let tenantBalance of lastMonthBalance) {
                         if (tenantBalance.email == roommatesChildren[i].getAttribute("tenantId")) {
                             roommatesChildren[i].children[1].children[1].children[0].innerText = 
-                            'Last month: ' + (tenantBalance.balance/100 + roommatesChildren[i].children[0].children[1].children[0].getAttribute("lastMonthBalance")) + ' PLN';
+                            'Last month: ' + Number(Number(tenantBalance.balance/100) + Number(roommatesChildren[i].children[1].children[1].children[0].getAttribute("lastMonthBalance"))) + ' PLN';
                         }
                     }
                 }
+
             }
         })
     })
