@@ -81,7 +81,7 @@ class TransactionsServiceImpl implements TransactionsService {
     }
 
     @Override
-    public Map<String, Set<Payer>> getLastMonthsBalance(String apartmentId) {
+    public Map<String, Set<Payer>> getLastTwoMonthsBalance(String apartmentId) {
         Calendar currDate = timeService.currentDateAndTime();
         String monthlyPaymentsId = (currDate.get(Calendar.MONTH)+1) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
         Map<String, Set<Payer>> balanceMap = new HashMap<>();

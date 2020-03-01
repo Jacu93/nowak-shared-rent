@@ -107,17 +107,19 @@ function loadRoommates(ApartmentId) {
             let borderDate = new Date();
             let rentsArrayLength = rentsArray.length;
             tenantsArrayLength = tenantsArray.length;
-            while (rentsArrayLength>0) {
-                rentsArrayLength--;
-                borderDate = new Date(rentsArray[rentsArrayLength].borderDate);
+            for(i = rentsArrayLength ; i >=0 ; i--) {  
+
+                borderDate = new Date(rentsArray[i].borderDate);
                 if (borderDate.getTime() <= currentDate.getTime()) {
-                    currentMonthRent = rentsArray[rentsArrayLength].value;
+
+                    currentMonthRent = rentsArray[i].value;
                 }
 
                 if (borderDate.getFullYear() < currentDate.getFullYear() || 
                     (borderDate.getMonth() < currentDate.getMonth() && borderDate.getFullYear() == currentDate.getFullYear())) {
-                    lastMonthRent = rentsArray[rentsArrayLength].value;
-                    rentsArrayLength = 0;
+
+                    lastMonthRent = rentsArray[i].value;
+                    break;
                 }
             }
 

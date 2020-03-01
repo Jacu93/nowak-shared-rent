@@ -5,12 +5,13 @@ window.onload = () => {
         loadAllApartmentsDropdowns();
         getTransactionTypesEnum(loadTransactionTypesDropdown);
         let currDate = new Date();
-        $('.datepicker').datepicker({
+        let dateForm = $('.datepicker')
+        dateForm.datepicker({
             format: "m/yyyy",
             viewMode: 1,
             minViewMode: 1
         });
-        $('.datepicker').datepicker('setValue', (currDate.getMonth() + 1) + "/" + currDate.getFullYear());
+        dateForm.datepicker('setValue', (currDate.getMonth() + 1) + "/" + currDate.getFullYear());
         loadTransactions();
     }
 }

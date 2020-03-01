@@ -61,12 +61,15 @@ class ApartmentServiceImpl implements ApartmentService {
     public void updateRent(String apartmentId, Rent newRent) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Calendar currDate = timeService.currentDateAndTime();
-        if (currDate.get(Calendar.MONTH) == Calendar.DECEMBER) {
+
+        //uncomment block below if you wish new rent value to be used from the next month instead of current
+        /*if (currDate.get(Calendar.MONTH) == Calendar.DECEMBER) {
             currDate.set(Calendar.MONTH, 0);
             currDate.set(Calendar.YEAR, currDate.get(Calendar.YEAR)+1);
         } else {
             currDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH)+1);
-        }
+        }*/
+
         currDate.set(Calendar.DAY_OF_MONTH, 1);
         currDate.set(Calendar.HOUR_OF_DAY, 0);
         currDate.set(Calendar.MINUTE, 0);

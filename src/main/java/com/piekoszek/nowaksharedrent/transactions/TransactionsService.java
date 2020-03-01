@@ -7,5 +7,5 @@ public interface TransactionsService {
 
     void newTransaction(Transaction transaction, String email);
     Transactions getTransactionsFromMonth(int month, int year, String apartmentId);
-    Map<String, Set<Payer>> getLastMonthsBalance(String apartmentId);
+    Map<String, Set<Payer>> getLastTwoMonthsBalance(String apartmentId);
 }

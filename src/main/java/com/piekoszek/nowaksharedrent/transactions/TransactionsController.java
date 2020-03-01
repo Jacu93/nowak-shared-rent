@@ -26,7 +26,7 @@ class TransactionsController {
     ResponseEntity<Object> getTransactionsFromMonth(@PathVariable("month") int month, @PathVariable("year") int year, @PathVariable("apartmentId") String apartmentId, @Jwt JwtData jwtData) {
         Transactions transactions = transactionsService.getTransactionsFromMonth(month, year, apartmentId);
         if (transactions == null) {
-            return new ResponseEntity<>(new MessageResponse("No transactions with given id found."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse("No transactions with given id found."), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
@@ -37,7 +37,7 @@ class TransactionsController {
     }
 
     @GetMapping("/transactions/balance/{apartmentId}")
-    ResponseEntity<Object> getLastMonthsBalance(@PathVariable("apartmentId") String apartmentId, @Jwt JwtData jwtData) {
-        return new ResponseEntity<>(transactionsService.getLastMonthsBalance(apartmentId), HttpStatus.OK);
+    ResponseEntity<Object> getLastTwoMonthsBalance(@PathVariable("apartmentId") String apartmentId, @Jwt JwtData jwtData) {
+        return new ResponseEntity<>(transactionsService.getLastTwoMonthsBalance(apartmentId), HttpStatus.OK);
     }
 }
