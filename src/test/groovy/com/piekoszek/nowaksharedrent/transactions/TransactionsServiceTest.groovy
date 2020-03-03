@@ -66,11 +66,12 @@ class TransactionsServiceTest extends Specification {
         transactions[0].getType() == transactionType
         transactions[0].getValue() == value
         Set<Payer> payers = transactionsOfTheMonth.getPayers()
-        for (Payer payer : payers) {
-            if (payer.getEmail() == adminId) {
-                payer.getBalance() == (int) (value / 2)
+
+        payers.each {
+            if (it.getEmail() == adminId) {
+                assert it.getBalance() == (int) (value / 2)
             } else {
-                payer.getBalance() == (int) (value / 2 - value)
+                assert it.getBalance() == (int) (value / 2 - value)
             }
         }
     }
@@ -117,8 +118,9 @@ class TransactionsServiceTest extends Specification {
         transactions[0].getType() == transactionType
         transactions[0].getValue() == value
         Set<Payer> payers = transactionsOfTheMonth.getPayers()
-        for (Payer payer : payers) {
-            payer.getBalance() == (int) (value / 2)
+
+        payers.each {
+            it.getBalance() == (int) (value / 2)
         }
     }
 
@@ -169,19 +171,19 @@ class TransactionsServiceTest extends Specification {
         Transactions transactionsOfTheMonth = transactionsService.getTransactionsFromMonth(currDate.get(Calendar.MONTH)+1, currDate.get(Calendar.YEAR), apartmentId)
         List<Transaction> transactions = transactionsOfTheMonth.getTransactions()
         transactions.size() == 2
-        for (Transaction transaction : transactions) {
-            assert transaction.getApartmentId() == apartmentId
-            assert transaction.getPaidBy() == tenantId
-            assert transaction.getType() == transactionType
-            assert transaction.getTitle() in [firstTransactionTitle,secondTransactionTitle]
-            assert transaction.getValue() in [firstTransactionValue,secondTransactionValue]
+        transactions.each {
+            assert it.getApartmentId() == apartmentId
+            assert it.getPaidBy() == tenantId
+            assert it.getType() == transactionType
+            assert it.getTitle() in [firstTransactionTitle,secondTransactionTitle]
+            assert it.getValue() in [firstTransactionValue,secondTransactionValue]
         }
         Set<Payer> payers = transactionsOfTheMonth.getPayers()
-        for (Payer payer : payers) {
-            if (payer.getEmail() == adminId) {
-                payer.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2)
+        payers.each {
+            if (it.getEmail() == adminId) {
+                it.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2)
             } else {
-                payer.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2 - firstTransactionValue - secondTransactionValue)
+                it.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2 - firstTransactionValue - secondTransactionValue)
             }
         }
     }
@@ -336,19 +338,19 @@ class TransactionsServiceTest extends Specification {
         then: "Two transactions added earlier are presented to the user"
         List<Transaction> transactions = transactionsHistory.getTransactions()
         transactions.size() == 2
-        for (Transaction transaction : transactions) {
-            assert transaction.getApartmentId() == apartmentId
-            assert transaction.getPaidBy() == tenantId
-            assert transaction.getType() == transactionType
-            assert transaction.getTitle() in [firstTransactionTitle,secondTransactionTitle]
-            assert transaction.getValue() in [firstTransactionValue,secondTransactionValue]
+        transactions.each {
+            assert it.getApartmentId() == apartmentId
+            assert it.getPaidBy() == tenantId
+            assert it.getType() == transactionType
+            assert it.getTitle() in [firstTransactionTitle,secondTransactionTitle]
+            assert it.getValue() in [firstTransactionValue,secondTransactionValue]
         }
         Set<Payer> payers = transactionsHistory.getPayers()
-        for (Payer payer : payers) {
-            if (payer.getEmail() == adminId) {
-                payer.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2)
+        payers.each {
+            if (it.getEmail() == adminId) {
+                it.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2)
             } else {
-                payer.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2 - firstTransactionValue - secondTransactionValue)
+                it.getBalance() == (int) ((firstTransactionValue + secondTransactionValue) / 2 - firstTransactionValue - secondTransactionValue)
             }
         }
     }
