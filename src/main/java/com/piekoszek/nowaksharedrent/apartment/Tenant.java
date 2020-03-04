@@ -3,9 +3,11 @@ package com.piekoszek.nowaksharedrent.apartment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Builder
 public class Tenant {
@@ -13,7 +15,6 @@ public class Tenant {
     @Id
     private String email;
     private String name;
-    private int balance;
 
     @Override
     public int hashCode() {
@@ -35,7 +36,5 @@ public class Tenant {
         return email.equals(other.email);
     }
 
-    void updateBalance(int value) {
-        this.balance += value;
-    }
+
 }

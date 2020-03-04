@@ -2,18 +2,14 @@ package com.piekoszek.nowaksharedrent.transactions;
 
 import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
+import com.piekoszek.nowaksharedrent.apartment.Tenant;
 import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import java.util.Calendar;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 class TransactionsServiceImpl implements TransactionsService {
@@ -45,7 +41,11 @@ class TransactionsServiceImpl implements TransactionsService {
 
         Transactions currTransactions = transactionsRepository.findById(monthlyPaymentsId);
         if (currTransactions == null) {
-            currTransactions = new Transactions(monthlyPaymentsId);
+            Set<Payer> balanceLog = new HashSet<>();
+            for (Tenant tenant : apartment.getTenants()) {
+                balanceLog.add(new Payer(tenant.getEmail(), tenant.getName(), 0));
+            }
+            currTransactions = new Transactions(monthlyPaymentsId, balanceLog);
         }
 
         Transaction newTransaction = Transaction.builder()
@@ -63,9 +63,13 @@ class TransactionsServiceImpl implements TransactionsService {
 
 
         if (transaction.getType() == TransactionType.BILL) {
-            apartmentService.updateBalance(transaction.getApartmentId(), transaction.getValue());
+            Transactions transactions = transactionsRepository.findById(monthlyPaymentsId);
+            transactions.updateBalance(transaction.getValue());
+            transactionsRepository.save(transactions);
         } else {
-            apartmentService.updateBalance(email, transaction.getApartmentId(), transaction.getValue());
+            Transactions transactions = transactionsRepository.findById(monthlyPaymentsId);
+            transactions.updateBalance(email, transaction.getValue());
+            transactionsRepository.save(transactions);
         }
     }
 
@@ -74,5 +78,22 @@ class TransactionsServiceImpl implements TransactionsService {
 
         String monthlyPaymentsId = month + "_" + year + "_" + apartmentId;
         return transactionsRepository.findById(monthlyPaymentsId);
+    }
+
+    @Override
+    public Map<String, Set<Payer>> getLastTwoMonthsBalance(String apartmentId) {
+        Calendar currDate = timeService.currentDateAndTime();
+        String monthlyPaymentsId = (currDate.get(Calendar.MONTH)+1) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
+        Map<String, Set<Payer>> balanceMap = new HashMap<>();
+        Transactions transactions = transactionsRepository.findById(monthlyPaymentsId);
+        if (transactions != null) {
+            balanceMap.put("currentMonth", transactions.getPayers());
+        }
+        monthlyPaymentsId = currDate.get(Calendar.MONTH) + "_" + currDate.get(Calendar.YEAR) + "_" + apartmentId;
+        transactions = transactionsRepository.findById(monthlyPaymentsId);
+        if (transactions != null) {
+            balanceMap.put("lastMonth", transactions.getPayers());
+        }
+        return balanceMap;
     }
 }

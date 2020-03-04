@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import java.util.*;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Apartment {
 
     @Id
@@ -14,6 +17,7 @@ public class Apartment {
     private String city;
     private String admin;
     private Set<Tenant> tenants;
+    private List<Rent> rents;
 
     public Apartment(String id, String address, String city, String admin) {
         this.id = id;
@@ -21,6 +25,7 @@ public class Apartment {
         this.city = city;
         this.admin = admin;
         this.tenants = new HashSet<>();
+        this.rents = new ArrayList<>();
     }
 
     void addTenant(Tenant tenant) {
@@ -31,19 +36,7 @@ public class Apartment {
         return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
     }
 
-    void updateBalance(String payerEmail, int transactionValue) {
-        for (Tenant tenant : this.tenants) {
-            if (tenant.getEmail().equals(payerEmail)) {
-                tenant.updateBalance(transactionValue / tenants.size() - transactionValue);
-            } else {
-                tenant.updateBalance(transactionValue / tenants.size());
-            }
-        }
-    }
-
-    void updateBalance(int transactionValue) {
-        for (Tenant tenant : this.tenants) {
-            tenant.updateBalance(transactionValue / tenants.size());
-        }
+    void updateRent(Rent newRent) {
+        this.rents.add(newRent);
     }
 }

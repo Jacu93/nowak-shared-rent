@@ -2,25 +2,27 @@ var transactionTypesEnum = null;
 
 window.onload = () => {
     if (checkToken()) {
-        loadApartmentsDropdown();
+        loadAllApartmentsDropdowns();
         getTransactionTypesEnum(loadTransactionTypesDropdown);
-        loadTransactions();
         let currDate = new Date();
-        $('.datepicker').datepicker({
+        let dateForm = $('.datepicker')
+        dateForm.datepicker({
             format: "m/yyyy",
             viewMode: 1,
             minViewMode: 1
         });
-        $('.datepicker').datepicker('setValue', (currDate.getMonth() + 1) + "/" + currDate.getFullYear());
+        dateForm.datepicker('setValue', (currDate.getMonth() + 1) + "/" + currDate.getFullYear());
+        loadTransactions();
     }
 }
 
 function getTransactionTypesEnum(callback) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
     fetch('/transactions/types', {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        headers: headers
     })
     .then(res => {
         res.json().then(json => {
@@ -42,22 +44,10 @@ function transactionTypes(enumValue) {
     }
 }
 
-function loadApartmentsDropdown() {
+function loadAllApartmentsDropdowns() {
 
-    let apartmentsArray = payload.apartments;
-    let apartmentsNewTran = document.getElementById("apartmentId-newTran");
-    let apartmentsHistory = document.getElementById("apartmentId-history");
-    while (apartmentsNewTran.firstChild || apartmentsHistory.firstChild) {
-        apartmentsNewTran.removeChild(apartmentsNewTran.firstChild);
-        apartmentsHistory.removeChild(apartmentsHistory.firstChild);
-    }
-    for (let i = 0; i < apartmentsArray.length; i++) {
-        let a = document.createElement("OPTION");
-        a.innerText = apartmentsArray[i].name;
-        a.setAttribute("apartmentId", apartmentsArray[i].id)
-        apartmentsNewTran.appendChild(a);
-        apartmentsHistory.appendChild(a.cloneNode(true));
-    }
+    loadApartmentsDropdown("apartmentId-newTran");
+    loadApartmentsDropdown("apartmentId-history");
 }
 
 function loadTransactionTypesDropdown() {
@@ -143,11 +133,12 @@ function loadTransactions() {
         transactions.removeChild(transactions.firstChild);
     }
     let url = '/transactions/' + date.substring(0, date.length-5) + '/' + date.substring(date.length-4, date.length+1) + '/' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', window.localStorage.getItem("accessToken"));
     fetch(url, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        headers: headers
     })
     .then(res => {
         res.json().then(json => {
@@ -184,7 +175,7 @@ function loadTransactions() {
                 transactions.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
-                a.className = "col-md-4";
+                a.className = "col-md-8";
                 transactions.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SMALL");
@@ -193,7 +184,7 @@ function loadTransactions() {
                 transactions.lastChild.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
-                a.className = "col-md-8 text-right";
+                a.className = "col-md-4 text-right";
                 transactions.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SMALL");
