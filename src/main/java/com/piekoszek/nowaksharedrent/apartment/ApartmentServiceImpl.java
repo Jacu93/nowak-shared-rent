@@ -6,7 +6,6 @@ import com.piekoszek.nowaksharedrent.dto.UserService;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
-
 import java.util.Calendar;
 
 @AllArgsConstructor
