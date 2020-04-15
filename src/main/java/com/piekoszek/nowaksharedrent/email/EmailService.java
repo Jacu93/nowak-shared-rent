@@ -1,4 +1,4 @@
-package com.piekoszek.nowaksharedrent.mailer;
+package com.piekoszek.nowaksharedrent.email;
 
 public interface EmailService {
 

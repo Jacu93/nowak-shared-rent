@@ -1,4 +1,4 @@
-package com.piekoszek.nowaksharedrent.mailer;
+package com.piekoszek.nowaksharedrent.email;
 
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 @AllArgsConstructor
 class EmailServiceImpl implements EmailService {
 
-    private JavaMailSender emailSender;
+    private JavaMailSender javaMailSender;
 
     @Override
     public void sendSimpleMessage(String to, String subject, String text) {
@@ -16,6 +16,6 @@ class EmailServiceImpl implements EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
-        emailSender.send(message);
+        javaMailSender.send(message);
     }
 }
