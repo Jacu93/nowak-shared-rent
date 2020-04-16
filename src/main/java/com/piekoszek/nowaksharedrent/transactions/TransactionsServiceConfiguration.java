@@ -1,7 +1,7 @@
 package com.piekoszek.nowaksharedrent.transactions;
 
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
-import com.piekoszek.nowaksharedrent.dto.UserService;
+import com.piekoszek.nowaksharedrent.user.UserService;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import org.springframework.context.annotation.Bean;

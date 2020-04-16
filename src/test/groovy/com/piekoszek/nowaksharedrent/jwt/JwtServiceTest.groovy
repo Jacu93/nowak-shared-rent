@@ -1,8 +1,8 @@
 package com.piekoszek.nowaksharedrent.jwt
 
 
-import com.piekoszek.nowaksharedrent.dto.User
-import com.piekoszek.nowaksharedrent.dto.UserApartment
+import com.piekoszek.nowaksharedrent.user.User
+import com.piekoszek.nowaksharedrent.user.UserApartment
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException
 import com.piekoszek.nowaksharedrent.time.TimeService
 import io.jsonwebtoken.SignatureAlgorithm

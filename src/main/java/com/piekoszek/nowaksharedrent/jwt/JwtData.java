@@ -1,6 +1,6 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
-import com.piekoszek.nowaksharedrent.dto.UserApartment;
+import com.piekoszek.nowaksharedrent.user.UserApartment;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

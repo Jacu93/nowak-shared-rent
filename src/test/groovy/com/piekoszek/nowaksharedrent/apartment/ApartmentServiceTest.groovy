@@ -1,8 +1,8 @@
 package com.piekoszek.nowaksharedrent.apartment
 
-import com.piekoszek.nowaksharedrent.dto.User
-import com.piekoszek.nowaksharedrent.dto.UserApartment
-import com.piekoszek.nowaksharedrent.dto.UserService
+import com.piekoszek.nowaksharedrent.user.User
+import com.piekoszek.nowaksharedrent.user.UserApartment
+import com.piekoszek.nowaksharedrent.user.UserService
 import com.piekoszek.nowaksharedrent.time.TimeService
 import com.piekoszek.nowaksharedrent.uuid.UuidService
 import spock.lang.Specification

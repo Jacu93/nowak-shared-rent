@@ -3,7 +3,7 @@ package com.piekoszek.nowaksharedrent.transactions;
 import com.piekoszek.nowaksharedrent.apartment.Apartment;
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService;
 import com.piekoszek.nowaksharedrent.apartment.Tenant;
-import com.piekoszek.nowaksharedrent.dto.UserService;
+import com.piekoszek.nowaksharedrent.user.UserService;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.transactions.exceptions.TransactionCreatorException;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
