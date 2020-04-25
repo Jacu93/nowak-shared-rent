@@ -95,7 +95,7 @@ class AuthServiceImpl implements AuthService {
             email = overrideRecipient;
         }
 
-        emailService.sendSimpleMessage(email, "Shared Rent - password reset", frontEndUrl + "/setpassword?id=" + passwordResetKey);
+        emailService.sendSimpleMessage(email, "Shared Rent - password reset", frontEndUrl + "/setpassword.html?key=" + passwordResetKey);
     }
 
     @Override
