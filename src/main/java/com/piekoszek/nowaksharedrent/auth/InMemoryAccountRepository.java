@@ -20,4 +20,9 @@ class InMemoryAccountRepository implements AccountRepository {
     public Account findByEmail(String email) {
         return map.get(email);
     }
+
+    @Override
+    public Account findByResetPasswordKey(String resetPasswordKey) {
+        return null;
+    }
 }

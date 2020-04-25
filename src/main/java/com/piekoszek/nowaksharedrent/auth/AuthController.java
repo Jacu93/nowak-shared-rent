@@ -43,13 +43,13 @@ class AuthController {
         return new ResponseEntity<>(new MessageResponse("Token malformed or expired. Please login again."), HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("reset-password")
+    @PostMapping("/password/reset")
     ResponseEntity<Object> resetPassword(@RequestBody Account account) {
         authService.resetPassword(account.getEmail());
         return new ResponseEntity<>(new MessageResponse("Reset link sent!"), HttpStatus.OK);
     }
 
-    @PostMapping("set-password")
+    @PostMapping("/password/set")
     ResponseEntity<Object> setPassword(@RequestBody Account account) {
         authService.setPassword(account);
         return new ResponseEntity<>(new MessageResponse("New password set!"), HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.piekoszek.nowaksharedrent.auth;
 
+import com.piekoszek.nowaksharedrent.auth.exceptions.ResetPasswordException;
 import com.piekoszek.nowaksharedrent.email.EmailService;
 import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException;
 import com.piekoszek.nowaksharedrent.user.User;
@@ -11,6 +12,7 @@ import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -25,6 +27,8 @@ class AuthServiceImpl implements AuthService {
     private JwtService jwtService;
     private EmailService emailService;
     private UuidService uuidService;
+    private String frontEndUrl;
+    private String overrideRecipient;
 
     @Override
     public Optional<String> createAccount(Account account) {
@@ -78,7 +82,7 @@ class AuthServiceImpl implements AuthService {
 
         if (!userService.isAccountExists(email)) {
 
-            throw new InviteCreatorException("User with email " + email + " not found!");
+            throw new ResetPasswordException("User with email " + email + " not found!");
         }
 
         String passwordResetKey = uuidService.generateUuid();
@@ -86,15 +90,26 @@ class AuthServiceImpl implements AuthService {
         registeredAccount.setResetPasswordKey(passwordResetKey);
         accountRepository.save(registeredAccount);
 
-        emailService.sendSimpleMessage("jackie.n93@gmail.com", "password reset", "http://nowak-dev.piekoszek.pl/reset/" + passwordResetKey);
+        if (!overrideRecipient.equals("false")) {
+
+            email = overrideRecipient;
+        }
+
+        emailService.sendSimpleMessage(email, "Shared Rent - password reset", frontEndUrl + "/setpassword?id=" + passwordResetKey);
     }
 
     @Override
     public void setPassword(Account account) {
 
-        Account registeredAccount = accountRepository.findByEmail(account.getEmail());
+        Account registeredAccount = accountRepository.findByResetPasswordKey(account.getResetPasswordKey());
+
+        if(registeredAccount==null) {
+
+            throw new ResetPasswordException("Invalid reset token.");
+        }
 
         if (registeredAccount.getResetPasswordKey().equals(account.getResetPasswordKey())) {
+
             registeredAccount.setPassword(hashService.encrypt(account.getPassword()));
             registeredAccount.setResetPasswordKey(null);
             accountRepository.save(registeredAccount);
