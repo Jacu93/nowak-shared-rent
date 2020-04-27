@@ -105,7 +105,7 @@ class AuthServiceImpl implements AuthService {
 
         if(registeredAccount==null) {
 
-            throw new ResetPasswordException("Invalid reset token.");
+            throw new ResetPasswordException("Invalid reset password key. Please make sure you are using correct URL.");
         }
 
         if (registeredAccount.getResetPasswordKey().equals(account.getResetPasswordKey())) {

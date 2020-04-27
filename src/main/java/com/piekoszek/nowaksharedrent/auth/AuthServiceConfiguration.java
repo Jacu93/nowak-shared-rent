@@ -17,8 +17,8 @@ class AuthServiceConfiguration {
     @Value("${app.overrideRecipient}")
     private String overrideRecipient;
 
-    AuthService authService(UserService userService, HashService hashService, JwtService jwtService, EmailService emailService, UuidService uuidService, String frontEndUrl, String overrideRecipient) {
-        return new AuthServiceImpl(new InMemoryAccountRepository(), userService, hashService, jwtService, emailService, uuidService, frontEndUrl, overrideRecipient);
+    AuthService authService(UserService userService, HashService hashService, JwtService jwtService, EmailService emailService, UuidService uuidService) {
+        return new AuthServiceImpl(new InMemoryAccountRepository(), userService, hashService, jwtService, emailService, uuidService, "test-url", "false");
     }
 
     @Bean
