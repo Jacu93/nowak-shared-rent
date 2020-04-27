@@ -9,6 +9,7 @@ public class EmailServiceConfiguration {
 
     @Bean
     EmailService emailService (JavaMailSender javaMailSender) {
+
         return new EmailServiceImpl(javaMailSender);
     }
 }
