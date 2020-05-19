@@ -175,22 +175,29 @@ class AuthServiceTest extends Specification {
 
         given: "User enters invalid reset password link. Then provides new password in textboxes."
         def urlKey = "da176230-d09c-4853-a991-cd1314d0231error"
-        def account = new Account("example@mail.com", "tester", "secret", "da176230-d09c-4853-a991-cd1314d0231e")
+        def account = new Account("example@mail.com", "tester", "secret", "da176230-d09c-4853-a991-cd1314d0231")
         def user = User.builder()
                 .email(account.getEmail())
                 .name(account.getName())
                 .apartments(new HashSet<UserApartment>())
                 .build()
-        hashService.encrypt(account.getPassword()) >> "2BB80D537B1DA3E38BD30361AA855686BDE0EACD7162FEF6A25FE97BF527A25B"
+        hashService.encrypt("secret") >> "2BB80D537B1DA3E38BD30361AA855686BDE0EACD7162FEF6A25FE97BF527A25B"
         jwtService.generateToken(user) >> "bearer eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiSmFjZWsiLCJlbWFpbCI6ImphY2tpZS5uOTNAZ21haWwuY29tIiwiaWF0IjoxNTUzMDc0NjcwLCJleHAiOjE1NTMwNzgyNzB9.tMItmryL5GQfKWoOS8XL1iloCvrrkxBCcf-vLajdQvI_tJpg8QOGVM6obs56DU5m-ySIwMDkIj9s-krL-8E3iQ"
         authService.createAccount(account)
 
         when:
+        userService.isAccountExists(account.getEmail()) >> true
+        uuidService.generateUuid() >> "da176230-d09c-4853-a991-cd1314d0231"
+        authService.resetPassword(account.getEmail())
         def requestParams = Account.builder()
                 .password("newsecret")
                 .resetPasswordKey(urlKey)
                 .build()
+        hashService.encrypt("newsecret") >> "78DFAY7YF7DSAFY7ASD78FH78AH7FHADS8YUFHASHD708F89AS70F0HJCVXHZLHD"
         authService.setPassword(requestParams)
+        hashService.compareWithHash("newsecret", "78DFAY7YF7DSAFY7ASD78FH78AH7FHADS8YUFHASHD708F89AS70F0HJCVXHZLHD") >> true
+        userService.getUser(user.getEmail()) >> user
+        jwtService.generateToken(user) >> "bearer eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiSmFjZWsiLCJlbWFpbCI6ImphY2tpZS5uOTNAZ21haWwuY29tIiwiaWF0IjoxNTUzMDc0NjcwLCJleHAiOjE1NTMwNzgyNzB9.tMItmryL5GQfKWoOS8XL1iloCvrrkxBCcf-vLajdQvI_tJpg8QOGVM6obs56DU5m-ySIwMDkIj9s-krL-8E3iQ"
 
         then: "New password is not set for this user. Application gives the feedback"
         def ex = thrown(ResetPasswordException)
