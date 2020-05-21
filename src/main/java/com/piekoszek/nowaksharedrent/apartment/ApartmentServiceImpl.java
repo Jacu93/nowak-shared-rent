@@ -61,7 +61,7 @@ class ApartmentServiceImpl implements ApartmentService {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Calendar currDate = timeService.currentDateAndTime();
 
-        //uncomment block below if you wish new rent value to be used from the next month instead of current
+        //uncomment block below if you wish new rent value border date to be set at the beginning of the next month instead of current
         /*if (currDate.get(Calendar.MONTH) == Calendar.DECEMBER) {
             currDate.set(Calendar.MONTH, 0);
             currDate.set(Calendar.YEAR, currDate.get(Calendar.YEAR)+1);
