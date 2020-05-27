@@ -1,6 +1,6 @@
 package com.piekoszek.nowaksharedrent.jwt;
 
-import com.piekoszek.nowaksharedrent.dto.User;
+import com.piekoszek.nowaksharedrent.user.User;
 
 public interface JwtService {
 

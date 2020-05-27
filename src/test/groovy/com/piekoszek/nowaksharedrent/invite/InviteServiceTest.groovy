@@ -2,7 +2,7 @@ package com.piekoszek.nowaksharedrent.invite
 
 import com.piekoszek.nowaksharedrent.apartment.Apartment
 import com.piekoszek.nowaksharedrent.apartment.ApartmentService
-import com.piekoszek.nowaksharedrent.dto.UserService
+import com.piekoszek.nowaksharedrent.user.UserService
 import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException
 import com.piekoszek.nowaksharedrent.uuid.UuidService
 import spock.lang.Specification

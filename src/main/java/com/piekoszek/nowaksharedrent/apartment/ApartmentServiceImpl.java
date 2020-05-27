@@ -1,12 +1,11 @@
 package com.piekoszek.nowaksharedrent.apartment;
 
-import com.piekoszek.nowaksharedrent.dto.User;
-import com.piekoszek.nowaksharedrent.dto.UserApartment;
-import com.piekoszek.nowaksharedrent.dto.UserService;
+import com.piekoszek.nowaksharedrent.user.User;
+import com.piekoszek.nowaksharedrent.user.UserApartment;
+import com.piekoszek.nowaksharedrent.user.UserService;
 import com.piekoszek.nowaksharedrent.time.TimeService;
 import com.piekoszek.nowaksharedrent.uuid.UuidService;
 import lombok.AllArgsConstructor;
-
 import java.util.Calendar;
 
 @AllArgsConstructor
@@ -62,7 +61,7 @@ class ApartmentServiceImpl implements ApartmentService {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Calendar currDate = timeService.currentDateAndTime();
 
-        //uncomment block below if you wish new rent value to be used from the next month instead of current
+        //uncomment block below if you wish new rent value border date to be set at the beginning of the next month instead of current
         /*if (currDate.get(Calendar.MONTH) == Calendar.DECEMBER) {
             currDate.set(Calendar.MONTH, 0);
             currDate.set(Calendar.YEAR, currDate.get(Calendar.YEAR)+1);

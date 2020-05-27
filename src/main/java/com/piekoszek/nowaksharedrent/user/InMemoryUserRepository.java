@@ -1,4 +1,4 @@
-package com.piekoszek.nowaksharedrent.dto;
+package com.piekoszek.nowaksharedrent.user;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

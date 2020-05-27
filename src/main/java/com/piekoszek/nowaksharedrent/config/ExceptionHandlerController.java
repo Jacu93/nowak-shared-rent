@@ -1,6 +1,7 @@
 package com.piekoszek.nowaksharedrent.config;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.piekoszek.nowaksharedrent.auth.exceptions.ResetPasswordException;
 import com.piekoszek.nowaksharedrent.invite.exceptions.InviteCreatorException;
 import com.piekoszek.nowaksharedrent.jwt.exceptions.InvalidTokenException;
 import com.piekoszek.nowaksharedrent.response.MessageResponse;
@@ -40,5 +41,10 @@ class ExceptionHandlerController {
         } else {
             return new ResponseEntity<>(new MessageResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ExceptionHandler(ResetPasswordException.class)
+    public ResponseEntity<Object> handleResetPasswordException (ResetPasswordException ex, WebRequest request) {
+        return new ResponseEntity<>(new MessageResponse("Password change unsuccessful: " + ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 }

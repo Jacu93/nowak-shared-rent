@@ -1,5 +1,7 @@
 package com.piekoszek.nowaksharedrent.auth;
 
+import com.piekoszek.nowaksharedrent.invite.Invitation;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,5 +21,18 @@ class InMemoryAccountRepository implements AccountRepository {
     @Override
     public Account findByEmail(String email) {
         return map.get(email);
+    }
+
+    @Override
+    public Account findByResetPasswordKey(String resetPasswordKey) {
+
+        for (Map.Entry<String, Account> entry : map.entrySet()) {
+
+            if (entry.getValue().resetPasswordKey.equals(resetPasswordKey)) {
+
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 }
