@@ -39,13 +39,13 @@
 .facebook-button {
   background: #4267b2;
 }
-.facebook-button:hover,.facebook-button:active,.facebook-button:focus {
+.facebook-button:hover,.facebook-button:active {
   background: #375695;
 }
 .normal-button {
   background: #4CAF50;
 }
-.normal-button:hover,.normal-button:active,.normal-button:focus {
+.normal-button:hover,.normal-button:active {
   background: #43A047;
 }
 .form .message {
