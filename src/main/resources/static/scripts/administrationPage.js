@@ -53,7 +53,7 @@ function newRentValue() {
     let form = document.getElementById("rent-form");
 
     if (form.checkValidity() === true) {
-        let value = document.getElementById("value").value;
+        let value = document.getElementById("value").value * 100;
         let apartmentId = document.getElementById("apartmentId");
         let url = 'apartment/rent/' + apartmentId.options[apartmentId.selectedIndex].getAttribute("apartmentId");
         let data = {"value": value};
