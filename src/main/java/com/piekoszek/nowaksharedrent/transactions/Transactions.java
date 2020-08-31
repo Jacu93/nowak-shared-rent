@@ -26,7 +26,7 @@ public class Transactions {
             if (payer.getEmail().equals(payerEmail)) {
                 payer.updateBalance(transactionValue / payers.size() - transactionValue);
             } else {
-                payer.updateBalance(transactionValue / payers.size());
+                payer.updateBalance(Math.round(transactionValue / payers.size()));
             }
         }
     }

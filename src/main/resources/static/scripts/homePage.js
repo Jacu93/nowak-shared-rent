@@ -147,8 +147,8 @@ function loadRoommates(ApartmentId) {
                 roommates.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SPAN");
-                a.innerText = 'Current month: ' + currentMonthRent/tenantsArrayLength + ' PLN';
-                a.setAttribute("currentMonthBalance", currentMonthRent/tenantsArrayLength);
+                a.innerText = 'Current month: ' + Math.round(currentMonthRent/tenantsArrayLength)/100 + ' PLN';
+                a.setAttribute("currentMonthBalance", Math.round(currentMonthRent/tenantsArrayLength)/100);
                 roommates.lastChild.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("DIV");
@@ -169,8 +169,8 @@ function loadRoommates(ApartmentId) {
                 roommates.lastChild.lastChild.appendChild(a);
 
                 a = document.createElement("SMALL");
-                a.innerText = 'Last month: ' + lastMonthRent/tenantsArrayLength + ' PLN';
-                a.setAttribute("lastMonthBalance", lastMonthRent/tenantsArrayLength);
+                a.innerText = 'Last month: ' + Math.round(lastMonthRent/tenantsArrayLength)/100 + ' PLN';
+                a.setAttribute("lastMonthBalance", Math.round(lastMonthRent/tenantsArrayLength)/100);
                 a.className = "text-muted";
                 roommates.lastChild.lastChild.lastChild.appendChild(a);
 
