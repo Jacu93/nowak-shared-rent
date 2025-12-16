@@ -1,12 +1,11 @@
 package com.piekoszek.nowaksharedrent.auth;
 
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
-
-import javax.validation.constraints.Email;
 
 @Builder
 @Getter

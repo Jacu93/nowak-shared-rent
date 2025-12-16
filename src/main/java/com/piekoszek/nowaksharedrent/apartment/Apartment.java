@@ -33,7 +33,7 @@ public class Apartment {
     }
 
     boolean hasTenant(String email) {
-        return tenants.stream().anyMatch(t-> t.getEmail().equals(email));
+        return tenants.stream().anyMatch(t -> t.getEmail().equals(email));
     }
 
     void updateRent(Rent newRent) {

@@ -1,10 +1,10 @@
 package com.piekoszek.nowaksharedrent.transactions;
 
+import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 
-import javax.validation.constraints.Min;
 
 @Builder
 @Getter
